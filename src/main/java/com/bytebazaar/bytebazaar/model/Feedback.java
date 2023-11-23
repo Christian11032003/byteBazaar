@@ -11,11 +11,11 @@ public class Feedback
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idFeedback;
+    private int idfeedback;
 
     @ManyToOne
-    @JoinColumn(nullable = false,updatable = false,name = "idOggettocarrello")
-    private Oggettocarrello oggettoCarrello;
+    @JoinColumn(nullable = false,updatable = false,name = "idoggettocarrello")
+    private Oggettocarrello oggettocarrello;
 
 
 }

@@ -14,20 +14,20 @@ public class Oggettocarrello
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idOggettocarrello;
+    private int idoggettocarrello;
 
     @ManyToOne
-    @JoinColumn(nullable = false,updatable = false,name = "idProdotto")
+    @JoinColumn(nullable = false,updatable = false,name = "idprodotto")
     private Prodotto prodotto;
 
     @ManyToOne
-    @JoinColumn(nullable = false,updatable = false,name = "idCarrello")
+    @JoinColumn(nullable = false,updatable = false,name = "idcarrello")
     private Carrello carrello;
 
     @Column(nullable = false)
     private int quantita;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "oggettoCarrello")
+    @OneToMany(mappedBy = "oggettocarrello")
     private List<Feedback> feedback;
 }

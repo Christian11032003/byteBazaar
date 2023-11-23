@@ -13,10 +13,10 @@ public class Messaggio
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idMessaggio;
+    private int idmessaggio;
 
     @ManyToOne
-    @JoinColumn(nullable = false,updatable = false,name = "idProdotto")
+    @JoinColumn(nullable = false,updatable = false,name = "idprodotto")
     private Prodotto prodotto;
 
     @Column(nullable = false)

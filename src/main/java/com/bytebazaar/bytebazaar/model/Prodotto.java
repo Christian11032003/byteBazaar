@@ -17,7 +17,7 @@ public class Prodotto
     private int idProdotto;
 
     @ManyToOne
-    @JoinColumn(nullable = false,updatable = false,name = "idUtente")
+    @JoinColumn(nullable = false,updatable = false,name = "idutente")
     private Utente utente;
 
     private String immagineProdotto;
@@ -37,7 +37,7 @@ public class Prodotto
 
     @JsonIgnore
     @OneToMany(mappedBy = "prodotto")
-    private List<Oggettocarrello> oggettoCarrello;
+    private List<Oggettocarrello> oggettocarrello;
 
 
 

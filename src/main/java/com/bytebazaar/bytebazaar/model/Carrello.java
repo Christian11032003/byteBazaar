@@ -15,10 +15,10 @@ public class Carrello
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idCarrello;
+    private int idcarrello;
 
     @ManyToOne
-    @JoinColumn(nullable = false,updatable = false,name = "idUtente")
+    @JoinColumn(nullable = false,updatable = false,name = "idutente")
     private Utente utente;
 
     @Column(nullable = false)

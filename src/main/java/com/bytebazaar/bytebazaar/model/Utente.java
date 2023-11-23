@@ -14,10 +14,12 @@ public class Utente
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUtente;
+    private int idutente;
 
+    @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false)
     private String cognome;
     @Column(unique = true,nullable = false,name = "email")
     private String email;
@@ -29,6 +31,7 @@ public class Utente
     private String password;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
     @JsonIgnore
