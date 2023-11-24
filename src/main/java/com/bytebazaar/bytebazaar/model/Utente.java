@@ -34,6 +34,9 @@ public class Utente
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
+
+    private boolean bloccato = false;
+
     @JsonIgnore
     @OneToMany(mappedBy = "utente")
     private List<Prodotto> prodotto;
@@ -41,5 +44,9 @@ public class Utente
     @JsonIgnore
     @OneToMany(mappedBy = "utente")
     private List<Carrello> carrello;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "utente")
+    private List<Richiesta> richiesta;
 
 }
