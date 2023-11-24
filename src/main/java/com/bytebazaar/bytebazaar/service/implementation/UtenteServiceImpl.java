@@ -1,5 +1,6 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
+import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
@@ -7,8 +8,12 @@ import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
 @Service
 public class UtenteServiceImpl implements UtenteService
 {
@@ -40,4 +45,34 @@ public class UtenteServiceImpl implements UtenteService
 
         return false;
     }
+
+    public Utente bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request)
+    {
+        if (request == null || request.getId() < 0 ||!roleControl(request.getUsername(), request.getPassword(), Ruolo.ADMIN)) {
+            return null;
+        }
+
+        Optional<Utente> ut = utenteRepo.findById(request.getId());
+
+        if (ut.isPresent()) {
+            Utente utente = ut.get();
+            utente.setBloccato(!utente.isBloccato());
+
+            utenteRepo.save(utente);
+            return utente;
+        } else {
+            return null;
+        }
+
+    }
+
+    public boolean roleControl(String username,String password,Ruolo ruolo){
+        Utente u =utenteRepo.findByUsernameAndPassword(username,password).orElse(null);
+        if(u==null)return false;
+        return u.getRuolo().equals(ruolo);
+    }
+
+
+
+
 }
