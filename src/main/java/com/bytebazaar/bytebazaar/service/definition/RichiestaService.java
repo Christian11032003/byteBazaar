@@ -10,4 +10,7 @@ import org.springframework.stereotype.Service;
 public interface RichiestaService
 {
     public boolean registrazioneRichiesta(Utente u);
+
+    public boolean changeRequestAccept(boolean stato);
+
 }

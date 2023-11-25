@@ -1,5 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
+import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,18 @@ public class UtenteController
     UtenteService serviceUtente;
 
     @PostMapping("/registraUtente")
-    public ResponseEntity<Void> registrazioneCliente(@RequestBody RegistrationUtenteRequest request) {
-        boolean registrato = serviceUtente.registrazioneUtente(request);
+    public ResponseEntity<Void> registrazioneUtente(@RequestBody RegistrationUtenteRequest request) {
+        boolean registrato = serviceUtente.registrationUtente((request));
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
+
+    @PostMapping("/bloccaSbloccaUtente")
+    public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedAdminRequest request) {
+        boolean bloccato = serviceUtente.bannedOrUnBannedAdminRequest(request);
+        if (bloccato) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+    }
+
+
 }

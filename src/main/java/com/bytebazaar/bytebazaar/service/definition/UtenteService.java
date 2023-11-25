@@ -6,12 +6,16 @@ import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 public interface UtenteService
 {
-    public boolean registrazioneUtente(RegistrationUtenteRequest request);
+    public boolean registrationUtente(RegistrationUtenteRequest request);
 
-    public Utente bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request);
+    public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request);
 
     public boolean roleControl(String username, String password, Ruolo ruolo);
+
+
 }

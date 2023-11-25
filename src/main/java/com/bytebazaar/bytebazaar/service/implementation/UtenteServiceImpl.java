@@ -22,7 +22,7 @@ public class UtenteServiceImpl implements UtenteService
     private UtenteRepository utenteRepo;
     @Autowired
     private RichiestaService serviceRichiesta;
-    public boolean registrazioneUtente(RegistrationUtenteRequest request)
+    public boolean registrationUtente(RegistrationUtenteRequest request)
     {
         Utente u = new Utente();
         u.setNome(request.getNome());
@@ -46,10 +46,11 @@ public class UtenteServiceImpl implements UtenteService
         return false;
     }
 
-    public Utente bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request)
+
+    public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request)
     {
-        if (request == null || request.getId() < 0 ||!roleControl(request.getUsername(), request.getPassword(), Ruolo.ADMIN)) {
-            return null;
+        if (request == null || utenteRepo.findByIdutente(request.getId()).isEmpty() ||!roleControl(request.getUsername(), request.getPassword(), Ruolo.ADMIN)) {
+            return false;
         }
 
         Optional<Utente> ut = utenteRepo.findById(request.getId());
@@ -59,11 +60,16 @@ public class UtenteServiceImpl implements UtenteService
             utente.setBloccato(!utente.isBloccato());
 
             utenteRepo.save(utente);
-            return utente;
+            return true;
         } else {
-            return null;
+            return false;
         }
 
+    }
+
+    public boolean acceptRequest()
+    {
+        return true;
     }
 
     public boolean roleControl(String username,String password,Ruolo ruolo){

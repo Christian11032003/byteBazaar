@@ -17,7 +17,7 @@ public class Richiesta
     @JoinColumn(nullable = false,updatable = false,name = "idutente")
     private Utente utente;
 
-
-    public boolean accettato;
+    @Enumerated(EnumType.STRING)
+    public Stato stato;
 
 }
