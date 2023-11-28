@@ -4,11 +4,10 @@ import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
-import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
-import lombok.Data;
+import com.bytebazaar.bytebazaar.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +19,10 @@ public class UtenteServiceImpl implements UtenteService
 
     @Autowired
     private UtenteRepository utenteRepo;
+
     @Autowired
     private RichiestaService serviceRichiesta;
+
     public boolean registrationUtente(RegistrationUtenteRequest request)
     {
         Utente u = new Utente();
@@ -49,11 +50,11 @@ public class UtenteServiceImpl implements UtenteService
 
     public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request)
     {
-        if (request == null || utenteRepo.findByIdutente(request.getId()).isEmpty() ||!roleControl(request.getUsername(), request.getPassword(), Ruolo.ADMIN)) {
+        if (request == null || utenteRepo.findByIdutente(request.getIdutente()).isEmpty() || !Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
             return false;
         }
 
-        Optional<Utente> ut = utenteRepo.findById(request.getId());
+        Optional<Utente> ut = utenteRepo.findById(request.getIdutente());
 
         if (ut.isPresent()) {
             Utente utente = ut.get();
@@ -66,19 +67,6 @@ public class UtenteServiceImpl implements UtenteService
         }
 
     }
-
-    public boolean acceptRequest()
-    {
-        return true;
-    }
-
-    public boolean roleControl(String username,String password,Ruolo ruolo){
-        Utente u =utenteRepo.findByUsernameAndPassword(username,password).orElse(null);
-        if(u==null)return false;
-        return u.getRuolo().equals(ruolo);
-    }
-
-
 
 
 }
