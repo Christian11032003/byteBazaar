@@ -44,7 +44,7 @@ public class RichiestaServiceImpl implements RichiestaService
 
         Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
 
-        if (optionalRichiesta.isPresent() && Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
+        if (optionalRichiesta.isPresent()) {
             Richiesta r = optionalRichiesta.get();
             Utente u = r.getUtente();
 

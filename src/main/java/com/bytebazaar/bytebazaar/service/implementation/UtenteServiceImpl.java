@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
+import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
@@ -11,6 +12,7 @@ import com.bytebazaar.bytebazaar.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +24,7 @@ public class UtenteServiceImpl implements UtenteService
 
     @Autowired
     private RichiestaService serviceRichiesta;
+
 
     public boolean registrationUtente(RegistrationUtenteRequest request)
     {
@@ -67,6 +70,39 @@ public class UtenteServiceImpl implements UtenteService
         }
 
     }
+
+    @Override
+    public Utente login(LoginRequest request) {
+
+        Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword());
+        if(ut.isEmpty())
+        {
+            //throw new UtenteNonTrovatoException("nessun utente attivo è stato trovato con questa username o password");
+        }
+        if(ut.isPresent())
+            return ut.get();
+        else return null;
+    }
+
+    @Override
+    public List<Utente> findAllClienti()
+    {
+        return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
+    }
+
+    @Override
+    public List<Utente> findAllVenditori()
+    {
+        return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
+    }
+
+    @Override
+    public List<Utente> findAllClientiVenditori()
+    {
+        return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
+    }
+
+
 
 
 }
