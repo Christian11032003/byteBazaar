@@ -12,14 +12,13 @@ import java.util.List;
 
 public interface UtenteService
 {
-    public boolean registrationUtente(RegistrationUtenteRequest request);
-
+    //funzionalità di dell'admin
     public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request);
-
+    public List<Utente> findAllClientiVenditori(LoginRequest request);
+    public List<Utente> findAllVenditori(LoginRequest request);
+    public List<Utente> findAllClienti(LoginRequest request);
+    //funzionalità di tutti
+    public boolean registrationUtente(RegistrationUtenteRequest request);
     public Utente login(LoginRequest request);
-
-    public List<Utente> findAllClientiVenditori();
-    public List<Utente> findAllVenditori();
-    public List<Utente> findAllClienti();
 
 }

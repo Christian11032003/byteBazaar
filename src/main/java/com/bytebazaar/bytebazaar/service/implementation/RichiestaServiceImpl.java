@@ -39,41 +39,46 @@ public class RichiestaServiceImpl implements RichiestaService
         return false;
     }
 
-    public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request)
-    {
+    public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request) {
 
         Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
 
-        if (optionalRichiesta.isPresent()) {
-            Richiesta r = optionalRichiesta.get();
-            Utente u = r.getUtente();
-
-            if (request.getStato().equals(Stato.ACCETTATO))
-            {
-                r.setStato(Stato.ACCETTATO);
-
-                if (u.getRuolo() == Ruolo.CLIENTE) {
-                    u.setRuolo(Ruolo.CLIENTEVENDITORE);
-                }
-
-            }
-
-            if(request.getStato().equals(Stato.RIFIUTATO))
-            {
-                r.setStato(Stato.RIFIUTATO);
-
-                if (u.getRuolo() == Ruolo.CLIENTEVENDITORE) {
-                    u.setRuolo(Ruolo.CLIENTE);
-                }
-            }
-
-            // Aggiorna l'utente e la richiesta nel repository
-            u = utenteRepo.save(u);
-            r = richiestaRepo.save(r);
-
-            return true;
-        } else {
+        if (optionalRichiesta.isEmpty()) {
+            // La richiesta non esiste
             return false;
         }
+
+        Richiesta r = optionalRichiesta.get();
+
+        if (!Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
+            // L'amministratore non ha le credenziali corrette
+            return false;
+        }
+
+        Utente u = r.getUtente();
+
+        if (request.getStato().equals(Stato.ACCETTATO)) {
+            r.setStato(Stato.ACCETTATO);
+
+            if (u.getRuolo() == Ruolo.CLIENTE) {
+                u.setRuolo(Ruolo.CLIENTEVENDITORE);
+            }
+
+        } else if (request.getStato().equals(Stato.RIFIUTATO)) {
+            r.setStato(Stato.RIFIUTATO);
+
+            if (u.getRuolo() == Ruolo.CLIENTEVENDITORE) {
+                u.setRuolo(Ruolo.CLIENTE);
+            }
+        } else {
+            // Stato non valido
+            return false;
+        }
+
+        // Aggiorna l'utente e la richiesta nel repository
+        u = utenteRepo.save(u);
+        r = richiestaRepo.save(r);
+
+        return true;
     }
 }

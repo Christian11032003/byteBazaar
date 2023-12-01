@@ -26,30 +26,6 @@ public class UtenteServiceImpl implements UtenteService
     private RichiestaService serviceRichiesta;
 
 
-    public boolean registrationUtente(RegistrationUtenteRequest request)
-    {
-        Utente u = new Utente();
-        u.setNome(request.getNome());
-        u.setCognome(request.getCognome());
-        u.setEmail(request.getEmail());
-        u.setUsername(request.getUsername());
-        u.setPassword(request.getPassword());
-        u.setRuolo(request.getRuolo());
-
-
-
-        if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
-            u = utenteRepo.save(u);
-            if((request.getRuolo() == Ruolo.VENDITORE) || (request.getRuolo() == Ruolo.CLIENTEVENDITORE))
-            {
-                serviceRichiesta.registrazioneRichiesta(u);
-            }
-            return true;
-        }
-
-        return false;
-    }
-
 
     public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request)
     {
@@ -85,21 +61,57 @@ public class UtenteServiceImpl implements UtenteService
     }
 
     @Override
-    public List<Utente> findAllClienti()
+    public List<Utente> findAllClienti(LoginRequest request)
     {
-        return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
+        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN))
+        {
+            return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
+        }
+
+        return null;
+
     }
 
     @Override
-    public List<Utente> findAllVenditori()
+    public List<Utente> findAllVenditori(LoginRequest request)
     {
-        return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
+
+
+        return null;
     }
 
     @Override
-    public List<Utente> findAllClientiVenditori()
+    public List<Utente> findAllClientiVenditori(LoginRequest request)
     {
-        return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
+        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
+            return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
+        }
+
+        return null;
+    }
+
+    public boolean registrationUtente(RegistrationUtenteRequest request)
+    {
+        Utente u = new Utente();
+        u.setNome(request.getNome());
+        u.setCognome(request.getCognome());
+        u.setEmail(request.getEmail());
+        u.setUsername(request.getUsername());
+        u.setPassword(request.getPassword());
+        u.setRuolo(request.getRuolo());
+
+
+
+        if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
+            u = utenteRepo.save(u);
+            if((request.getRuolo() == Ruolo.VENDITORE) || (request.getRuolo() == Ruolo.CLIENTEVENDITORE))
+            {
+                serviceRichiesta.registrazioneRichiesta(u);
+            }
+            return true;
+        }
+
+        return false;
     }
 
 

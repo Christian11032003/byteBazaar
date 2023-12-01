@@ -22,6 +22,7 @@ public class Prodotto
 
     private String immagineProdotto;
 
+    @Column(nullable = false)
     private String nome;
 
     private String descrizione;
