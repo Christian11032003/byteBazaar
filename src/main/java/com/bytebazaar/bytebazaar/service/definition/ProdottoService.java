@@ -6,4 +6,5 @@ public interface ProdottoService
 {
     public boolean registraProdotto(RegistrationProdottoRequest request);
 
+
 }

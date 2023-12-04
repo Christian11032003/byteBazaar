@@ -19,8 +19,26 @@ public class Util
         Util.utenteRepo = utenteRepo;
     }
 
-    public static boolean roleControl(String username, String password, Ruolo ruolo){
+    public static boolean roleControlAdmin(String username, String password, Ruolo ruolo){
         Utente u = utenteRepo.findByUsernameAndPasswordAndRuolo(username,password,Ruolo.ADMIN).orElse(null);
+        if(u==null)return false;
+        return u.getRuolo().equals(ruolo);
+    }
+
+    public static boolean roleControlSeller(String username, String password, Ruolo ruolo){
+        Utente u = utenteRepo.findByUsernameAndPasswordAndRuolo(username,password,Ruolo.VENDITORE).orElse(null);
+        if(u==null)return false;
+        return u.getRuolo().equals(ruolo);
+    }
+
+    public static boolean roleControlSellerClient(String username, String password, Ruolo ruolo){
+        Utente u = utenteRepo.findByUsernameAndPasswordAndRuolo(username,password,Ruolo.CLIENTEVENDITORE).orElse(null);
+        if(u==null)return false;
+        return u.getRuolo().equals(ruolo);
+    }
+
+    public static boolean roleControlCustomer(String username, String password, Ruolo ruolo){
+        Utente u = utenteRepo.findByUsernameAndPasswordAndRuolo(username,password,Ruolo.CLIENTE).orElse(null);
         if(u==null)return false;
         return u.getRuolo().equals(ruolo);
     }

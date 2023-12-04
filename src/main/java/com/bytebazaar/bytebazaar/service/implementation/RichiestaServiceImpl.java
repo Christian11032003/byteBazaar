@@ -50,7 +50,7 @@ public class RichiestaServiceImpl implements RichiestaService
 
         Richiesta r = optionalRichiesta.get();
 
-        if (!Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
+        if (!Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
             // L'amministratore non ha le credenziali corrette
             return false;
         }

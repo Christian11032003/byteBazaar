@@ -1,9 +1,9 @@
 package com.bytebazaar.bytebazaar.controller;
 
+import com.bytebazaar.bytebazaar.dto.request.AggiungiProdottoInCarrelloRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationProdottoRequest;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
+import com.bytebazaar.bytebazaar.service.definition.OggettocarrelloService;
 import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
-import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ProdottoController
+public class OggettoCarrelloController
 {
     @Autowired
-    ProdottoService serviceProdotto;
+    OggettocarrelloService serviceOggettocarrello;
 
-    @PostMapping("/registraProdotto")
-    public ResponseEntity<Void> registrazioneProdotto(@RequestBody RegistrationProdottoRequest request) {
-        boolean registrato = serviceProdotto.registraProdotto(request);
+    @PostMapping("/aggiungiOggettoCarrello")
+    public ResponseEntity<Void> aggiungiOggettoCarrello(@RequestBody AggiungiProdottoInCarrelloRequest request) {
+        boolean registrato = serviceOggettocarrello.aggiungiAlCarrello(request);
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

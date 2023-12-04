@@ -29,7 +29,7 @@ public class UtenteServiceImpl implements UtenteService
 
     public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request)
     {
-        if (request == null || utenteRepo.findByIdutente(request.getIdutente()).isEmpty() || !Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
+        if (request == null || utenteRepo.findByIdutente(request.getIdutente()).isEmpty() || !Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
             return false;
         }
 
@@ -47,23 +47,11 @@ public class UtenteServiceImpl implements UtenteService
 
     }
 
-    @Override
-    public Utente login(LoginRequest request) {
-
-        Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword());
-        if(ut.isEmpty())
-        {
-            //throw new UtenteNonTrovatoException("nessun utente attivo è stato trovato con questa username o password");
-        }
-        if(ut.isPresent())
-            return ut.get();
-        else return null;
-    }
 
     @Override
     public List<Utente> findAllClienti(LoginRequest request)
     {
-        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN))
+        if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN))
         {
             return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
         }
@@ -75,7 +63,9 @@ public class UtenteServiceImpl implements UtenteService
     @Override
     public List<Utente> findAllVenditori(LoginRequest request)
     {
-
+        if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
+            return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
+        }
 
         return null;
     }
@@ -83,7 +73,7 @@ public class UtenteServiceImpl implements UtenteService
     @Override
     public List<Utente> findAllClientiVenditori(LoginRequest request)
     {
-        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
+        if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
             return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
         }
 
@@ -112,6 +102,19 @@ public class UtenteServiceImpl implements UtenteService
         }
 
         return false;
+    }
+
+    @Override
+    public Utente login(LoginRequest request) {
+
+        Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword());
+        if(ut.isEmpty())
+        {
+            //throw new UtenteNonTrovatoException("nessun utente attivo è stato trovato con questa username o password");
+        }
+        if(ut.isPresent())
+            return ut.get();
+        else return null;
     }
 
 

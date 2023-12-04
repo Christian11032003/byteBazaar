@@ -48,7 +48,7 @@ public class UtenteController
         return ResponseEntity.status(HttpStatus.OK).body(clientiVenditoriUsers);
     }
 
-    //funzionalità del venditore
+    //funzionalità del venditore registraProdotto in prodottoController
 
 
     //funzionalità di tutti

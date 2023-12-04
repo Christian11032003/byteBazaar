@@ -21,7 +21,6 @@ public class Carrello
     @JoinColumn(nullable = false,updatable = false,name = "idutente")
     private Utente utente;
 
-    @Column(nullable = false)
     private LocalDateTime dataAcquisto;
 
     @JsonIgnore
