@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.AggiungiProdottoInCarrelloRequest;
+import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.*;
 import com.bytebazaar.bytebazaar.service.definition.CarrelloService;
@@ -37,7 +38,7 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
             // Find the carrello with a date, or create a new one
             Carrello carrello = utente.getCarrello().stream()
-                    .filter(c -> c.getDataAcquisto() != null)
+                    .filter(c -> c.getDataAcquisto() == null)
                     .findFirst()
                     .orElseGet(() -> {
                         Carrello newCarrello = new Carrello();
@@ -70,5 +71,30 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
         }
 
         return false;
+    }
+
+    public boolean modificaQuantitaRimanenti(LoginRequest request, Carrello c)
+    {
+        List<Oggettocarrello> oggettiCarrelli = c.getOggettoCarrello();
+
+        for(Oggettocarrello og : oggettiCarrelli)
+        {
+            Prodotto p = og.getProdotto();
+            if(p.getQuantita() >= og.getQuantita())
+            {
+                p.setQuantita(p.getQuantita()-og.getQuantita());
+                prodottoRepo.save(p);
+            }
+
+            else
+            {
+                return false;
+            }
+
+
+        }
+
+        return true;
+
     }
 }

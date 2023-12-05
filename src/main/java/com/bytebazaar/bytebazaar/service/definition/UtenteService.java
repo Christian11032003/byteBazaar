@@ -18,6 +18,7 @@ public interface UtenteService
     public List<Utente> findAllVenditori(LoginRequest request);
     public List<Utente> findAllClienti(LoginRequest request);
 
+
     //funzionalità di tutti
     public boolean registrationUtente(RegistrationUtenteRequest request);
     public Utente login(LoginRequest request);
