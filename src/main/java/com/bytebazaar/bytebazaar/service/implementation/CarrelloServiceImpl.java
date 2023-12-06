@@ -31,7 +31,7 @@ public class CarrelloServiceImpl implements CarrelloService
     {
         Optional<Carrello> carrelloOptional = carrelloRepo.findCarrelloByUtente_UsernameAndUtente_PasswordAndDataAcquistoIsNull(request.getUsername(), request.getPassword());
 
-        if(carrelloOptional.isPresent())
+        if(carrelloOptional.isPresent() && Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTE) && Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTEVENDITORE))
         {
             Carrello c = carrelloOptional.get();
 

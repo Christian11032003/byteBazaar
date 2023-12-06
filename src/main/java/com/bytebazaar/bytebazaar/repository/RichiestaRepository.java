@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface RichiestaRepository extends JpaRepository<Richiesta,Integer>
 {
     Optional<Richiesta> findByIdrichiesta(int idrichiesta);
+
+    Optional<Richiesta> findByUtente_UsernameAndUtente_Password(String username, String password);
 }

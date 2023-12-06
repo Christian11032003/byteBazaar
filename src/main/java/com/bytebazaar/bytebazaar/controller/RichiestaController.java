@@ -1,5 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
+import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.dto.request.ChangeRequestAcceptRequest;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
@@ -19,6 +20,13 @@ public class RichiestaController
     @PostMapping("/cambioRichiestaStato")
     public ResponseEntity<Void> cambioRichiestaStato(@RequestBody ChangeRequestAcceptRequest request) {
         boolean cambio = serviceRichiesta.changeRequestAcceptInRegistration(request);
+        if (cambio) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/richiesta")
+    public ResponseEntity<Void> richiesta(@RequestBody LoginRequest request) {
+        boolean cambio = serviceRichiesta.richiesta(request);
         if (cambio) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

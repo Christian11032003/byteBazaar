@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.ChangeRequestAcceptRequest;
+import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.model.Richiesta;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Stato;
@@ -38,6 +39,35 @@ public class RichiestaServiceImpl implements RichiestaService
 
         return false;
     }
+
+    public boolean richiesta(LoginRequest request)
+    {
+        Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
+
+        if (Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTE) && utenteOptional.isPresent())
+        {
+            Utente u = utenteOptional.get();
+
+            Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
+
+            if (richiestaOptional.isEmpty())
+            {
+                Richiesta r = new Richiesta();
+                r.setUtente(u);
+                r.setStato(Stato.RICHIESTA);
+                r = richiestaRepo.save(r);
+                return true;
+            }
+        }
+
+
+        return false;
+
+
+
+
+    }
+
 
     public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request) {
 
@@ -81,4 +111,6 @@ public class RichiestaServiceImpl implements RichiestaService
 
         return true;
     }
+
+
 }
