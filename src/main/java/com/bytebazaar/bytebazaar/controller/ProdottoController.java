@@ -1,5 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
+import com.bytebazaar.bytebazaar.dto.request.ModificaProdottoRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationProdottoRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
@@ -19,6 +20,13 @@ public class ProdottoController
     @PostMapping("/registraProdotto")
     public ResponseEntity<Void> registrazioneProdotto(@RequestBody RegistrationProdottoRequest request) {
         boolean registrato = serviceProdotto.registraProdotto(request);
+        if (registrato) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/modificaProdotto")
+    public ResponseEntity<Void> modificaProdotto(@RequestBody ModificaProdottoRequest request) {
+        boolean registrato = serviceProdotto.modificaProdotto(request);
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

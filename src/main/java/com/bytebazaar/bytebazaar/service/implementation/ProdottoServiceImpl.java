@@ -1,5 +1,6 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
+import com.bytebazaar.bytebazaar.dto.request.ModificaProdottoRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationProdottoRequest;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Ruolo;
@@ -52,8 +53,58 @@ public class ProdottoServiceImpl implements ProdottoService
             return false;
         }
 
+    }
 
+    public boolean modificaProdotto(ModificaProdottoRequest request)
+    {
+        Optional<Utente> u = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
+        if (u.isPresent() && Util.roleControlSeller(request.getUsername(), request.getPassword(), Ruolo.VENDITORE)) {
+
+            Utente utSes = u.get();
+
+            Optional<Prodotto> prodottoOptional = prodottoRepo.findById(request.getIdprodotto());
+
+            if (prodottoOptional.isPresent()) {
+                Prodotto p = prodottoOptional.get();
+
+                // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
+                if (p.getUtente().equals(utSes)) {
+                    // Modifica solo i campi non nulli nella richiesta
+                    if (request.getImmagine() != null) {
+                        p.setImmagineProdotto(request.getImmagine());
+                    }
+                    if (request.getNome() != null) {
+                        p.setNome(request.getNome());
+                    }
+                    if (request.getDescrizione() != null) {
+                        p.setDescrizione(request.getDescrizione());
+                    }
+                    if (request.getPrezzo() > 0) {
+                        p.setPrezzo(request.getPrezzo());
+                    }
+                    if (request.getQuantita() >= 0) {
+                        p.setQuantita(request.getQuantita());
+                    }
+
+                    prodottoRepo.save(p);
+
+                    return true;
+                } else {
+                    // L'utente non è autorizzato a modificare questo prodotto
+                    return false;
+                }
+            } else {
+                // Prodotto non trovato
+                return false;
+            }
+        } else {
+            // Utente non autorizzato o ruolo non corretto
+            return false;
+        }
 
     }
+
+
+
 }
