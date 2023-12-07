@@ -20,6 +20,9 @@ public class Messaggio
     private Prodotto prodotto;
 
     @Column(nullable = false)
+    private String mittente;
+
+    @Column(nullable = false)
     private String testoMessaggio;
 
     @Column(nullable = false)

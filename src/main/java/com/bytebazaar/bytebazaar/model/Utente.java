@@ -49,4 +49,6 @@ public class Utente
     @OneToMany(mappedBy = "utente")
     private List<Richiesta> richiesta;
 
+
+
 }
