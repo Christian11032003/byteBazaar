@@ -17,7 +17,7 @@ public class MessaggioController
     MessaggioService serviceMessaggio;
 
     @PostMapping("/mandaMessaggio")
-    public ResponseEntity<Void> confermaCarrello(@RequestBody MandaMessaggioRequest request) {
+    public ResponseEntity<Void> mandaMessaggio(@RequestBody MandaMessaggioRequest request) {
         boolean sendMessaggio = serviceMessaggio.mandaMessaggio(request);
         if (sendMessaggio) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();

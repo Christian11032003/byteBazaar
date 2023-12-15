@@ -19,8 +19,9 @@ public class Messaggio
     @JoinColumn(nullable = false,updatable = false,name = "idprodotto")
     private Prodotto prodotto;
 
-    @Column(nullable = false)
-    private String mittente;
+    @ManyToOne
+    @JoinColumn(nullable = false,updatable = false,name= "idutente")
+    private Utente utente;
 
     @Column(nullable = false)
     private String testoMessaggio;

@@ -34,7 +34,6 @@ public class Utente
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
-
     private boolean bloccato = false;
 
     @JsonIgnore
@@ -48,6 +47,10 @@ public class Utente
     @JsonIgnore
     @OneToMany(mappedBy = "utente")
     private List<Richiesta> richiesta;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "utente")
+    private List<Messaggio> messaggio;
 
 
 

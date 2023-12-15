@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,41 +29,59 @@ public class MessaggioServiceImpl implements MessaggioService
     @Autowired
     ProdottoRepository prodottoRepo;
 
-    public boolean mandaMessaggio(MandaMessaggioRequest request)
-    {
+    public boolean mandaMessaggio(MandaMessaggioRequest request) {
+        Optional<Utente> optionalUtente = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
-        Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
-
-        if(utenteOptional.isPresent())
-        {
-            Utente u = utenteOptional.get();
-            Optional<Prodotto> optionalProdotto = prodottoRepo.findByIdProdotto(request.getIdprodotto());
-
-            if(optionalProdotto.isPresent())
-            {
-                Prodotto p = optionalProdotto.get();
-
-                if(u.getIdutente() != p.getUtente().getIdutente())
-                {
-                    Messaggio m = new Messaggio();
-
-                    m.setProdotto(p);
-                    m.setMittente(u.getUsername());
-                    m.setTestoMessaggio(request.getTestoMessaggio());
-                    m.setDataOraArrivo(LocalDateTime.now());
-                    m.setMittenteORdestinatario(true);
-
-                    m = messaggioRepo.save(m);
-                    return true;
-                }
-
-            }
-
+        if (optionalUtente.isEmpty()) {
+            return false;
         }
 
-        return false;
+        Utente u = optionalUtente.get();
+
+        Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdprodotto());
+
+        if (prodottoOptional.isEmpty()) {
+            return false;
+        }
+
+        Prodotto p = prodottoOptional.get();
+
+        Optional<Messaggio> messaggioOptional = messaggioRepo.findMessaggioByUtente_IdutenteAndProdotto_IdProdotto(u.getIdutente(), p.getIdProdotto());
+
+        if (messaggioOptional.isEmpty()) {
+            // Creazione di un nuovo messaggio quando non ne esiste uno
+            Messaggio m = new Messaggio();
+            m.setUtente(u);
+            m.setProdotto(p);
+            m.setTestoMessaggio(request.getTestoMessaggio());
+            m.setDataOraArrivo(LocalDateTime.now());
+            m.setMittenteORdestinatario(true);
+            messaggioRepo.save(m);
+        }
+
+        else
+        {
+            // Aggiornamento del messaggio esistente
+            Messaggio m = messaggioOptional.get();
+            Messaggio m2 = new Messaggio();
+            m2.setUtente(m.getUtente());
+            m2.setProdotto(p);
+            m2.setTestoMessaggio(request.getTestoMessaggio());
+            m2.setDataOraArrivo(LocalDateTime.now());
+
+            if (u.getIdutente() == m.getUtente().getIdutente()) {
+                m2.setMittenteORdestinatario(true);
+            } else if (u.getIdutente() == m.getProdotto().getUtente().getIdutente()) {
+                m2.setMittenteORdestinatario(false);
+            } else {
+                // Gestire il caso in cui la logica di confronto non è soddisfatta
+                throw new RuntimeException("Logica di confronto non gestita correttamente.");
+            }
+
+            messaggioRepo.save(m2);
+        }
+
+        return true;
     }
-
-
 
 }
