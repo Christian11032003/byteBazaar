@@ -21,6 +21,7 @@ public class Utente
 
     @Column(nullable = false)
     private String cognome;
+
     @Column(unique = true,nullable = false,name = "email")
     private String email;
 
@@ -51,6 +52,9 @@ public class Utente
     @JsonIgnore
     @OneToMany(mappedBy = "utente")
     private List<Messaggio> messaggio;
+
+
+
 
 
 

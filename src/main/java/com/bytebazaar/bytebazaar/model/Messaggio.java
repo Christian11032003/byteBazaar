@@ -16,11 +16,7 @@ public class Messaggio
     private int idmessaggio;
 
     @ManyToOne
-    @JoinColumn(nullable = false,updatable = false,name = "idprodotto")
-    private Prodotto prodotto;
-
-    @ManyToOne
-    @JoinColumn(nullable = false,updatable = false,name= "idutente")
+    @JoinColumn(nullable = false,updatable = false,name = "idutente")
     private Utente utente;
 
     @Column(nullable = false)

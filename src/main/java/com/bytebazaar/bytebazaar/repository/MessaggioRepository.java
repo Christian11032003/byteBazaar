@@ -8,8 +8,4 @@ import java.util.Optional;
 
 public interface MessaggioRepository extends JpaRepository<Messaggio,Integer>
 {
-
-    Optional<Messaggio> findMessaggioByUtente_IdutenteAndProdotto_IdProdotto(int idutente,int idprodotto);
-
-
 }

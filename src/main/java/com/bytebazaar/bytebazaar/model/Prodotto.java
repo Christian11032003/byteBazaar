@@ -32,9 +32,6 @@ public class Prodotto
     @Column(nullable = false)
     private int quantita;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "prodotto")
-    private List<Messaggio> messaggio;
 
     @JsonIgnore
     @OneToMany(mappedBy = "prodotto")
