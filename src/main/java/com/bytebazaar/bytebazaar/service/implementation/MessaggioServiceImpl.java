@@ -54,13 +54,13 @@ public class MessaggioServiceImpl implements MessaggioService
 
         if(prodottoList.contains(p))
         {
-            System.out.println("sono il cliente");
+
             m2.setMittenteORdestinatario(false);
         }
 
         else
         {
-            System.out.println("sono il venditore");
+
             m2.setMittenteORdestinatario(true);
         }
 

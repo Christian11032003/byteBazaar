@@ -27,34 +27,26 @@ public class CarrelloServiceImpl implements CarrelloService
     OggettocarrelloService serviceOggettoCarrello;
 
 
-    public boolean confermaCarrello(LoginRequest request)
-    {
+    public boolean confermaCarrello(LoginRequest request) {
         Optional<Carrello> carrelloOptional = carrelloRepo.findCarrelloByUtente_UsernameAndUtente_PasswordAndDataAcquistoIsNull(request.getUsername(), request.getPassword());
 
-        if((carrelloOptional.isPresent() && Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTE) || Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTEVENDITORE)) && carrelloOptional.isPresent())
-        {
-            Carrello c = carrelloOptional.get();
-
-            if(c.getDataAcquisto() == null)
-            {
-                c.setDataAcquisto(LocalDateTime.now());
-
-                if(serviceOggettoCarrello.modificaQuantitaRimanenti(request, c))
-                {
-                    carrelloRepo.save(c);
-                }
-
-                return true;
-            }
-
-            else
-            {
-                return false;
-            }
-
-
+        if (carrelloOptional.isEmpty()) {
+            return false; // Il carrello non esiste
         }
-        return false;
+
+        Carrello c = carrelloOptional.get();
+
+        if (c.getDataAcquisto() != null) {
+            return false; // Il carrello è già stato acquistato
+        }
+
+        c.setDataAcquisto(LocalDateTime.now());
+
+        if (serviceOggettoCarrello.modificaQuantitaRimanenti(request, c)) {
+            carrelloRepo.save(c);
+        }
+
+        return true;
     }
 
 

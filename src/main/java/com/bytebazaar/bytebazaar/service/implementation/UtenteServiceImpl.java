@@ -3,6 +3,8 @@ package com.bytebazaar.bytebazaar.service.implementation;
 import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
+import com.bytebazaar.bytebazaar.exception.exceptionUtente.MessaggioUtenteNotFoundException;
+import com.bytebazaar.bytebazaar.exception.exceptionUtente.MessaggioUtenteUnauthorizedException;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
@@ -27,10 +29,9 @@ public class UtenteServiceImpl implements UtenteService
 
 
 
-    public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request)
-    {
+    public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request) throws MessaggioUtenteUnauthorizedException, MessaggioUtenteNotFoundException {
         if (request == null || utenteRepo.findByIdutente(request.getIdutente()).isEmpty() || !Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
-            return false;
+            throw new MessaggioUtenteUnauthorizedException("Non Autorizzato");
         }
 
         Optional<Utente> ut = utenteRepo.findById(request.getIdutente());
@@ -41,76 +42,95 @@ public class UtenteServiceImpl implements UtenteService
 
             utenteRepo.save(utente);
             return true;
-        } else {
-            return false;
+        }
+        else
+        {
+            throw new MessaggioUtenteNotFoundException("Utente non trovato");
         }
 
     }
 
 
-    @Override
-    public List<Utente> findAllClienti(LoginRequest request)
+
+    public List<Utente> findAllClienti(LoginRequest request) throws MessaggioUtenteUnauthorizedException
     {
         if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN))
         {
             return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
         }
 
-        return null;
+        else
+        {
+            throw new MessaggioUtenteUnauthorizedException("Non autorizzato");
+        }
+
+
 
     }
 
-    @Override
-    public List<Utente> findAllVenditori(LoginRequest request)
+
+    public List<Utente> findAllVenditori(LoginRequest request) throws MessaggioUtenteUnauthorizedException
     {
         if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
             return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
         }
 
-        return null;
+        else
+        {
+            throw new MessaggioUtenteUnauthorizedException("Non autorizzato");
+        }
     }
 
-    @Override
-    public List<Utente> findAllClientiVenditori(LoginRequest request)
+
+    public List<Utente> findAllClientiVenditori(LoginRequest request) throws MessaggioUtenteUnauthorizedException
     {
         if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
             return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
         }
 
-        return null;
+        else
+        {
+            throw new MessaggioUtenteUnauthorizedException("Non autorizzato");
+        }
     }
 
-    public boolean registrationUtente(RegistrationUtenteRequest request)
+    public boolean registrationUtente(RegistrationUtenteRequest request) throws MessaggioUtenteUnauthorizedException
     {
-        Utente u = new Utente();
-        u.setNome(request.getNome());
-        u.setCognome(request.getCognome());
-        u.setEmail(request.getEmail());
-        u.setUsername(request.getUsername());
-        u.setPassword(request.getPassword());
-        u.setRuolo(request.getRuolo());
 
+        if ((request.getPassword().equals(request.getPasswordRipetuta())))
+        {
 
-
-        if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
+            Utente u = new Utente();
+            u.setNome(request.getNome());
+            u.setCognome(request.getCognome());
+            u.setEmail(request.getEmail());
+            u.setUsername(request.getUsername());
+            u.setPassword(request.getPassword());
+            u.setRuolo(request.getRuolo());
             u = utenteRepo.save(u);
+
             if((request.getRuolo() == Ruolo.VENDITORE) || (request.getRuolo() == Ruolo.CLIENTEVENDITORE))
             {
                 serviceRichiesta.registrazioneRichiesta(u);
             }
-            return true;
+
+            else
+            {
+                throw new MessaggioUtenteUnauthorizedException("Per richiedere il passaggio di ruolo dovrai farlo una volta loggato siccome sei un cliente ");
+            }
+
         }
+
 
         return false;
     }
 
-    @Override
-    public Utente login(LoginRequest request) {
+    public Utente login(LoginRequest request) throws MessaggioUtenteNotFoundException {
 
-        Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword());
+        Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword()) ;
         if(ut.isEmpty())
         {
-            //throw new UtenteNonTrovatoException("nessun utente attivo è stato trovato con questa username o password");
+            throw new MessaggioUtenteNotFoundException("Utente inesistente nel database");
         }
         if(ut.isPresent())
             return ut.get();

@@ -33,11 +33,16 @@ public class RichiestaServiceImpl implements RichiestaService
         r.setStato(Stato.RICHIESTA);
         if(r.getUtente().getIdutente() == u.getIdutente())
         {
-            r = richiestaRepo.save(r);
+            richiestaRepo.save(r);
             return true;
         }
 
-        return false;
+        else
+        {
+            return false;
+        }
+
+
     }
 
     public boolean richiesta(LoginRequest request)
@@ -55,12 +60,16 @@ public class RichiestaServiceImpl implements RichiestaService
                 Richiesta r = new Richiesta();
                 r.setUtente(u);
                 r.setStato(Stato.RICHIESTA);
-                r = richiestaRepo.save(r);
+                richiestaRepo.save(r);
                 return true;
             }
+
+            else
+            {
+                return false;
+            }
+
         }
-
-
         return false;
     }
 

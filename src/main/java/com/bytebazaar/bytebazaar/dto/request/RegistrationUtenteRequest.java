@@ -12,13 +12,12 @@ import org.hibernate.validator.constraints.UniqueElements;
 @Data
 public class RegistrationUtenteRequest
 {
-
+    @NotBlank(message = "il nome non può essere null")
     private String nome;
-
+    @NotBlank(message = "il cognome non può essere null")
     private String cognome;
 
     @NotBlank(message = "l'email non può essere unica")
-    @UniqueElements(message = "l'email deve essere unica")
     @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,7}$",message = "formato email non rispettato")
     private String email;
 
@@ -32,7 +31,6 @@ public class RegistrationUtenteRequest
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$", message = "inserisci un carattere maiuscolo, una minuscola, un carattere speciale e un numero, tra gli 8 e i 20 caratteri")
     private String passwordRipetuta;
 
-    @NotBlank(message = "il ruolo non può essere null")
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 

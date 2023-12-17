@@ -70,7 +70,10 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
             return true; // Successfully added to the carrello
         }
 
-        return false;
+        else {
+            return false;
+        }
+
     }
 
     public boolean modificaQuantitaRimanenti(LoginRequest request, Carrello c)
@@ -84,6 +87,7 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
             {
                 p.setQuantita(p.getQuantita()-og.getQuantita());
                 prodottoRepo.save(p);
+                return true;
             }
 
             else
@@ -94,7 +98,7 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
         }
 
-        return true;
+        return false;
 
     }
 }

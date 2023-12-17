@@ -48,22 +48,35 @@ public class FeedbackServiceImpl implements FeedbackService
                 {
                     for(Oggettocarrello o : c.getOggettoCarrello())
                     {
-                        if(p.getIdProdotto() == o.getProdotto().getIdProdotto() && c.getDataAcquisto() != null)
+                        for(Feedback fe : o.getFeedback())
                         {
-                            Feedback f = new Feedback();
-                            f.setOggettocarrello(o);
-                            f.setDescrizione(request.getDescrizione());
-                            f.setValutazione(request.getValutazione());
-                            feedbackRepo.save(f);
+                            if(p.getIdProdotto() == o.getProdotto().getIdProdotto() && c.getDataAcquisto() != null)
+                            {
+                                Feedback f = new Feedback();
+                                f.setOggettocarrello(o);
+                                f.setDescrizione(request.getDescrizione());
+                                f.setValutazione(request.getValutazione());
 
-                            return true;
+                                if(fe.getOggettocarrello().getCarrello().getUtente().getIdutente() == o.getIdoggettocarrello())
+                                {
+                                    feedbackRepo.save(f);
+                                    return true;
+                                }
 
+                                else {
+                                    return false;
+                                }
+
+                            }
+
+                            else
+                            {
+                                return false;
+                            }
                         }
 
-                        else
-                        {
-                            return false;
-                        }
+
+
 
                     }
 
