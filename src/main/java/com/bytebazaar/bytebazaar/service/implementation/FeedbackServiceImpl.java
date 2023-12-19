@@ -34,6 +34,7 @@ public class FeedbackServiceImpl implements FeedbackService
 
         if(utenteOptional.isPresent())
         {
+
             Utente u = utenteOptional.get();
 
             Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdprodotto());
@@ -44,38 +45,36 @@ public class FeedbackServiceImpl implements FeedbackService
 
                 List<Carrello> carrelloList = u.getCarrello();
 
+                List<Feedback> feedbackList = feedbackRepo.findAllByOggettocarrello_Prodotto_IdProdotto(request.getIdprodotto());
+
+
+                boolean trovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getIdutente() == (u.getIdutente()));
+
+
+
                 for (Carrello c: carrelloList)
                 {
                     for(Oggettocarrello o : c.getOggettoCarrello())
                     {
-                        for(Feedback fe : o.getFeedback())
+
+                        if(p.getIdProdotto() == o.getProdotto().getIdProdotto() && c.getDataAcquisto() != null && trovaFeedback)
                         {
-                            if(p.getIdProdotto() == o.getProdotto().getIdProdotto() && c.getDataAcquisto() != null)
-                            {
-                                Feedback f = new Feedback();
-                                f.setOggettocarrello(o);
-                                f.setDescrizione(request.getDescrizione());
-                                f.setValutazione(request.getValutazione());
 
-                                if(fe.getOggettocarrello().getCarrello().getUtente().getIdutente() == o.getIdoggettocarrello())
-                                {
-                                    feedbackRepo.save(f);
-                                    return true;
-                                }
+                            Feedback f = new Feedback();
+                            f.setOggettocarrello(o);
+                            f.setDescrizione(request.getDescrizione());
+                            f.setValutazione(request.getValutazione());
+                            feedbackRepo.save(f);
+                            return true;
 
-                                else {
-                                    return false;
-                                }
-
-                            }
-
-                            else
-                            {
-                                return false;
-                            }
                         }
 
+                        else
+                        {
+                            return false;
+                        }
 
+                    }
 
 
                     }
@@ -89,8 +88,8 @@ public class FeedbackServiceImpl implements FeedbackService
                 return false;
             }
 
-        }
-
         return false;
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.bytebazaar.bytebazaar.exception.exceptionUtente;
+package com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente;
 
 public class MessaggioUtenteUnauthorizedException extends Exception
 {

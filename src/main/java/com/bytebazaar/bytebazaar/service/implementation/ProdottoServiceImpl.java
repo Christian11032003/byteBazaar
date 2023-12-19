@@ -1,17 +1,16 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
-import com.bytebazaar.bytebazaar.dto.request.ModificaProdottoRequest;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationProdottoRequest;
-import com.bytebazaar.bytebazaar.model.Prodotto;
-import com.bytebazaar.bytebazaar.model.Ruolo;
-import com.bytebazaar.bytebazaar.model.Utente;
+import com.bytebazaar.bytebazaar.dto.request.RegistrationOrModifyProdottoRequest;
+import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
+import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
 import com.bytebazaar.bytebazaar.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,28 +22,67 @@ public class ProdottoServiceImpl implements ProdottoService
     @Autowired
     private ProdottoRepository prodottoRepo;
 
-    public boolean registraProdotto(RegistrationProdottoRequest request)
-    {
-        Optional<Utente> u = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
+    @Autowired
+    private RichiestaRepository richiestaRepo;
 
-        if(u.isPresent() && Util.roleControlSeller(request.getUsername(),request.getPassword(),Ruolo.VENDITORE))
+    public boolean registraProdotto(RegistrationOrModifyProdottoRequest request)
+    {
+        Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
+
+        if(utenteOptional.isPresent() && ((Util.roleControlSeller(request.getUsername(),request.getPassword(),Ruolo.VENDITORE) || Util.roleControlSeller(request.getUsername(),request.getPassword(),Ruolo.CLIENTEVENDITORE))))
         {
 
-            Utente utSes = u.get();
+            Utente u = utenteOptional.get();
 
 
-            Prodotto p = new Prodotto();
+            Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_UsernameAndUtente_Password(request.getUsername(),request.getPassword());
 
-            p.setUtente(utSes);
-            p.setImmagineProdotto(request.getImmagine());
-            p.setNome(request.getNome());
-            p.setDescrizione(request.getDescrizione());
-            p.setPrezzo(request.getPrezzo());
-            p.setQuantita(request.getQuantita());
+            if(richiestaOptional.isPresent())
+            {
+                Richiesta r = richiestaOptional.get();
 
-            p = prodottoRepo.save(p);
+                List<Prodotto> prodottoList= u.getProdotto();
 
-            return true;
+                boolean notExistProduct = prodottoList.stream().noneMatch(prodotto -> prodotto.getNome().equalsIgnoreCase(request.getNome()));
+
+
+
+                if(r.getStato().name().contains("ACCETTATO") && notExistProduct)
+                {
+                    Prodotto p = new Prodotto();
+                    p.setUtente(u);
+                    p.setImmagineProdotto(request.getImmagine());
+                    p.setNome(request.getNome());
+                    p.setDescrizione(request.getDescrizione());
+                    p.setPrezzo(request.getPrezzo());
+                    p.setQuantita(request.getQuantita());
+                    prodottoRepo.save(p);
+                    return true;
+                }
+
+                if(r.getStato().name().contains("ACCETTATO") && !notExistProduct)
+                {
+                    System.out.println("Sono qui ");
+                    Optional<Prodotto> optionalProdotto = prodottoRepo.findByNome(request.getNome());
+
+                    if(optionalProdotto.isPresent())
+                    {
+                        System.out.println("entraaaa");
+                        return modificaProdotto(request);
+                    }
+
+                    else
+                    {
+                        return false;
+                    }
+
+
+
+                }
+
+
+            }
+
 
         }
 
@@ -53,31 +91,37 @@ public class ProdottoServiceImpl implements ProdottoService
             return false;
         }
 
+        return false;
+
     }
 
-    public boolean modificaProdotto(ModificaProdottoRequest request)
+    public boolean modificaProdotto(RegistrationOrModifyProdottoRequest request)
     {
-        Optional<Utente> u = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
+        Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
-        if (u.isPresent() && Util.roleControlSeller(request.getUsername(), request.getPassword(), Ruolo.VENDITORE) && Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTEVENDITORE)) {
+        if (utenteOptional.isPresent() && (Util.roleControlSeller(request.getUsername(), request.getPassword(), Ruolo.VENDITORE)) || (Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTEVENDITORE))) {
 
-            Utente utSes = u.get();
+            Utente u = utenteOptional.get();
 
-            Optional<Prodotto> prodottoOptional = prodottoRepo.findById(request.getIdprodotto());
+            Optional<Prodotto> prodottoOptional = prodottoRepo.findByNome(request.getNome());
 
             if (prodottoOptional.isPresent()) {
                 Prodotto p = prodottoOptional.get();
 
                 // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
-                if (p.getUtente().equals(utSes)) {
+                if (p.getUtente().equals(u)) {
                     // Modifica solo i campi non nulli nella richiesta
-                    if (request.getImmagine() != null) {
+                    if (request.getImmagine() != null)
+                    {
+                        System.out.println("modifico l'immagine");
                         p.setImmagineProdotto(request.getImmagine());
                     }
                     if (request.getNome() != null) {
+                        System.out.println("modifico il nome");
                         p.setNome(request.getNome());
                     }
                     if (request.getDescrizione() != null) {
+                        System.out.println("modifico la descrizione");
                         p.setDescrizione(request.getDescrizione());
                     }
                     if (request.getPrezzo() > 0) {
@@ -90,7 +134,9 @@ public class ProdottoServiceImpl implements ProdottoService
                     prodottoRepo.save(p);
 
                     return true;
-                } else {
+                }
+
+                else {
                     // L'utente non è autorizzato a modificare questo prodotto
                     return false;
                 }

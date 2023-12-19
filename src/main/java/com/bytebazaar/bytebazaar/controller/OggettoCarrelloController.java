@@ -1,9 +1,7 @@
 package com.bytebazaar.bytebazaar.controller;
 
 import com.bytebazaar.bytebazaar.dto.request.AggiungiProdottoInCarrelloRequest;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationProdottoRequest;
 import com.bytebazaar.bytebazaar.service.definition.OggettocarrelloService;
-import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -47,30 +47,38 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
                         return carrelloRepo.save(newCarrello);
                     });
 
-            Prodotto p = prodottoRepo.findByNome(request.getNomeProdotto());
+            Optional<Prodotto> prodottoOptional = prodottoRepo.findByNome(request.getNomeProdotto());
 
-            if(p == null)
+            if(prodottoOptional.isEmpty())
             {
                 return false;
             }
 
+            else
+            {
+                Prodotto p = prodottoOptional.get();
 
-            Oggettocarrello oggettoCarrello = new Oggettocarrello();
-            oggettoCarrello.setProdotto(p);
-            oggettoCarrello.setQuantita(request.getQuantita());
+
+                Oggettocarrello oggettoCarrello = new Oggettocarrello();
+                oggettoCarrello.setProdotto(p);
+                oggettoCarrello.setQuantita(request.getQuantita());
 
 
-            // Set the relationship between Carrello and Oggettocarrello
-            oggettoCarrello.setCarrello(carrello);
+                // Set the relationship between Carrello and Oggettocarrello
+                oggettoCarrello.setCarrello(carrello);
 
-            // Save the Oggettocarrello and update the Carrello to the database using the repositories
-            oggettocarrelloRepo.save(oggettoCarrello);
-            carrelloRepo.save(carrello);
+                // Save the Oggettocarrello and update the Carrello to the database using the repositories
+                oggettocarrelloRepo.save(oggettoCarrello);
+                carrelloRepo.save(carrello);
 
-            return true; // Successfully added to the carrello
+                return true; // Successfully added to the carrello
+            }
+
+
         }
 
-        else {
+        else
+        {
             return false;
         }
 
@@ -82,12 +90,12 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
         for(Oggettocarrello og : oggettiCarrelli)
         {
+
             Prodotto p = og.getProdotto();
             if(p.getQuantita() >= og.getQuantita())
             {
                 p.setQuantita(p.getQuantita()-og.getQuantita());
                 prodottoRepo.save(p);
-                return true;
             }
 
             else
@@ -98,7 +106,7 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
         }
 
-        return false;
+        return true;
 
     }
 }

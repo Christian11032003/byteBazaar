@@ -2,6 +2,11 @@ package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.ChangeRequestAcceptRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionRichiesta.MessaggioRichiestaAlreadyDefined;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionRichiesta.MessaggioRichiestaNotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionRichiesta.MessaggioRichiestaStatusNotValidException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteNotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteUnauthorizedException;
 import com.bytebazaar.bytebazaar.model.Richiesta;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Stato;
@@ -10,6 +15,7 @@ import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import com.bytebazaar.bytebazaar.utils.Util;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,95 +33,85 @@ public class RichiestaServiceImpl implements RichiestaService
 
     public boolean registrazioneRichiesta(Utente u)
     {
-
         Richiesta r = new Richiesta();
         r.setUtente(u);
         r.setStato(Stato.RICHIESTA);
-        if(r.getUtente().getIdutente() == u.getIdutente())
-        {
-            richiestaRepo.save(r);
-            return true;
-        }
-
-        else
-        {
-            return false;
-        }
-
-
+        richiestaRepo.save(r);
+        return true;
     }
 
-    public boolean richiesta(LoginRequest request)
-    {
+    @SneakyThrows
+    public boolean richiesta(LoginRequest request){
         Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
-        if (Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTE) && utenteOptional.isPresent())
-        {
+        if (Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTE) && utenteOptional.isPresent()) {
             Utente u = utenteOptional.get();
 
             Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
 
-            if (richiestaOptional.isEmpty())
-            {
+            if (richiestaOptional.isEmpty()) {
                 Richiesta r = new Richiesta();
                 r.setUtente(u);
                 r.setStato(Stato.RICHIESTA);
                 richiestaRepo.save(r);
                 return true;
             }
-
             else
             {
-                return false;
+                throw new MessaggioRichiestaAlreadyDefined("Richiesta già somministrata, attendere l'approvazione di un admin");
             }
 
         }
-        return false;
+
+        else {
+            throw new MessaggioUtenteUnauthorizedException("Sei già un CLIENTEVENDITORE");
+        }
+
     }
 
 
-    public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request) {
+        @SneakyThrows
+        public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request) {
 
-        Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
+            Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
 
-        if (optionalRichiesta.isEmpty()) {
-            // La richiesta non esiste
-            return false;
-        }
-
-        Richiesta r = optionalRichiesta.get();
-
-        if (!Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
-            // L'amministratore non ha le credenziali corrette
-            return false;
-        }
-
-        Utente u = r.getUtente();
-
-        if (request.getStato().equals(Stato.ACCETTATO)) {
-            r.setStato(Stato.ACCETTATO);
-
-            if (u.getRuolo() == Ruolo.CLIENTE) {
-                u.setRuolo(Ruolo.CLIENTEVENDITORE);
+            if (optionalRichiesta.isEmpty()) {
+                throw new MessaggioRichiestaNotFoundException("Messaggio richiesta non trovato");
             }
 
-        } else if (request.getStato().equals(Stato.RIFIUTATO)) {
-            r.setStato(Stato.RIFIUTATO);
+            Richiesta r = optionalRichiesta.get();
 
-            if (u.getRuolo() == Ruolo.CLIENTEVENDITORE) {
-                u.setRuolo(Ruolo.CLIENTE);
+            if (!Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
+                throw new MessaggioUtenteUnauthorizedException("Non autorizzato");
             }
-        } else {
-            // Stato non valido
-            return false;
+
+            Utente u = r.getUtente();
+
+            if (request.getStato().equals(Stato.ACCETTATO)) {
+                r.setStato(Stato.ACCETTATO);
+
+                if (u.getRuolo() == Ruolo.CLIENTE) {
+                    u.setRuolo(Ruolo.CLIENTEVENDITORE);
+                }
+
+            } else if (request.getStato().equals(Stato.RIFIUTATO)) {
+                r.setStato(Stato.RIFIUTATO);
+
+                if (u.getRuolo() == Ruolo.CLIENTEVENDITORE) {
+                    u.setRuolo(Ruolo.CLIENTE);
+                }
+            }
+            else
+            {
+                throw new MessaggioRichiestaStatusNotValidException("Errore");
+            }
+
+            // Aggiorna l'utente e la richiesta nel repository
+            utenteRepo.save(u);
+            richiestaRepo.save(r);
+
+            return true;
         }
-
-        // Aggiorna l'utente e la richiesta nel repository
-        u = utenteRepo.save(u);
-        r = richiestaRepo.save(r);
-
-        return true;
-    }
 
 
 }

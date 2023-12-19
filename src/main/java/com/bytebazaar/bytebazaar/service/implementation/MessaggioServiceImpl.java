@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,35 +36,17 @@ public class MessaggioServiceImpl implements MessaggioService
 
         Utente u = optionalUtente.get();
 
-        Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdprodotto());
-
-        if (prodottoOptional.isEmpty()) {
-            return false;
-        }
-
-        Prodotto p = prodottoOptional.get();
-
-        List<Prodotto> prodottoList = u.getProdotto();
-        Messaggio m2 = new Messaggio();
-        m2.setUtente(u);
-        m2.setTestoMessaggio(request.getTestoMessaggio());
-        m2.setDataOraArrivo(LocalDateTime.now());
-
-
-        if(prodottoList.contains(p))
+        if(u.getIdutente() != request.getIdutente())
         {
+            Messaggio m2 = new Messaggio();
+            m2.setUtente(u);
+            m2.setIdmittente(u.getIdutente());
+            m2.setIddestinatario(request.getIdutente());
+            m2.setTestoMessaggio(request.getTestoMessaggio());
+            m2.setDataOraArrivo(LocalDateTime.now());
 
-            m2.setMittenteORdestinatario(false);
+            messaggioRepo.save(m2);
         }
-
-        else
-        {
-
-            m2.setMittenteORdestinatario(true);
-        }
-
-        messaggioRepo.save(m2);
-
 
         return true;
     }

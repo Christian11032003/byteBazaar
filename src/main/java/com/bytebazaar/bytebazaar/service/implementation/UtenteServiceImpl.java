@@ -3,8 +3,8 @@ package com.bytebazaar.bytebazaar.service.implementation;
 import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
-import com.bytebazaar.bytebazaar.exception.exceptionUtente.MessaggioUtenteNotFoundException;
-import com.bytebazaar.bytebazaar.exception.exceptionUtente.MessaggioUtenteUnauthorizedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteNotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteUnauthorizedException;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
@@ -94,8 +94,7 @@ public class UtenteServiceImpl implements UtenteService
         }
     }
 
-    public boolean registrationUtente(RegistrationUtenteRequest request) throws MessaggioUtenteUnauthorizedException
-    {
+    public boolean registrationUtente(RegistrationUtenteRequest request) {
 
         if ((request.getPassword().equals(request.getPasswordRipetuta())))
         {
@@ -111,18 +110,18 @@ public class UtenteServiceImpl implements UtenteService
 
             if((request.getRuolo() == Ruolo.VENDITORE) || (request.getRuolo() == Ruolo.CLIENTEVENDITORE))
             {
-                serviceRichiesta.registrazioneRichiesta(u);
+                return serviceRichiesta.registrazioneRichiesta(u);
             }
 
             else
             {
-                throw new MessaggioUtenteUnauthorizedException("Per richiedere il passaggio di ruolo dovrai farlo una volta loggato siccome sei un cliente ");
+                return true;
             }
 
         }
 
-
         return false;
+
     }
 
     public Utente login(LoginRequest request) throws MessaggioUtenteNotFoundException {
@@ -132,9 +131,7 @@ public class UtenteServiceImpl implements UtenteService
         {
             throw new MessaggioUtenteNotFoundException("Utente inesistente nel database");
         }
-        if(ut.isPresent())
-            return ut.get();
-        else return null;
+        return ut.orElse(null);
     }
 
 

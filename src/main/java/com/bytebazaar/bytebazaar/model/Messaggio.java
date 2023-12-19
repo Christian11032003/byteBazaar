@@ -20,12 +20,17 @@ public class Messaggio
     private Utente utente;
 
     @Column(nullable = false)
+    private int idmittente;
+
+    @Column(nullable = false)
+    private int iddestinatario;
+
+    @Column(nullable = false)
     private String testoMessaggio;
 
     @Column(nullable = false)
     private LocalDateTime dataOraArrivo;
 
-    @Column(nullable = false)
-    private boolean mittenteORdestinatario;
+
 
 }

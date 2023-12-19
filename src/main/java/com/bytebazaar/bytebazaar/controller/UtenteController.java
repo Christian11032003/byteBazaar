@@ -4,8 +4,8 @@ import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponse;
-import com.bytebazaar.bytebazaar.exception.exceptionUtente.MessaggioUtenteNotFoundException;
-import com.bytebazaar.bytebazaar.exception.exceptionUtente.MessaggioUtenteUnauthorizedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteNotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteUnauthorizedException;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import jakarta.validation.Valid;
@@ -54,8 +54,8 @@ public class UtenteController
 
     //funzionalità di tutti
     @PostMapping("/registraUtente")
-    public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUtenteRequest request) throws MessaggioUtenteUnauthorizedException {
-        boolean registrato = serviceUtente.registrationUtente((request));
+    public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUtenteRequest request){
+        boolean registrato = serviceUtente.registrationUtente(request);
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class MandaMessaggioRequest
 {
-    private int idprodotto;
+    private int idutente;
 
     private String testoMessaggio;
 

@@ -3,8 +3,8 @@ package com.bytebazaar.bytebazaar.service.definition;
 import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
-import com.bytebazaar.bytebazaar.exception.exceptionUtente.MessaggioUtenteNotFoundException;
-import com.bytebazaar.bytebazaar.exception.exceptionUtente.MessaggioUtenteUnauthorizedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteNotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteUnauthorizedException;
 import com.bytebazaar.bytebazaar.model.Utente;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface UtenteService
 
 
     //funzionalità di tutti
-    public boolean registrationUtente(RegistrationUtenteRequest request) throws MessaggioUtenteUnauthorizedException;
+    public boolean registrationUtente(RegistrationUtenteRequest request);
     public Utente login(LoginRequest request) throws MessaggioUtenteNotFoundException;
 
 }
