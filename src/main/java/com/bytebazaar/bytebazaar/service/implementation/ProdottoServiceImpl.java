@@ -62,12 +62,11 @@ public class ProdottoServiceImpl implements ProdottoService
 
                 if(r.getStato().name().contains("ACCETTATO") && !notExistProduct)
                 {
-                    System.out.println("Sono qui ");
+
                     Optional<Prodotto> optionalProdotto = prodottoRepo.findByNome(request.getNome());
 
                     if(optionalProdotto.isPresent())
                     {
-                        System.out.println("entraaaa");
                         return modificaProdotto(request);
                     }
 
@@ -76,13 +75,9 @@ public class ProdottoServiceImpl implements ProdottoService
                         return false;
                     }
 
-
-
                 }
 
-
             }
-
 
         }
 
@@ -92,7 +87,6 @@ public class ProdottoServiceImpl implements ProdottoService
         }
 
         return false;
-
     }
 
     public boolean modificaProdotto(RegistrationOrModifyProdottoRequest request)
@@ -111,17 +105,13 @@ public class ProdottoServiceImpl implements ProdottoService
                 // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
                 if (p.getUtente().equals(u)) {
                     // Modifica solo i campi non nulli nella richiesta
-                    if (request.getImmagine() != null)
-                    {
-                        System.out.println("modifico l'immagine");
+                    if (request.getImmagine() != null) {
                         p.setImmagineProdotto(request.getImmagine());
                     }
                     if (request.getNome() != null) {
-                        System.out.println("modifico il nome");
                         p.setNome(request.getNome());
                     }
                     if (request.getDescrizione() != null) {
-                        System.out.println("modifico la descrizione");
                         p.setDescrizione(request.getDescrizione());
                     }
                     if (request.getPrezzo() > 0) {

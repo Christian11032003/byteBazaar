@@ -3,8 +3,9 @@ package com.bytebazaar.bytebazaar.controller;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.dto.request.ChangeRequestAcceptRequest;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionRichiesta.MessaggioRichiestaAlreadyDefined;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteUnauthorizedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.AlreadyReportedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class RichiestaController
     }
 
     @PostMapping("/richiesta")
-    public ResponseEntity<Void> richiesta(@RequestBody LoginRequest request) throws MessaggioUtenteUnauthorizedException, MessaggioRichiestaAlreadyDefined {
+    public ResponseEntity<Void> richiesta(@RequestBody LoginRequest request) throws AlreadyReportedException, NotFoundException {
         boolean cambio = serviceRichiesta.richiesta(request);
         if (cambio) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();

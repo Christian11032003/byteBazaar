@@ -2,11 +2,9 @@ package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.ChangeRequestAcceptRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionRichiesta.MessaggioRichiestaAlreadyDefined;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionRichiesta.MessaggioRichiestaNotFoundException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionRichiesta.MessaggioRichiestaStatusNotValidException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteNotFoundException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteUnauthorizedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.AlreadyReportedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Richiesta;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Stato;
@@ -58,13 +56,13 @@ public class RichiestaServiceImpl implements RichiestaService
             }
             else
             {
-                throw new MessaggioRichiestaAlreadyDefined("Richiesta già somministrata, attendere l'approvazione di un admin");
+                throw new UnAuthorizedException("Richiesta già somministrata, attendere l'approvazione di un admin");
             }
 
         }
 
         else {
-            throw new MessaggioUtenteUnauthorizedException("Sei già un CLIENTEVENDITORE");
+            throw new AlreadyReportedException("Sei già un CLIENTEVENDITORE");
         }
 
     }
@@ -76,13 +74,13 @@ public class RichiestaServiceImpl implements RichiestaService
             Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
 
             if (optionalRichiesta.isEmpty()) {
-                throw new MessaggioRichiestaNotFoundException("Messaggio richiesta non trovato");
+                throw new NotFoundException("Messaggio richiesta non trovato");
             }
 
             Richiesta r = optionalRichiesta.get();
 
             if (!Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
-                throw new MessaggioUtenteUnauthorizedException("Non autorizzato");
+                throw new UnAuthorizedException("Non autorizzato");
             }
 
             Utente u = r.getUtente();
@@ -103,7 +101,7 @@ public class RichiestaServiceImpl implements RichiestaService
             }
             else
             {
-                throw new MessaggioRichiestaStatusNotValidException("Errore");
+                throw new NotFoundException("Errore");
             }
 
             // Aggiorna l'utente e la richiesta nel repository

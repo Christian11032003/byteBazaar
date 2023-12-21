@@ -3,14 +3,16 @@ package com.bytebazaar.bytebazaar.service.implementation;
 import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteNotFoundException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.exceptionUtente.MessaggioUtenteUnauthorizedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
+import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
+import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import com.bytebazaar.bytebazaar.utils.Util;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +27,17 @@ public class UtenteServiceImpl implements UtenteService
     private UtenteRepository utenteRepo;
 
     @Autowired
+    private ProdottoRepository prodottoRepo;
+
+    @Autowired
     private RichiestaService serviceRichiesta;
 
 
-
-    public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request) throws MessaggioUtenteUnauthorizedException, MessaggioUtenteNotFoundException {
+    //funzionalità admin
+    @SneakyThrows
+    public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request){
         if (request == null || utenteRepo.findByIdutente(request.getIdutente()).isEmpty() || !Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
-            throw new MessaggioUtenteUnauthorizedException("Non Autorizzato");
+            throw new UnAuthorizedException("Non Autorizzato");
         }
 
         Optional<Utente> ut = utenteRepo.findById(request.getIdutente());
@@ -45,44 +51,43 @@ public class UtenteServiceImpl implements UtenteService
         }
         else
         {
-            throw new MessaggioUtenteNotFoundException("Utente non trovato");
+            throw new UnAuthorizedException("Utente non trovato");
         }
 
     }
 
 
-
-    public List<Utente> findAllClienti(LoginRequest request) throws MessaggioUtenteUnauthorizedException
+    @SneakyThrows
+    public List<Utente> findAllClienti(LoginRequest request)
     {
-        if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN))
-        {
-            return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
-        }
 
-        else
-        {
-            throw new MessaggioUtenteUnauthorizedException("Non autorizzato");
-        }
-
-
-
-    }
-
-
-    public List<Utente> findAllVenditori(LoginRequest request) throws MessaggioUtenteUnauthorizedException
-    {
         if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
             return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
         }
 
         else
         {
-            throw new MessaggioUtenteUnauthorizedException("Non autorizzato");
+            throw new UnAuthorizedException("Non autorizzato");
+        }
+
+    }
+
+    @SneakyThrows
+    public List<Utente> findAllVenditori(LoginRequest request)
+    {
+
+        if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
+            return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
+        }
+
+        else
+        {
+            throw new UnAuthorizedException("Non autorizzato");
         }
     }
 
-
-    public List<Utente> findAllClientiVenditori(LoginRequest request) throws MessaggioUtenteUnauthorizedException
+    @SneakyThrows
+    public List<Utente> findAllClientiVenditori(LoginRequest request)
     {
         if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
             return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
@@ -90,9 +95,41 @@ public class UtenteServiceImpl implements UtenteService
 
         else
         {
-            throw new MessaggioUtenteUnauthorizedException("Non autorizzato");
+            throw new UnAuthorizedException("Non autorizzato");
         }
     }
+
+    //funzionalità venditore
+
+    @SneakyThrows
+    public List<Prodotto> findAllHisProducts(LoginRequest request)
+    {
+        if(Util.roleControlSeller(request.getUsername(),request.getPassword(),Ruolo.VENDITORE))
+        {
+            return prodottoRepo.findAllByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
+        }
+
+        else {
+            throw new UnAuthorizedException("Non autorizzato");
+        }
+    }
+
+    //funzionalità del cliente
+    @SneakyThrows
+    public List<Prodotto> findAllOtherProducts(LoginRequest request)
+    {
+        if(Util.roleControlCustomer(request.getUsername(),request.getPassword(),Ruolo.CLIENTE))
+        {
+            return prodottoRepo.findAllByUtente_UsernameIsNot(request.getUsername());
+        }
+
+        else {
+            throw new UnAuthorizedException("Non autorizzato");
+        }
+    }
+
+
+    //funzionalità di tutti
 
     public boolean registrationUtente(RegistrationUtenteRequest request) {
 
@@ -123,13 +160,13 @@ public class UtenteServiceImpl implements UtenteService
         return false;
 
     }
-
-    public Utente login(LoginRequest request) throws MessaggioUtenteNotFoundException {
+    @SneakyThrows
+    public Utente login(LoginRequest request){
 
         Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword()) ;
         if(ut.isEmpty())
         {
-            throw new MessaggioUtenteNotFoundException("Utente inesistente nel database");
+            throw new UnAuthorizedException("Utente inesistente nel database");
         }
         return ut.orElse(null);
     }
