@@ -10,6 +10,7 @@ import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import jakarta.validation.Valid;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,42 +27,45 @@ public class UtenteController
     @Autowired
     UtenteService serviceUtente;
     //funzionalità dell'admin
+    @SneakyThrows
     @PostMapping("/bloccaSbloccaUtente")
-    public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedAdminRequest request) throws UnAuthorizedException, NotFoundException {
+    public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedAdminRequest request){
         boolean bloccato = serviceUtente.bannedOrUnBannedAdminRequest(request);
         if (bloccato) return ResponseEntity.ok().build();
         else return  ResponseEntity.badRequest().build();
     }
-
+    @SneakyThrows
     @PostMapping("/trovaTuttiClienti")
-    public ResponseEntity<List<Utente>> findAllClienti(@RequestBody LoginRequest request) throws UnAuthorizedException{
+    public ResponseEntity<List<Utente>> findAllClienti(@RequestBody LoginRequest request) {
         List<Utente> clientiUsers = serviceUtente.findAllClienti(request);
         return ResponseEntity.status(HttpStatus.OK).body(clientiUsers);
     }
+    @SneakyThrows
     @PostMapping("/trovaTuttiVenditori")
-    public ResponseEntity<List<Utente>> findAllVenditori(@RequestBody LoginRequest request) throws UnAuthorizedException{
+    public ResponseEntity<List<Utente>> findAllVenditori(@RequestBody LoginRequest request) {
         List<Utente> venditoriUsers = serviceUtente.findAllVenditori(request);
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
 
+    @SneakyThrows
     @PostMapping("/trovaTuttiClientiVenditori")
-    public ResponseEntity<List<Utente>> findAllClientiVenditori(@RequestBody LoginRequest request) throws UnAuthorizedException{
+    public ResponseEntity<List<Utente>> findAllClientiVenditori(@RequestBody LoginRequest request){
         List<Utente> clientiVenditoriUsers = serviceUtente.findAllClientiVenditori(request);
         return ResponseEntity.status(HttpStatus.OK).body(clientiVenditoriUsers);
     }
 
     //funzionalità del venditore
-
+    @SneakyThrows
     @PostMapping("/trovaTuttiImieiProdotti")
-    public ResponseEntity<List<Prodotto>> findAllHisProducts(@RequestBody LoginRequest request) throws UnAuthorizedException{
+    public ResponseEntity<List<Prodotto>> findAllHisProducts(@RequestBody LoginRequest request){
         List<Prodotto> prodottoListPersonal = serviceUtente.findAllHisProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListPersonal);
     }
 
     //funzionalità del cliente
-
+    @SneakyThrows
     @PostMapping("/trovaGliAltriProdotti")
-    public ResponseEntity<List<Prodotto>> findAllOtherProducts(@RequestBody LoginRequest request) throws UnAuthorizedException{
+    public ResponseEntity<List<Prodotto>> findAllOtherProducts(@RequestBody LoginRequest request){
         List<Prodotto> prodottoListOthers = serviceUtente.findAllOtherProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);
     }

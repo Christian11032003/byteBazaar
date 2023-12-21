@@ -4,6 +4,7 @@ import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.MandaMessaggioRequest;
 import com.bytebazaar.bytebazaar.service.definition.CarrelloService;
 import com.bytebazaar.bytebazaar.service.definition.MessaggioService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ public class MessaggioController
 {
     @Autowired
     MessaggioService serviceMessaggio;
-
+    @SneakyThrows
     @PostMapping("/mandaMessaggio")
     public ResponseEntity<Void> mandaMessaggio(@RequestBody MandaMessaggioRequest request) {
         boolean sendMessaggio = serviceMessaggio.mandaMessaggio(request);

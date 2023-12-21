@@ -42,7 +42,7 @@ public class RichiestaServiceImpl implements RichiestaService
     public boolean richiesta(LoginRequest request){
         Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
-        if (Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTE) && utenteOptional.isPresent()) {
+        if (Util.roleControl(request.getUsername(), request.getPassword(), Ruolo.CLIENTE) && utenteOptional.isPresent()) {
             Utente u = utenteOptional.get();
 
             Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
@@ -79,7 +79,7 @@ public class RichiestaServiceImpl implements RichiestaService
 
             Richiesta r = optionalRichiesta.get();
 
-            if (!Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
+            if (!Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
                 throw new UnAuthorizedException("Non autorizzato");
             }
 

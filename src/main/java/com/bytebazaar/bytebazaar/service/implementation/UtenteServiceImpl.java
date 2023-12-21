@@ -3,6 +3,7 @@ package com.bytebazaar.bytebazaar.service.implementation;
 import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
+import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Ruolo;
@@ -36,7 +37,7 @@ public class UtenteServiceImpl implements UtenteService
     //funzionalità admin
     @SneakyThrows
     public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request){
-        if (request == null || utenteRepo.findByIdutente(request.getIdutente()).isEmpty() || !Util.roleControlAdmin(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
+        if (request == null || utenteRepo.findByIdutente(request.getIdutente()).isEmpty() || !Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
             throw new UnAuthorizedException("Non Autorizzato");
         }
 
@@ -61,8 +62,8 @@ public class UtenteServiceImpl implements UtenteService
     public List<Utente> findAllClienti(LoginRequest request)
     {
 
-        if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
-            return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
+        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
+            return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
         }
 
         else
@@ -76,7 +77,7 @@ public class UtenteServiceImpl implements UtenteService
     public List<Utente> findAllVenditori(LoginRequest request)
     {
 
-        if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
+        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
             return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
         }
 
@@ -89,7 +90,7 @@ public class UtenteServiceImpl implements UtenteService
     @SneakyThrows
     public List<Utente> findAllClientiVenditori(LoginRequest request)
     {
-        if(Util.roleControlAdmin(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
+        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
             return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
         }
 
@@ -104,7 +105,7 @@ public class UtenteServiceImpl implements UtenteService
     @SneakyThrows
     public List<Prodotto> findAllHisProducts(LoginRequest request)
     {
-        if(Util.roleControlSeller(request.getUsername(),request.getPassword(),Ruolo.VENDITORE))
+        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.VENDITORE))
         {
             return prodottoRepo.findAllByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
         }
@@ -118,7 +119,7 @@ public class UtenteServiceImpl implements UtenteService
     @SneakyThrows
     public List<Prodotto> findAllOtherProducts(LoginRequest request)
     {
-        if(Util.roleControlCustomer(request.getUsername(),request.getPassword(),Ruolo.CLIENTE))
+        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.CLIENTE))
         {
             return prodottoRepo.findAllByUtente_UsernameIsNot(request.getUsername());
         }
@@ -130,7 +131,7 @@ public class UtenteServiceImpl implements UtenteService
 
 
     //funzionalità di tutti
-
+    @SneakyThrows
     public boolean registrationUtente(RegistrationUtenteRequest request) {
 
         if ((request.getPassword().equals(request.getPasswordRipetuta())))
@@ -157,7 +158,7 @@ public class UtenteServiceImpl implements UtenteService
 
         }
 
-        return false;
+        throw new BadRequestException("Impossibile completare la registrazione");
 
     }
     @SneakyThrows

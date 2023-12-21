@@ -2,6 +2,7 @@ package com.bytebazaar.bytebazaar.exception.gestori;
 
 import com.bytebazaar.bytebazaar.dto.response.errori.MessaggioErroreResponse;
 import com.bytebazaar.bytebazaar.exception.messaggiException.AlreadyReportedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,15 @@ public class GenericExceptionHadler
         MessaggioErroreResponse m = new MessaggioErroreResponse(HttpStatus.ALREADY_REPORTED.name(),e.getMessage());
         return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(m);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<MessaggioErroreResponse> richiestaGiàDefinita(BadRequestException e) {
+        MessaggioErroreResponse m = new MessaggioErroreResponse(HttpStatus.ALREADY_REPORTED.name(),e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(m);
+    }
+
+
+
 
 
 

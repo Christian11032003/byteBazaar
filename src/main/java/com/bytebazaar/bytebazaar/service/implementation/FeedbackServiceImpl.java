@@ -1,9 +1,12 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.AggiungiFeedbackRequest;
+import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.*;
 import com.bytebazaar.bytebazaar.service.definition.FeedbackService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +27,9 @@ public class FeedbackServiceImpl implements FeedbackService
     private ProdottoRepository prodottoRepo;
 
 
-
+    @SneakyThrows
     public boolean aggiungiFeedback(AggiungiFeedbackRequest request)
     {
-
-
 
         Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
@@ -39,7 +40,8 @@ public class FeedbackServiceImpl implements FeedbackService
 
             Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdprodotto());
 
-            if (prodottoOptional.isPresent()) {
+            if (prodottoOptional.isPresent())
+            {
 
                 Prodotto p = prodottoOptional.get();
 
@@ -49,8 +51,6 @@ public class FeedbackServiceImpl implements FeedbackService
 
 
                 boolean trovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getIdutente() == (u.getIdutente()));
-
-
 
                 for (Carrello c: carrelloList)
                 {
@@ -71,24 +71,27 @@ public class FeedbackServiceImpl implements FeedbackService
 
                         else
                         {
-                            return false;
+                            throw new BadRequestException("Errore");
                         }
 
                     }
-
-
-                    }
-
                 }
 
             }
 
             else
             {
-                return false;
+                throw new NotFoundException("Prodotto non trovato");
             }
 
-        return false;
+        }
+
+        else
+        {
+            throw new NotFoundException("Utente non trovato");
+        }
+
+        throw new BadRequestException("Errore");
     }
 
 

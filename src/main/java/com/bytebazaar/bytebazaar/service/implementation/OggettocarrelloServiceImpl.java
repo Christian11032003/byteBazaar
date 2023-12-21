@@ -2,11 +2,15 @@ package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.AggiungiProdottoInCarrelloRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
+import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.*;
 import com.bytebazaar.bytebazaar.service.definition.CarrelloService;
 import com.bytebazaar.bytebazaar.service.definition.OggettocarrelloService;
 import com.bytebazaar.bytebazaar.utils.Util;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +30,14 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
     @Autowired
     private ProdottoRepository prodottoRepo;
+    @SneakyThrows
     public boolean aggiungiAlCarrello(AggiungiProdottoInCarrelloRequest request)
     {
         Optional<Utente> u = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
         if (u.isPresent() &&
-                ((Util.roleControlSellerClient(request.getUsername(), request.getPassword(), Ruolo.CLIENTEVENDITORE)) ||
-                        (Util.roleControlCustomer(request.getUsername(), request.getPassword(), Ruolo.CLIENTE)))) {
+                ((Util.roleControl(request.getUsername(), request.getPassword(), Ruolo.CLIENTEVENDITORE)) ||
+                        (Util.roleControl(request.getUsername(), request.getPassword(), Ruolo.CLIENTE)))) {
 
             Utente utente = u.get();
 
@@ -51,7 +56,7 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
             if(prodottoOptional.isEmpty())
             {
-                return false;
+                throw new NotFoundException("Prodotto non trovato");
             }
 
             else
@@ -79,11 +84,11 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
         else
         {
-            return false;
+            throw new UnAuthorizedException("Non autorizzato");
         }
 
     }
-
+    @SneakyThrows
     public boolean modificaQuantitaRimanenti(LoginRequest request, Carrello c)
     {
         List<Oggettocarrello> oggettiCarrelli = c.getOggettoCarrello();
@@ -100,7 +105,7 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
             else
             {
-                return false;
+                throw new BadRequestException("impossibile completare l'operazione verificare le quantità");
             }
 
 

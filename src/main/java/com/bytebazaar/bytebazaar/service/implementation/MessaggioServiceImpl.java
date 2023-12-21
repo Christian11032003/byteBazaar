@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.MandaMessaggioRequest;
+import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.Messaggio;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
@@ -8,6 +9,7 @@ import com.bytebazaar.bytebazaar.repository.MessaggioRepository;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.MessaggioService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +29,12 @@ public class MessaggioServiceImpl implements MessaggioService
     @Autowired
     ProdottoRepository prodottoRepo;
 
+    @SneakyThrows
     public boolean mandaMessaggio(MandaMessaggioRequest request) {
         Optional<Utente> optionalUtente = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
         if (optionalUtente.isEmpty()) {
-            return false;
+            throw new NotFoundException("Utente non trovato");
         }
 
         Utente u = optionalUtente.get();

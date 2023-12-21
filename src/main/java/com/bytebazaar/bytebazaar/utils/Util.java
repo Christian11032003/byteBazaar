@@ -22,7 +22,7 @@ public class Util
         Util.utenteRepo = utenteRepo;
     }
 
-    public static boolean roleControlAdmin(String username, String password, Ruolo ruolo){
+    public static boolean roleControl(String username, String password, Ruolo ruolo){
         Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(username,password);
         if(utenteOptional.isPresent())
         {
@@ -32,41 +32,6 @@ public class Util
 
         return false;
     }
-
-
-    public static boolean roleControlSeller(String username, String password, Ruolo ruolo){
-        Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(username,password);
-        if(utenteOptional.isPresent())
-        {
-            Utente u = utenteOptional.get();
-            return u.getRuolo().equals(ruolo);
-        }
-
-        return false;
-    }
-
-    public static boolean roleControlSellerClient(String username, String password, Ruolo ruolo){
-        Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(username,password);
-        if(utenteOptional.isPresent())
-        {
-            Utente u = utenteOptional.get();
-            return u.getRuolo().equals(ruolo);
-        }
-
-        return false;
-    }
-
-    public static boolean roleControlCustomer(String username, String password, Ruolo ruolo){
-        Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(username,password);
-        if(utenteOptional.isPresent())
-        {
-            Utente u = utenteOptional.get();
-            return u.getRuolo().equals(ruolo);
-        }
-
-        return false;
-    }
-
-
-
 }
+
+
