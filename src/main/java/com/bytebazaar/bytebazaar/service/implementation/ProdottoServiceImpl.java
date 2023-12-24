@@ -107,7 +107,7 @@ public class ProdottoServiceImpl implements ProdottoService
     {
         Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
-        if (utenteOptional.isPresent() && (Util.roleControl(request.getUsername(), request.getPassword(), Ruolo.VENDITORE)) || (Util.roleControl(request.getUsername(), request.getPassword(), Ruolo.CLIENTEVENDITORE))) {
+        if ((utenteOptional.isPresent()) && (Util.roleControl(request.getUsername(), request.getPassword(), Ruolo.VENDITORE) || Util.roleControl(request.getUsername(), request.getPassword(), Ruolo.CLIENTEVENDITORE))) {
 
             Utente u = utenteOptional.get();
 

@@ -34,7 +34,7 @@ public class GenericExceptionHadler
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<MessaggioErroreResponse> richiestaGiàDefinita(BadRequestException e) {
-        MessaggioErroreResponse m = new MessaggioErroreResponse(HttpStatus.ALREADY_REPORTED.name(),e.getMessage());
+        MessaggioErroreResponse m = new MessaggioErroreResponse(HttpStatus.BAD_REQUEST.name(),e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(m);
     }
 

@@ -5,15 +5,16 @@ import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponse;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
+import com.bytebazaar.bytebazaar.security.TokenUtil;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,37 +27,42 @@ public class UtenteController
 
     @Autowired
     UtenteService serviceUtente;
+
+    @Autowired
+    TokenUtil util;
+
     //funzionalità dell'admin
+
     @SneakyThrows
-    @PostMapping("/bloccaSbloccaUtente")
+    @PostMapping("/admin/bloccaSbloccaUtente")
     public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedAdminRequest request){
         boolean bloccato = serviceUtente.bannedOrUnBannedAdminRequest(request);
         if (bloccato) return ResponseEntity.ok().build();
         else return  ResponseEntity.badRequest().build();
     }
     @SneakyThrows
-    @PostMapping("/trovaTuttiClienti")
-    public ResponseEntity<List<Utente>> findAllClienti(@RequestBody LoginRequest request) {
-        List<Utente> clientiUsers = serviceUtente.findAllClienti(request);
+    @GetMapping("/admin/trovaTuttiClienti")
+    public ResponseEntity<List<Utente>> findAllClienti() {
+        List<Utente> clientiUsers = serviceUtente.findAllClienti();
         return ResponseEntity.status(HttpStatus.OK).body(clientiUsers);
     }
     @SneakyThrows
-    @PostMapping("/trovaTuttiVenditori")
-    public ResponseEntity<List<Utente>> findAllVenditori(@RequestBody LoginRequest request) {
-        List<Utente> venditoriUsers = serviceUtente.findAllVenditori(request);
+    @GetMapping("/admin/trovaTuttiVenditori")
+    public ResponseEntity<List<Utente>> findAllVenditori() {
+        List<Utente> venditoriUsers = serviceUtente.findAllVenditori();
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
 
     @SneakyThrows
-    @PostMapping("/trovaTuttiClientiVenditori")
-    public ResponseEntity<List<Utente>> findAllClientiVenditori(@RequestBody LoginRequest request){
-        List<Utente> clientiVenditoriUsers = serviceUtente.findAllClientiVenditori(request);
+    @GetMapping("/admin/trovaTuttiClientiVenditori")
+    public ResponseEntity<List<Utente>> findAllClientiVenditori(){
+        List<Utente> clientiVenditoriUsers = serviceUtente.findAllClientiVenditori();
         return ResponseEntity.status(HttpStatus.OK).body(clientiVenditoriUsers);
     }
 
     //funzionalità del venditore
     @SneakyThrows
-    @PostMapping("/trovaTuttiImieiProdotti")
+    @GetMapping("/venditore/trovaTuttiImieiProdotti")
     public ResponseEntity<List<Prodotto>> findAllHisProducts(@RequestBody LoginRequest request){
         List<Prodotto> prodottoListPersonal = serviceUtente.findAllHisProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListPersonal);
@@ -64,7 +70,7 @@ public class UtenteController
 
     //funzionalità del cliente
     @SneakyThrows
-    @PostMapping("/trovaGliAltriProdotti")
+    @PostMapping("/cliente/trovaGliAltriProdotti")
     public ResponseEntity<List<Prodotto>> findAllOtherProducts(@RequestBody LoginRequest request){
         List<Prodotto> prodottoListOthers = serviceUtente.findAllOtherProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);
@@ -72,7 +78,7 @@ public class UtenteController
 
 
     //funzionalità di tutti
-    @PostMapping("/registraUtente")
+    @PostMapping("/all/registraUtente")
     public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUtenteRequest request){
         boolean registrato = serviceUtente.registrationUtente(request);
         if (registrato) return ResponseEntity.ok().build();
@@ -80,7 +86,7 @@ public class UtenteController
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/all/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws NotFoundException {
         Utente u = serviceUtente.login(request);
         if(u != null)
@@ -89,7 +95,8 @@ public class UtenteController
             lr.setUsername(request.getUsername());
             lr.setRuolo(u.getRuolo().toString());
 
-            return ResponseEntity.ok(lr);
+            String token= util.generaToken(u);
+            return ResponseEntity.status(HttpStatus.OK).header("Authorization",token).body(lr);
         }
 
         else

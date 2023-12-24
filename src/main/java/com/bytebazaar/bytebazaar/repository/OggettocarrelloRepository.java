@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface OggettocarrelloRepository extends JpaRepository<Oggettocarrello,Integer>
 {
 
+    Optional<Oggettocarrello> findByCarrello_IdcarrelloAndProdotto_IdProdotto(int idcarrello, int idprodotto);
+
+    Optional<Oggettocarrello> findById(int idoggettocarrello);
 }

@@ -17,7 +17,7 @@ public class ProdottoController
     @Autowired
     ProdottoService serviceProdotto;
     @SneakyThrows
-    @PostMapping("/registraProdotto")
+    @PostMapping("/venditore/registraProdotto")
     public ResponseEntity<Void> registrazioneProdotto(@RequestBody RegistrationOrModifyProdottoRequest request) {
         boolean registrato = serviceProdotto.registraProdotto(request);
         if (registrato) return ResponseEntity.ok().build();

@@ -4,6 +4,7 @@ import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Ruolo;
@@ -37,9 +38,6 @@ public class UtenteServiceImpl implements UtenteService
     //funzionalità admin
     @SneakyThrows
     public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request){
-        if (request == null || utenteRepo.findByIdutente(request.getIdutente()).isEmpty() || !Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
-            throw new UnAuthorizedException("Non Autorizzato");
-        }
 
         Optional<Utente> ut = utenteRepo.findById(request.getIdutente());
 
@@ -52,81 +50,44 @@ public class UtenteServiceImpl implements UtenteService
         }
         else
         {
-            throw new UnAuthorizedException("Utente non trovato");
+            throw new NotFoundException("Utente non trovato");
         }
 
     }
 
 
     @SneakyThrows
-    public List<Utente> findAllClienti(LoginRequest request)
+    public List<Utente> findAllClienti()
     {
+        return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
+    }
 
-        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
-            return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
-        }
-
-        else
-        {
-            throw new UnAuthorizedException("Non autorizzato");
-        }
+    @SneakyThrows
+    public List<Utente> findAllVenditori()
+    {
+        return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
 
     }
 
     @SneakyThrows
-    public List<Utente> findAllVenditori(LoginRequest request)
+    public List<Utente> findAllClientiVenditori()
     {
-
-        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
-            return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
-        }
-
-        else
-        {
-            throw new UnAuthorizedException("Non autorizzato");
-        }
-    }
-
-    @SneakyThrows
-    public List<Utente> findAllClientiVenditori(LoginRequest request)
-    {
-        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.ADMIN)) {
-            return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
-        }
-
-        else
-        {
-            throw new UnAuthorizedException("Non autorizzato");
-        }
+        return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
     }
 
     //funzionalità venditore
-
     @SneakyThrows
     public List<Prodotto> findAllHisProducts(LoginRequest request)
     {
-        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.VENDITORE))
-        {
-            return prodottoRepo.findAllByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
-        }
-
-        else {
-            throw new UnAuthorizedException("Non autorizzato");
-        }
+        return prodottoRepo.findAllByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
     }
 
     //funzionalità del cliente
     @SneakyThrows
     public List<Prodotto> findAllOtherProducts(LoginRequest request)
     {
-        if(Util.roleControl(request.getUsername(),request.getPassword(),Ruolo.CLIENTE))
-        {
-            return prodottoRepo.findAllByUtente_UsernameIsNot(request.getUsername());
-        }
+        return prodottoRepo.findAllByUtente_UsernameIsNot(request.getUsername());
 
-        else {
-            throw new UnAuthorizedException("Non autorizzato");
-        }
     }
 
 
@@ -171,6 +132,14 @@ public class UtenteServiceImpl implements UtenteService
         }
         return ut.orElse(null);
     }
+
+
+
+    public Utente trovaPerUsername(String username)
+    {
+        return utenteRepo.findByUsername(username).orElse(null);
+    }
+
 
 
 

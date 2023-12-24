@@ -28,7 +28,7 @@ public class RichiestaController
         else return ResponseEntity.badRequest().build();
     }
     @SneakyThrows
-    @PostMapping("/richiesta")
+    @PostMapping("/all/richiesta")
     public ResponseEntity<Void> richiesta(@RequestBody LoginRequest request){
         boolean cambio = serviceRichiesta.richiesta(request);
         if (cambio) return ResponseEntity.ok().build();
