@@ -41,6 +41,8 @@ public class Utente implements UserDetails
 
     private boolean bloccato = false;
 
+    private String token;
+
     @JsonIgnore
     @OneToMany(mappedBy = "utente")
     private List<Prodotto> prodotto;

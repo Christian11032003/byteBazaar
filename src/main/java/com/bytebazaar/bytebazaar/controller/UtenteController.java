@@ -14,6 +14,8 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +32,6 @@ public class UtenteController
 
     @Autowired
     TokenUtil util;
-
     //funzionalità dell'admin
 
     @SneakyThrows
@@ -42,13 +43,20 @@ public class UtenteController
     }
     @SneakyThrows
     @GetMapping("/admin/trovaTuttiClienti")
-    public ResponseEntity<List<Utente>> findAllClienti() {
+    public ResponseEntity<List<Utente>> findAllClienti(UsernamePasswordAuthenticationToken token) {
+
+        //prendi utente da token
+        Utente u=(Utente)token.getPrincipal();
+
+
         List<Utente> clientiUsers = serviceUtente.findAllClienti();
         return ResponseEntity.status(HttpStatus.OK).body(clientiUsers);
     }
     @SneakyThrows
     @GetMapping("/admin/trovaTuttiVenditori")
     public ResponseEntity<List<Utente>> findAllVenditori() {
+
+
         List<Utente> venditoriUsers = serviceUtente.findAllVenditori();
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
@@ -76,7 +84,6 @@ public class UtenteController
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);
     }
 
-
     //funzionalità di tutti
     @PostMapping("/all/registraUtente")
     public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUtenteRequest request){
@@ -95,7 +102,7 @@ public class UtenteController
             lr.setUsername(request.getUsername());
             lr.setRuolo(u.getRuolo().toString());
 
-            String token= util.generaToken(u);
+            String token= u.getToken();
             return ResponseEntity.status(HttpStatus.OK).header("Authorization",token).body(lr);
         }
 

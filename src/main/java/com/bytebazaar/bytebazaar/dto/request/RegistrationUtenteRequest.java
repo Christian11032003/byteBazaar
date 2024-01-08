@@ -34,8 +34,4 @@ public class RegistrationUtenteRequest
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
-
-
-
-
 }

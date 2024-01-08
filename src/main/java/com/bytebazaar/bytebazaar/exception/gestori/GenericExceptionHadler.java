@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GenericExceptionHadler
 {
-    //Messaggi Utente
+
     @ExceptionHandler(UnAuthorizedException.class)
     public ResponseEntity<MessaggioErroreResponse> nonAutorizzato(UnAuthorizedException e) {
         MessaggioErroreResponse m = new MessaggioErroreResponse(HttpStatus.UNAUTHORIZED.name(),e.getMessage());

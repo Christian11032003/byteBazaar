@@ -1,5 +1,6 @@
 package com.bytebazaar.bytebazaar.security;
 
+import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
@@ -8,22 +9,26 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.SecretKey;
 
 import java.util.Date;
 
 @Service
+@Data
 public class TokenUtil {
 
-    private final UtenteService service;
+    private final UtenteRepository service;
 
     @Value("${miocodice.jwt.key}")
     private String key;
 
-    public TokenUtil(UtenteService service) {
+    public TokenUtil(UtenteRepository service) {
         this.service = service;
     }
 
@@ -36,6 +41,7 @@ public class TokenUtil {
     public String generaToken(Utente u) {
         String ruolo = u.getRuolo().toString();
         String username = u.getUsername();
+        String password = u.getPassword();
 
         // Durata del token impostata a 60 giorni in millisecondi
         long millisecondiDiDurata = 1000L * 60 * 60 * 24 * 60;
@@ -66,9 +72,8 @@ public class TokenUtil {
     // Metodo per ottenere un oggetto Utente dal token JWT
     public Utente getUtenteFromToken(String token) {
         String username = getSubject(token);
-        return service.trovaPerUsername(username);
+        return service.findByUsername(username).orElseThrow(()->new ResponseStatusException(HttpStatusCode.valueOf(403),"nessun utente con queste credenziali"));
     }
-
 
     // Metodo per ottenere il ruolo dell'utente dal token JWT
     public Ruolo getRuolo(String token) {

@@ -6,8 +6,6 @@ import lombok.Data;
 @Data
 public class ChangeRequestAcceptRequest
 {
-    private String usernameAdmin;
-    private String passwordAdmin;
     private int idrichiesta;
     private Stato stato;
 }

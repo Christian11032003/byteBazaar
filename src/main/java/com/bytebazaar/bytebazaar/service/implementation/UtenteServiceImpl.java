@@ -11,6 +11,7 @@ import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
+import com.bytebazaar.bytebazaar.security.TokenUtil;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import com.bytebazaar.bytebazaar.utils.Util;
@@ -33,6 +34,9 @@ public class UtenteServiceImpl implements UtenteService
 
     @Autowired
     private RichiestaService serviceRichiesta;
+
+    @Autowired
+    private TokenUtil tokenUtil;
 
 
     //funzionalità admin
@@ -65,6 +69,7 @@ public class UtenteServiceImpl implements UtenteService
     @SneakyThrows
     public List<Utente> findAllVenditori()
     {
+
         return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);
 
     }
@@ -126,11 +131,11 @@ public class UtenteServiceImpl implements UtenteService
     public Utente login(LoginRequest request){
 
         Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword()) ;
-        if(ut.isEmpty())
-        {
-            throw new UnAuthorizedException("Utente inesistente nel database");
-        }
-        return ut.orElse(null);
+        Utente u = ut.orElseThrow(()->new UnAuthorizedException("Utente inesistente nel database"));
+        String token= tokenUtil.generaToken(u);
+        u.setToken(token);
+        utenteRepo.save(u);
+        return u;
     }
 
 
@@ -139,6 +144,8 @@ public class UtenteServiceImpl implements UtenteService
     {
         return utenteRepo.findByUsername(username).orElse(null);
     }
+
+
 
 
 

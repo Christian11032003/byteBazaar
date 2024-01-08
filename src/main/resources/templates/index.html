@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Registrazione Utente</title>
+</head>
+<body>
+
+<h1>Registrazione Utente</h1>
+
+<form th:action="@{/all/registraUtente}" method="post" th:object="${request}">
+    <!-- Nome -->
+    <label>Nome: <input type="text" th:field="*{nome}" required/></label><br/>
+
+    <!-- Cognome -->
+    <label>Cognome: <input type="text" th:field="*{cognome}" required/></label><br/>
+
+    <!-- Email -->
+    <label>Email: <input type="email" th:field="*{email}" required/></label><br/>
+
+    <!-- Username -->
+    <label>Username: <input type="text" th:field="*{username}" required/></label><br/>
+
+    <!-- Password -->
+    <label>Password: <input type="password" th:field="*{password}" required/></label><br/>
+
+    <!-- Ripeti Password -->
+    <label>Ripeti Password: <input type="password" th:field="*{passwordRipetuta}" required/></label><br/>
+
+    <!-- Ruolo -->
+    <label>Ruolo:
+        <select th:field="*{ruolo}">
+            <option value="ADMIN">ADMIN</option>
+            <option value="CLIENTEVENDITORE">VENDITORE</option>
+            <option value="VENDITORE">VENDITORE</option>
+            <option value="CLIENTE">CLIENTE</option>
+        </select>
+    </label><br/>
+
+    <!-- Aggiungi altri campi del form secondo le tue esigenze -->
+
+    <button type="submit">Registra</button>
+</form>
+
+</body>
+</html>

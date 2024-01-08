@@ -33,7 +33,10 @@ public class FilterJwt extends OncePerRequestFilter {
 
             // Utilizza un oggetto "tokenUtil" per ottenere l'utente associato al token.
             Utente u = tokenUtil.getUtenteFromToken(token);
-
+            if(!u.getToken().equals(token)){
+                response.setStatus(403);
+                return;
+            }
             // Crea un oggetto "UsernamePasswordAuthenticationToken" che rappresenta l'autenticazione dell'utente.
             // L'oggetto contiene l'utente (principal), null per le credenziali (poiché è autenticazione basata su token) e le autorizzazioni dell'utente.
             UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(u, null, u.getAuthorities());

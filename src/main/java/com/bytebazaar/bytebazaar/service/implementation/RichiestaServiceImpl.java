@@ -1,8 +1,6 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.ChangeRequestAcceptRequest;
-import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
-import com.bytebazaar.bytebazaar.exception.messaggiException.AlreadyReportedException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Richiesta;
@@ -11,6 +9,7 @@ import com.bytebazaar.bytebazaar.model.Stato;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
+import com.bytebazaar.bytebazaar.security.TokenUtil;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import com.bytebazaar.bytebazaar.utils.Util;
 import lombok.SneakyThrows;
@@ -29,6 +28,7 @@ public class RichiestaServiceImpl implements RichiestaService
     @Autowired
     private UtenteRepository utenteRepo;
 
+
     public boolean registrazioneRichiesta(Utente u)
     {
         Richiesta r = new Richiesta();
@@ -39,39 +39,34 @@ public class RichiestaServiceImpl implements RichiestaService
     }
 
     @SneakyThrows
-    public boolean richiesta(LoginRequest request){
-        Optional<Utente> utenteOptional = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
+    public boolean richiesta(TokenUtil util)
+    {
+    /*
+        Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(util.getUtenteFromToken("${miocodice.jwt.key}").getUsername());
 
-        if (Util.roleControl(request.getUsername(), request.getPassword(), Ruolo.CLIENTE) && utenteOptional.isPresent()) {
-            Utente u = utenteOptional.get();
-
-            Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
-
-            if (richiestaOptional.isEmpty()) {
-                Richiesta r = new Richiesta();
-                r.setUtente(u);
-                r.setStato(Stato.RICHIESTA);
-                richiestaRepo.save(r);
-                return true;
-            }
-            else
-            {
-                throw new UnAuthorizedException("Richiesta già somministrata, attendere l'approvazione di un admin");
-            }
-
+        if (richiestaOptional.isEmpty()) {
+            Richiesta r = new Richiesta();
+            r.setUtente(util.getUtenteFromToken("${miocodice.jwt.key}"));
+            r.setStato(Stato.RICHIESTA);
+            richiestaRepo.save(r);
+            return true;
         }
 
-        else {
-            throw new AlreadyReportedException("Sei già un CLIENTEVENDITORE");
-        }
+        else
+        {
+            throw new UnAuthorizedException("Richiesta già somministrata, attendere l'approvazione di un admin");
+        }*/
+        return false;
 
     }
 
 
         @SneakyThrows
-        public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request) {
+        public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request, TokenUtil token) {
 
             Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
+            Utente utses=token.getUtenteFromToken("");
+            System.out.println(utses.getIdutente());
 
             if (optionalRichiesta.isEmpty()) {
                 throw new NotFoundException("Messaggio richiesta non trovato");
@@ -79,7 +74,7 @@ public class RichiestaServiceImpl implements RichiestaService
 
             Richiesta r = optionalRichiesta.get();
 
-            if (!Util.roleControl(request.getUsernameAdmin(), request.getPasswordAdmin(), Ruolo.ADMIN)) {
+            if (utses.getRuolo() != Ruolo.ADMIN) {
                 throw new UnAuthorizedException("Non autorizzato");
             }
 
