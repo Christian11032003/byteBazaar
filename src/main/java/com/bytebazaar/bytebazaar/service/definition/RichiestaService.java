@@ -12,8 +12,8 @@ public interface RichiestaService
 {
     public boolean registrazioneRichiesta(Utente u);
 
-    public boolean richiesta(TokenUtil util) throws AlreadyReportedException, NotFoundException;
+    public boolean richiesta(Utente u);
 
-    public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request, TokenUtil util);
+    public boolean changeRequestAcceptInRegistration(Utente u,ChangeRequestAcceptRequest request);
 
 }

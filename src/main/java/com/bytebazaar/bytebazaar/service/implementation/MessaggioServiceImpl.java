@@ -29,15 +29,9 @@ public class MessaggioServiceImpl implements MessaggioService
     @Autowired
     ProdottoRepository prodottoRepo;
 
-    @SneakyThrows
-    public boolean mandaMessaggio(MandaMessaggioRequest request) {
-        Optional<Utente> optionalUtente = utenteRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword());
 
-        if (optionalUtente.isEmpty()) {
-            throw new NotFoundException("Utente non trovato");
-        }
+    public boolean mandaMessaggio(Utente u, MandaMessaggioRequest request) {
 
-        Utente u = optionalUtente.get();
 
         if(u.getIdutente() != request.getIdutente())
         {

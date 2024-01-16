@@ -9,14 +9,15 @@ import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Carrello;
 import com.bytebazaar.bytebazaar.model.Oggettocarrello;
+import com.bytebazaar.bytebazaar.model.Utente;
 
 public interface OggettocarrelloService
 {
-    public boolean aggiungiAlCarrello(AggiungiProdottoInCarrelloRequest request) throws UnAuthorizedException, NotFoundException, BadRequestException;
+    public boolean aggiungiAlCarrello(Utente u,AggiungiProdottoInCarrelloRequest request);
 
-    public boolean modificaQuantitaRimanenti(LoginRequest request, Carrello c);
+    public boolean modificaQuantitaRimanenti(Utente u, Carrello c);
 
-    public boolean sottraiQuantita(SottraiQuantitaRequest request) throws UnAuthorizedException, NotFoundException;
+    public boolean sottraiQuantita(Utente u, SottraiQuantitaRequest request);
 
-    public boolean eliminaoggettocarrello(EliminaOggettoCarrelloRequest request) throws UnAuthorizedException, NotFoundException;;
+    public boolean eliminaoggettocarrello(Utente u,EliminaOggettoCarrelloRequest request);
 }

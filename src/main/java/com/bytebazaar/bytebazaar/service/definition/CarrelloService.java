@@ -10,7 +10,7 @@ import com.bytebazaar.bytebazaar.model.Utente;
 
 public interface CarrelloService
 {
-    public boolean confermaCarrello(LoginRequest request) throws NotFoundException, BadRequestException;
+    public boolean confermaCarrello(Utente u);
 
 
 }

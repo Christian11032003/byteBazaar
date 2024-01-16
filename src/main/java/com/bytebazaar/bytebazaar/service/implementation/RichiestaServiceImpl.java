@@ -38,15 +38,15 @@ public class RichiestaServiceImpl implements RichiestaService
         return true;
     }
 
-    @SneakyThrows
-    public boolean richiesta(TokenUtil util)
+
+    public boolean richiesta(Utente u)
     {
-    /*
-        Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(util.getUtenteFromToken("${miocodice.jwt.key}").getUsername());
+
+        Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(u.getUsername());
 
         if (richiestaOptional.isEmpty()) {
             Richiesta r = new Richiesta();
-            r.setUtente(util.getUtenteFromToken("${miocodice.jwt.key}"));
+            r.setUtente(u);
             r.setStato(Stato.RICHIESTA);
             richiestaRepo.save(r);
             return true;
@@ -55,56 +55,53 @@ public class RichiestaServiceImpl implements RichiestaService
         else
         {
             throw new UnAuthorizedException("Richiesta già somministrata, attendere l'approvazione di un admin");
-        }*/
-        return false;
+        }
 
     }
 
 
-        @SneakyThrows
-        public boolean changeRequestAcceptInRegistration(ChangeRequestAcceptRequest request, TokenUtil token) {
 
-            Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
-            Utente utses=token.getUtenteFromToken("");
-            System.out.println(utses.getIdutente());
+    public boolean changeRequestAcceptInRegistration(Utente u,ChangeRequestAcceptRequest request) {
 
-            if (optionalRichiesta.isEmpty()) {
-                throw new NotFoundException("Messaggio richiesta non trovato");
-            }
+        Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
 
-            Richiesta r = optionalRichiesta.get();
+        System.out.println(u.getIdutente());
 
-            if (utses.getRuolo() != Ruolo.ADMIN) {
-                throw new UnAuthorizedException("Non autorizzato");
-            }
-
-            Utente u = r.getUtente();
-
-            if (request.getStato().equals(Stato.ACCETTATO)) {
-                r.setStato(Stato.ACCETTATO);
-
-                if (u.getRuolo() == Ruolo.CLIENTE) {
-                    u.setRuolo(Ruolo.CLIENTEVENDITORE);
-                }
-
-            } else if (request.getStato().equals(Stato.RIFIUTATO)) {
-                r.setStato(Stato.RIFIUTATO);
-
-                if (u.getRuolo() == Ruolo.CLIENTEVENDITORE) {
-                    u.setRuolo(Ruolo.CLIENTE);
-                }
-            }
-            else
-            {
-                throw new NotFoundException("Errore");
-            }
-
-            // Aggiorna l'utente e la richiesta nel repository
-            utenteRepo.save(u);
-            richiestaRepo.save(r);
-
-            return true;
+        if (optionalRichiesta.isEmpty()) {
+            throw new NotFoundException("Messaggio richiesta non trovato");
         }
+
+        Richiesta r = optionalRichiesta.get();
+
+        if (u.getRuolo() != Ruolo.ADMIN) {
+            throw new UnAuthorizedException("Non autorizzato");
+        }
+
+        if (request.getStato().equals(Stato.ACCETTATO)) {
+            r.setStato(Stato.ACCETTATO);
+
+            if (u.getRuolo() == Ruolo.CLIENTE) {
+                u.setRuolo(Ruolo.CLIENTEVENDITORE);
+            }
+
+        } else if (request.getStato().equals(Stato.RIFIUTATO)) {
+            r.setStato(Stato.RIFIUTATO);
+
+            if (u.getRuolo() == Ruolo.CLIENTEVENDITORE) {
+                u.setRuolo(Ruolo.CLIENTE);
+            }
+        }
+        else
+        {
+            throw new NotFoundException("Errore");
+        }
+
+        // Aggiorna l'utente e la richiesta nel repository
+        utenteRepo.save(u);
+        richiestaRepo.save(r);
+
+        return true;
+    }
 
 
 }

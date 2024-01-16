@@ -34,34 +34,27 @@ public class UtenteController
     TokenUtil util;
     //funzionalità dell'admin
 
-    @SneakyThrows
+
     @PostMapping("/admin/bloccaSbloccaUtente")
     public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedAdminRequest request){
         boolean bloccato = serviceUtente.bannedOrUnBannedAdminRequest(request);
         if (bloccato) return ResponseEntity.ok().build();
         else return  ResponseEntity.badRequest().build();
     }
-    @SneakyThrows
+
     @GetMapping("/admin/trovaTuttiClienti")
-    public ResponseEntity<List<Utente>> findAllClienti(UsernamePasswordAuthenticationToken token) {
-
-        //prendi utente da token
-        Utente u=(Utente)token.getPrincipal();
-
-
+    public ResponseEntity<List<Utente>> findAllClienti() {
         List<Utente> clientiUsers = serviceUtente.findAllClienti();
         return ResponseEntity.status(HttpStatus.OK).body(clientiUsers);
     }
-    @SneakyThrows
+
     @GetMapping("/admin/trovaTuttiVenditori")
     public ResponseEntity<List<Utente>> findAllVenditori() {
-
-
         List<Utente> venditoriUsers = serviceUtente.findAllVenditori();
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
 
-    @SneakyThrows
+
     @GetMapping("/admin/trovaTuttiClientiVenditori")
     public ResponseEntity<List<Utente>> findAllClientiVenditori(){
         List<Utente> clientiVenditoriUsers = serviceUtente.findAllClientiVenditori();
@@ -69,7 +62,7 @@ public class UtenteController
     }
 
     //funzionalità del venditore
-    @SneakyThrows
+
     @GetMapping("/venditore/trovaTuttiImieiProdotti")
     public ResponseEntity<List<Prodotto>> findAllHisProducts(@RequestBody LoginRequest request){
         List<Prodotto> prodottoListPersonal = serviceUtente.findAllHisProducts(request);
@@ -77,7 +70,7 @@ public class UtenteController
     }
 
     //funzionalità del cliente
-    @SneakyThrows
+
     @PostMapping("/cliente/trovaGliAltriProdotti")
     public ResponseEntity<List<Prodotto>> findAllOtherProducts(@RequestBody LoginRequest request){
         List<Prodotto> prodottoListOthers = serviceUtente.findAllOtherProducts(request);
@@ -110,6 +103,16 @@ public class UtenteController
         {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @GetMapping("/all/logout")
+    public ResponseEntity<Void> logout(UsernamePasswordAuthenticationToken token)
+    {
+        Utente u=(Utente)token.getPrincipal();
+        boolean logout = serviceUtente.logout(u);
+        if(logout) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+
     }
 
 

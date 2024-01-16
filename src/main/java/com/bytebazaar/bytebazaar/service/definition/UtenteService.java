@@ -15,23 +15,25 @@ import java.util.List;
 public interface UtenteService
 {
     //funzionalità di dell'admin
-    public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request) throws NotFoundException, BadRequestException;
-    public List<Utente> findAllClientiVenditori() throws UnAuthorizedException,BadRequestException;
-    public List<Utente> findAllVenditori() throws UnAuthorizedException,BadRequestException;
-    public List<Utente> findAllClienti() throws UnAuthorizedException,BadRequestException;
+    public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request);
+    public List<Utente> findAllClientiVenditori();
+    public List<Utente> findAllVenditori();
+    public List<Utente> findAllClienti();
 
     //funzionalità del venditore
-    public List<Prodotto> findAllHisProducts(LoginRequest request) throws UnAuthorizedException,BadRequestException;
+    public List<Prodotto> findAllHisProducts(LoginRequest request);
 
     //funzionalità del cliente
-    public List<Prodotto> findAllOtherProducts(LoginRequest request) throws UnAuthorizedException,BadRequestException;
+    public List<Prodotto> findAllOtherProducts(LoginRequest request);
 
     //funzionalità
 
 
     //funzionalità di tutti
     public boolean registrationUtente(RegistrationUtenteRequest request);
-    public Utente login(LoginRequest request) throws NotFoundException;
+    public Utente login(LoginRequest request);
+
+    public boolean logout(Utente u);
 
     public Utente trovaPerUsername(String username);
 

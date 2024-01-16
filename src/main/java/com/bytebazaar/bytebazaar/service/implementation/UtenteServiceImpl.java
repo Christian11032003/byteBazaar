@@ -40,7 +40,7 @@ public class UtenteServiceImpl implements UtenteService
 
 
     //funzionalità admin
-    @SneakyThrows
+
     public boolean bannedOrUnBannedAdminRequest(BannedOrUnBannedAdminRequest request){
 
         Optional<Utente> ut = utenteRepo.findById(request.getIdutente());
@@ -60,13 +60,13 @@ public class UtenteServiceImpl implements UtenteService
     }
 
 
-    @SneakyThrows
+
     public List<Utente> findAllClienti()
     {
         return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);
     }
 
-    @SneakyThrows
+
     public List<Utente> findAllVenditori()
     {
 
@@ -74,21 +74,21 @@ public class UtenteServiceImpl implements UtenteService
 
     }
 
-    @SneakyThrows
+
     public List<Utente> findAllClientiVenditori()
     {
         return utenteRepo.findAllByRuolo(Ruolo.CLIENTEVENDITORE);
     }
 
     //funzionalità venditore
-    @SneakyThrows
+
     public List<Prodotto> findAllHisProducts(LoginRequest request)
     {
         return prodottoRepo.findAllByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());
     }
 
     //funzionalità del cliente
-    @SneakyThrows
+
     public List<Prodotto> findAllOtherProducts(LoginRequest request)
     {
         return prodottoRepo.findAllByUtente_UsernameIsNot(request.getUsername());
@@ -97,7 +97,7 @@ public class UtenteServiceImpl implements UtenteService
 
 
     //funzionalità di tutti
-    @SneakyThrows
+
     public boolean registrationUtente(RegistrationUtenteRequest request) {
 
         if ((request.getPassword().equals(request.getPasswordRipetuta())))
@@ -127,7 +127,7 @@ public class UtenteServiceImpl implements UtenteService
         throw new BadRequestException("Impossibile completare la registrazione");
 
     }
-    @SneakyThrows
+
     public Utente login(LoginRequest request){
 
         Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword()) ;
@@ -137,6 +137,15 @@ public class UtenteServiceImpl implements UtenteService
         utenteRepo.save(u);
         return u;
     }
+
+    public boolean logout(Utente u)
+    {
+        u.setToken(null);
+        utenteRepo.save(u);
+        return true;
+    }
+
+
 
 
 
