@@ -33,9 +33,9 @@ public class ProdottoServiceImpl implements ProdottoService
         {
 
             Richiesta r = richiestaOptional.get();
-            System.out.println("Prima della lista");
+
             List<Prodotto> prodottoList = u.getProdotto();  //questo potrebbe essere un problema
-            System.out.println("Prima dopo la lista");
+
 
             boolean notExistProduct = prodottoList.stream().noneMatch(prodotto -> prodotto.getNome().equalsIgnoreCase(request.getNome()));
 

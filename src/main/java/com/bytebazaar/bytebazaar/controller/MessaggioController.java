@@ -19,7 +19,7 @@ public class MessaggioController
     @Autowired
     MessaggioService serviceMessaggio;
 
-    @PostMapping("/mandaMessaggio")
+    @PostMapping("/all/mandaMessaggio")
     public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody MandaMessaggioRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean sendMessaggio = serviceMessaggio.mandaMessaggio(u,request);

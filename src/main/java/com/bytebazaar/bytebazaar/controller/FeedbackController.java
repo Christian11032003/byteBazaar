@@ -17,11 +17,21 @@ public class FeedbackController
     @Autowired
     FeedbackService serviceFeedback;
 
-    @PostMapping("/mandaFeedback")
-    public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody AggiungiFeedbackRequest request) {
+    @PostMapping("/cliente/mandaFeedback")
+    public ResponseEntity<Void> mandaMessaggioCliente(UsernamePasswordAuthenticationToken token, @RequestBody AggiungiFeedbackRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean addFeedback = serviceFeedback.aggiungiFeedback(u,request);
         if (addFeedback) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
+
+    @PostMapping("/clienteVenditore/mandaFeedback")
+    public ResponseEntity<Void> mandaMessaggioClienteVenditore(UsernamePasswordAuthenticationToken token, @RequestBody AggiungiFeedbackRequest request) {
+        Utente u = (Utente)token.getPrincipal();
+        boolean addFeedback = serviceFeedback.aggiungiFeedback(u,request);
+        if (addFeedback) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+    }
+
+
 }

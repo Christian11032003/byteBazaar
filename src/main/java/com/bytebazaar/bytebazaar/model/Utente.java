@@ -48,15 +48,15 @@ public class Utente implements UserDetails
     private List<Prodotto> prodotto;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente",fetch = FetchType.EAGER)
     private List<Carrello> carrello;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente",fetch = FetchType.EAGER)
     private List<Richiesta> richiesta;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente",fetch = FetchType.EAGER)
     private List<Messaggio> messaggio;
 
 

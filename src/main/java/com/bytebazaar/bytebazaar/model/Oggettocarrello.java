@@ -28,6 +28,6 @@ public class Oggettocarrello
     private int quantita;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "oggettocarrello")
+    @OneToMany(mappedBy = "oggettocarrello",fetch = FetchType.EAGER)
     private List<Feedback> feedback;
 }

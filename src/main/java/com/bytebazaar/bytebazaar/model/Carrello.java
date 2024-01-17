@@ -24,7 +24,7 @@ public class Carrello
     private LocalDateTime dataAcquisto;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "carrello")
+    @OneToMany(mappedBy = "carrello",fetch = FetchType.EAGER)
     private List<Oggettocarrello> oggettoCarrello;
 
 

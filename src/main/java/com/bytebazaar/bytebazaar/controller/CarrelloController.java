@@ -27,7 +27,7 @@ public class CarrelloController
         else return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/venditore/confermaCarrello")
+    @GetMapping("/clienteVenditore/confermaCarrello")
     public ResponseEntity<Void> confermaCarrelloClienteVenditore(UsernamePasswordAuthenticationToken token) {
         Utente u = (Utente)token.getPrincipal();
         boolean bloccato = serviceCarrello.confermaCarrello(u);

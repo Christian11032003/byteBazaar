@@ -65,7 +65,6 @@ public class RichiestaServiceImpl implements RichiestaService
 
         Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
 
-        System.out.println(u.getIdutente());
 
         if (optionalRichiesta.isEmpty()) {
             throw new NotFoundException("Messaggio richiesta non trovato");
