@@ -44,7 +44,7 @@ public class Utente implements UserDetails
     private String token;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente",fetch = FetchType.EAGER)  //soluzione è questa e va sistemata
     private List<Prodotto> prodotto;
 
     @JsonIgnore

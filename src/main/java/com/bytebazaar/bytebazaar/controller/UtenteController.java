@@ -87,7 +87,7 @@ public class UtenteController
 
 
     @PostMapping("/all/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws NotFoundException {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
         Utente u = serviceUtente.login(request);
         if(u != null)
         {
@@ -106,16 +106,14 @@ public class UtenteController
     }
 
     @GetMapping("/all/logout")
-    public ResponseEntity<Void> logout(UsernamePasswordAuthenticationToken token)
+    public ResponseEntity<Void> logoutAdmin(UsernamePasswordAuthenticationToken token)
     {
-        Utente u=(Utente)token.getPrincipal();
+        Utente u=(Utente) token.getPrincipal();
         boolean logout = serviceUtente.logout(u);
         if(logout) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
 
     }
-
-
 
 
 }

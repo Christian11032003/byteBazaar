@@ -15,7 +15,5 @@ public class RegistrationOrModifyProdottoRequest
 
     private int quantita;
 
-    private String username;
 
-    private String password;
 }

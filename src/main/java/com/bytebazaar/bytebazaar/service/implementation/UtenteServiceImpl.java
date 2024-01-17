@@ -130,7 +130,7 @@ public class UtenteServiceImpl implements UtenteService
 
     public Utente login(LoginRequest request){
 
-        Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword()) ;
+        Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword());
         Utente u = ut.orElseThrow(()->new UnAuthorizedException("Utente inesistente nel database"));
         String token= tokenUtil.generaToken(u);
         u.setToken(token);
@@ -144,10 +144,6 @@ public class UtenteServiceImpl implements UtenteService
         utenteRepo.save(u);
         return true;
     }
-
-
-
-
 
     public Utente trovaPerUsername(String username)
     {

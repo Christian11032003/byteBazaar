@@ -10,7 +10,4 @@ public class AggiungiFeedbackRequest
 
     private int valutazione;
 
-    private String username;
-
-    private String password;
 }

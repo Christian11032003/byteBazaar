@@ -11,7 +11,4 @@ public class AggiungiProdottoInCarrelloRequest {
 
     private int quantita;
 
-    private String username;
-
-    private String password;
 }

@@ -1,19 +1,15 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.dto.request.RegistrationOrModifyProdottoRequest;
-import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
+
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
-import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
-import com.bytebazaar.bytebazaar.utils.Util;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -31,20 +27,21 @@ public class ProdottoServiceImpl implements ProdottoService
     public boolean registraProdotto(Utente u, RegistrationOrModifyProdottoRequest request)
     {
 
-
-        Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(request.getUsername());
+        Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(u.getUsername());
 
         if(richiestaOptional.isPresent())
         {
 
             Richiesta r = richiestaOptional.get();
-
-            List<Prodotto> prodottoList = u.getProdotto();
+            System.out.println("Prima della lista");
+            List<Prodotto> prodottoList = u.getProdotto();  //questo potrebbe essere un problema
+            System.out.println("Prima dopo la lista");
 
             boolean notExistProduct = prodottoList.stream().noneMatch(prodotto -> prodotto.getNome().equalsIgnoreCase(request.getNome()));
 
 
-            if (r.getStato().name().contains("ACCETTATO") && notExistProduct) {
+            if (r.getStato().name().contains("ACCETTATO") && notExistProduct)
+            {
                 Prodotto p = new Prodotto();
                 p.setUtente(u);
                 p.setImmagineProdotto(request.getImmagine());
@@ -54,6 +51,7 @@ public class ProdottoServiceImpl implements ProdottoService
                 p.setQuantita(request.getQuantita());
                 prodottoRepo.save(p);
                 return true;
+
             }
 
             else if (r.getStato().name().contains("ACCETTATO") && !notExistProduct)
@@ -61,7 +59,8 @@ public class ProdottoServiceImpl implements ProdottoService
 
                 Optional<Prodotto> optionalProdotto = prodottoRepo.findByNome(request.getNome());
 
-                if (optionalProdotto.isPresent()) {
+                if (optionalProdotto.isPresent())
+                {
                     return modificaProdotto(u,request);
                 }
 
@@ -76,7 +75,6 @@ public class ProdottoServiceImpl implements ProdottoService
             {
                 throw new UnAuthorizedException("Impossibile effetuare l'operazione, controllare la richiesta se è stata accettata ");
             }
-
 
         }
 

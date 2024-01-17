@@ -9,9 +9,7 @@ public class MandaMessaggioRequest
 
     private String testoMessaggio;
 
-    private String username;
 
-    private String password;
 
 
 }
