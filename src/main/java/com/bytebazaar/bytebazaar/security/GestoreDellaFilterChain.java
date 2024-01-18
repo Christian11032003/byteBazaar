@@ -17,11 +17,13 @@ public class GestoreDellaFilterChain {
 
     private final FilterJwt filterJwt;
     private final AuthenticationProvider provider;
+    private final CustomFilter customFilter;
 
     // Costruttore per inizializzare i campi con i valori passati come argomenti
-    public GestoreDellaFilterChain(FilterJwt filterJwt, AuthenticationProvider provider) {
+    public GestoreDellaFilterChain(FilterJwt filterJwt, AuthenticationProvider provider, CustomFilter customFilter) {
         this.filterJwt = filterJwt;
         this.provider = provider;
+        this.customFilter = customFilter;
     }
 
     // Metodo annotato come @Bean, gestito da Spring, per configurare la catena di filtri di sicurezza
@@ -67,7 +69,13 @@ public class GestoreDellaFilterChain {
                 .authenticationProvider(provider)
 
                 // Aggiunge il filtro FilterJwt prima del filtro UsernamePasswordAuthenticationFilter
-                .addFilterBefore(filterJwt, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(filterJwt, UsernamePasswordAuthenticationFilter.class)
+
+                .addFilterAfter(customFilter,FilterJwt.class);
+
+
+
+
 
         // Restituisce l'oggetto httpSecurity configurato come catena di filtri di sicurezza
         return httpSecurity.build();
