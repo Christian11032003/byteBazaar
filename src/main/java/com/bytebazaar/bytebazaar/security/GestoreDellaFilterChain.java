@@ -3,6 +3,7 @@ package com.bytebazaar.bytebazaar.security;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,11 +31,14 @@ public class GestoreDellaFilterChain {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
+        //String[] optionsPath = {"/admin/**", "/clienteVenditore/**", "/venditore/**", "/cliente/**", "/all/**"};
+
         // Disabilita la protezione CSRF
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
 
                 // Configura le regole di autorizzazione per le richieste HTTP
                 .authorizeHttpRequests(auth->auth
+                        //.requestMatchers(HttpMethod.OPTIONS, optionsPath).permitAll()
 
                         // Le richieste a "/admin/**" richiedono l'autenticazione con il ruolo "ADMIN"
                         .requestMatchers("/admin/**").hasAnyRole(Ruolo.ADMIN.toString())
