@@ -2,10 +2,7 @@ package com.bytebazaar.bytebazaar.service.definition;
 
 import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
-import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
+import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequest;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
 
@@ -30,7 +27,7 @@ public interface UtenteService
 
 
     //funzionalità di tutti
-    public boolean registrationUtente(RegistrationUtenteRequest request);
+    public boolean registrationUtente(RegistrationUserRequest request);
     public Utente login(LoginRequest request);
 
     public boolean logout(Utente u);

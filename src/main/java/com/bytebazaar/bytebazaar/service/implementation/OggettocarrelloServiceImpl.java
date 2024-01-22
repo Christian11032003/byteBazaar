@@ -25,7 +25,7 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
     @Autowired
     private ProdottoRepository prodottoRepo;
 
-    public boolean aggiungiAlCarrello(Utente u, AggiungiProdottoInCarrelloRequest request)
+    public boolean aggiungiAlCarrello(Utente u, AddProductToCartRequest request)
     {
 
         // Find the carrello with a date, or create a new one
@@ -39,7 +39,7 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
                     return carrelloRepo.save(newCarrello);
                 });
 
-        Optional<Prodotto> prodottoOptional = prodottoRepo.findByNome(request.getNomeProdotto());
+        Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdProdotto());
 
         if(prodottoOptional.isPresent())
         {
@@ -121,8 +121,8 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
     }
 
     //rivedere sto metodo
-    @SneakyThrows
-    public boolean modificaOggettoCarrello(Utente u, RegistrationOrModifyProdottoRequest request)
+
+    public boolean modificaOggettoCarrello(Utente u, InsertOrModifyProductRequest request)
     {
 
 
@@ -172,8 +172,8 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
 
     }
-    @SneakyThrows
-    public boolean sottraiQuantita(Utente u, SottraiQuantitaRequest request)
+
+    public boolean sottraiQuantita(Utente u, SubtractQuantityRequest request)
     {
 
         Optional<Oggettocarrello> oggettocarrello = oggettocarrelloRepo.findById(request.getIdoggettocarrello());
@@ -203,8 +203,8 @@ public class OggettocarrelloServiceImpl implements OggettocarrelloService
 
 
     }
-    @SneakyThrows
-    public boolean eliminaoggettocarrello(Utente u, EliminaOggettoCarrelloRequest request)
+
+    public boolean eliminaoggettocarrello(Utente u, DeleteObjectFromCartRequest request)
     {
 
         Optional<Oggettocarrello> oggettocarrello = oggettocarrelloRepo.findById(request.getIdoggettocarrello());

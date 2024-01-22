@@ -2,7 +2,7 @@ package com.bytebazaar.bytebazaar.dto.request;
 
 import lombok.Data;
 @Data
-public class AggiungiFeedbackRequest
+public class AddFeedbackRequest
 {
     private int idprodotto;
 

@@ -19,19 +19,12 @@ public class CarrelloController
     @Autowired
     CarrelloService serviceCarrello;
 
-    @GetMapping("/cliente/confermaCarrello")
-    public ResponseEntity<Void> confermaCarrelloCliente(UsernamePasswordAuthenticationToken token) {
+    @GetMapping({"clienteVenditore/confermaCarrello","/cliente/confermaCarrello"})
+    public ResponseEntity<Void> confermaCarrello(UsernamePasswordAuthenticationToken token) {
         Utente u = (Utente)token.getPrincipal();
         boolean bloccato = serviceCarrello.confermaCarrello(u);
         if (bloccato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/clienteVenditore/confermaCarrello")
-    public ResponseEntity<Void> confermaCarrelloClienteVenditore(UsernamePasswordAuthenticationToken token) {
-        Utente u = (Utente)token.getPrincipal();
-        boolean bloccato = serviceCarrello.confermaCarrello(u);
-        if (bloccato) return ResponseEntity.ok().build();
-        else return ResponseEntity.badRequest().build();
-    }
 }

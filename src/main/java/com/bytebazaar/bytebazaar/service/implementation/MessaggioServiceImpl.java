@@ -1,20 +1,16 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
-import com.bytebazaar.bytebazaar.dto.request.MandaMessaggioRequest;
-import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
+import com.bytebazaar.bytebazaar.dto.request.SendMessageRequest;
 import com.bytebazaar.bytebazaar.model.Messaggio;
-import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.MessaggioRepository;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.MessaggioService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class MessaggioServiceImpl implements MessaggioService
@@ -30,7 +26,7 @@ public class MessaggioServiceImpl implements MessaggioService
     ProdottoRepository prodottoRepo;
 
 
-    public boolean mandaMessaggio(Utente u, MandaMessaggioRequest request) {
+    public boolean mandaMessaggio(Utente u, SendMessageRequest request) {
 
 
         if(u.getIdutente() != request.getIdutente())

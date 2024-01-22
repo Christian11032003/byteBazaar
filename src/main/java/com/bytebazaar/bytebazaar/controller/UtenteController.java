@@ -2,20 +2,18 @@ package com.bytebazaar.bytebazaar.controller;
 
 import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUtenteRequest;
+import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequest;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponse;
-import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.security.TokenUtil;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import jakarta.validation.Valid;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,8 +76,8 @@ public class UtenteController
     }
 
     //funzionalità di tutti
-    @PostMapping("/all/registraUtente")
-    public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUtenteRequest request){
+    @PostMapping("/all/registration")
+    public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUserRequest request){
         boolean registrato = serviceUtente.registrationUtente(request);
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
@@ -106,7 +104,7 @@ public class UtenteController
     }
 
     @GetMapping("/all/logout")
-    public ResponseEntity<Void> logoutAdmin(UsernamePasswordAuthenticationToken token)
+    public ResponseEntity<Void> logout(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
         boolean logout = serviceUtente.logout(u);

@@ -5,12 +5,10 @@ import com.bytebazaar.bytebazaar.model.Ruolo;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import org.hibernate.validator.constraints.UniqueElements;
 
 @Data
-public class RegistrationUtenteRequest
+public class RegistrationUserRequest
 {
     @NotBlank(message = "il nome non può essere null")
     private String nome;

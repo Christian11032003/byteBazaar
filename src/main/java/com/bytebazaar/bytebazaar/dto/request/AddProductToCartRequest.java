@@ -3,9 +3,10 @@ package com.bytebazaar.bytebazaar.dto.request;
 import lombok.Data;
 
 @Data
-public class SottraiQuantitaRequest
-{
-    private int idoggettocarrello;
+public class AddProductToCartRequest {
+
+    private int idProdotto;
+
     private int quantita;
 
 }

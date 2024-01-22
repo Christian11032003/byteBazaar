@@ -11,7 +11,7 @@ public interface ProdottoRepository extends JpaRepository<Prodotto,Integer>
 {
     public Optional<Prodotto> findByNome(String nome);
 
-    public Optional<Prodotto> findByIdProdotto(int idprodotto);
+    public Optional<Prodotto> findByIdProdotto(int idProdotto);
 
     public List<Prodotto> findAllByUtente_UsernameIsNot(String username);
 

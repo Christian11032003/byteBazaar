@@ -1,11 +1,7 @@
 package com.bytebazaar.bytebazaar.service.definition;
 
-import com.bytebazaar.bytebazaar.dto.request.ChangeRequestAcceptRequest;
-import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
-import com.bytebazaar.bytebazaar.exception.messaggiException.AlreadyReportedException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
+import com.bytebazaar.bytebazaar.dto.request.AcceptOrRejectRequest;
 import com.bytebazaar.bytebazaar.model.Utente;
-import com.bytebazaar.bytebazaar.security.TokenUtil;
 
 
 public interface RichiestaService
@@ -14,6 +10,6 @@ public interface RichiestaService
 
     public boolean richiesta(Utente u);
 
-    public boolean changeRequestAcceptInRegistration(Utente u,ChangeRequestAcceptRequest request);
+    public boolean changeRequestAcceptInRegistration(Utente u, AcceptOrRejectRequest request);
 
 }

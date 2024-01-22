@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
-import com.bytebazaar.bytebazaar.dto.request.ChangeRequestAcceptRequest;
+import com.bytebazaar.bytebazaar.dto.request.AcceptOrRejectRequest;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Richiesta;
@@ -9,10 +9,7 @@ import com.bytebazaar.bytebazaar.model.Stato;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
-import com.bytebazaar.bytebazaar.security.TokenUtil;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
-import com.bytebazaar.bytebazaar.utils.Util;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +58,7 @@ public class RichiestaServiceImpl implements RichiestaService
 
 
 
-    public boolean changeRequestAcceptInRegistration(Utente u,ChangeRequestAcceptRequest request) {
+    public boolean changeRequestAcceptInRegistration(Utente u, AcceptOrRejectRequest request) {
 
         Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
 

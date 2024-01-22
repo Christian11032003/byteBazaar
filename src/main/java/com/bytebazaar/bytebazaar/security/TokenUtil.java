@@ -41,7 +41,6 @@ public class TokenUtil {
     public String generaToken(Utente u) {
         String ruolo = u.getRuolo().toString();
         String username = u.getUsername();
-        String password = u.getPassword();
 
         // Durata del token impostata a 60 giorni in millisecondi
         long millisecondiDiDurata = 1000L * 60 * 60 * 24 * 60;

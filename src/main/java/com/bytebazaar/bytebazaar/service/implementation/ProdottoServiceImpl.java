@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
-import com.bytebazaar.bytebazaar.dto.request.RegistrationOrModifyProdottoRequest;
+import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequest;
 
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
@@ -24,7 +24,7 @@ public class ProdottoServiceImpl implements ProdottoService
     private RichiestaRepository richiestaRepo;
 
 
-    public boolean registraProdotto(Utente u, RegistrationOrModifyProdottoRequest request)
+    public boolean registraProdotto(Utente u, InsertOrModifyProductRequest request)
     {
 
         Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(u.getUsername());
@@ -34,7 +34,7 @@ public class ProdottoServiceImpl implements ProdottoService
 
             Richiesta r = richiestaOptional.get();
 
-            List<Prodotto> prodottoList = u.getProdotto();  //questo potrebbe essere un problema
+            List<Prodotto> prodottoList = u.getProdotto();
 
 
             boolean notExistProduct = prodottoList.stream().noneMatch(prodotto -> prodotto.getNome().equalsIgnoreCase(request.getNome()));
@@ -85,17 +85,18 @@ public class ProdottoServiceImpl implements ProdottoService
 
     }
 
-    public boolean modificaProdotto(Utente u, RegistrationOrModifyProdottoRequest request)
+    public boolean modificaProdotto(Utente u, InsertOrModifyProductRequest request)
     {
 
 
         Optional<Prodotto> prodottoOptional = prodottoRepo.findByNome(request.getNome());
 
+
         if (prodottoOptional.isPresent()) {
             Prodotto p = prodottoOptional.get();
 
             // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
-            if (p.getUtente().equals(u)) {
+            if (p.getUtente().getIdutente() == u.getIdutente()) {
                 // Modifica solo i campi non nulli nella richiesta
                 if (request.getImmagine() != null) {
                     p.setImmagineProdotto(request.getImmagine());
