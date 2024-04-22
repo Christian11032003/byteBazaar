@@ -19,7 +19,7 @@ public class OggettoCarrelloController
     OggettocarrelloService serviceOggettocarrello;
 
 
-    @PostMapping({"clienteVenditore/aggiungiOggettoCarrello","/cliente/aggiungiOggettoCarrello"})
+    @PostMapping({"/venditore/aggiungiOggettoCarrello","/cliente/aggiungiOggettoCarrello"})
     public ResponseEntity<Void> aggiungiOggettoCarrello(UsernamePasswordAuthenticationToken token, @RequestBody AddProductToCartRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean registratoOggettoCarrello = serviceOggettocarrello.aggiungiAlCarrello(u,request);
@@ -28,7 +28,7 @@ public class OggettoCarrelloController
     }
 
 
-    @PostMapping({"clienteVenditore/aggiungiOggettoCarrello","/cliente/sottraiQuantita"})
+    @PostMapping({"/venditore/aggiungiOggettoCarrello","/cliente/sottraiQuantita"})
     public ResponseEntity<Void> sottraiquanità(UsernamePasswordAuthenticationToken token,@RequestBody SubtractQuantityRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean sottraiQuantita = serviceOggettocarrello.sottraiQuantita(u,request);
@@ -37,7 +37,7 @@ public class OggettoCarrelloController
     }
 
 
-    @PostMapping({"clienteVenditore/eliminaoggettocarrello","/cliente/eliminaoggettocarrello"})
+    @PostMapping({"/venditore/eliminaoggettocarrello","/cliente/eliminaoggettocarrello"})
     public ResponseEntity<Void> eliminaoggettocarrelloCliente(UsernamePasswordAuthenticationToken token,@RequestBody DeleteObjectFromCartRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean eliminato = serviceOggettocarrello.eliminaoggettocarrello(u,request);

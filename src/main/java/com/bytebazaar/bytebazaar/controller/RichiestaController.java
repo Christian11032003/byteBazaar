@@ -18,24 +18,21 @@ public class RichiestaController
     @Autowired
     RichiestaService serviceRichiesta;
 
-    @Autowired
-    TokenUtil token;
-
-
-    @PostMapping("/admin/cambioRichiestaStato")
-    public ResponseEntity<Void> cambioRichiestaStato(UsernamePasswordAuthenticationToken token,@RequestBody AcceptOrRejectRequest request) {
+    @PostMapping({"/admin/modifyTheRequest","/superAdmin/modifyTheRequest"})
+    public ResponseEntity<Void> modifyTheRequest(UsernamePasswordAuthenticationToken token,@RequestBody AcceptOrRejectRequest request)
+    {
         Utente u=(Utente) token.getPrincipal();
-        boolean cambio = serviceRichiesta.changeRequestAcceptInRegistration(u,request);
+        boolean cambio = serviceRichiesta.modifyTheRequest(u,request);
         if (cambio) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/cliente/richiesta")
+    /*@GetMapping("/cliente/richiesta")
     public ResponseEntity<Void> richiesta(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
         boolean cambio = serviceRichiesta.richiesta(u);
         if (cambio) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
-    }
+    }*/
 }

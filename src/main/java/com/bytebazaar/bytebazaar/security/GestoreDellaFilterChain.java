@@ -41,10 +41,10 @@ public class GestoreDellaFilterChain {
                         //.requestMatchers(HttpMethod.OPTIONS, optionsPath).permitAll()
 
                         // Le richieste a "/admin/**" richiedono l'autenticazione con il ruolo "ADMIN"
-                        .requestMatchers("/admin/**").hasAnyRole(Ruolo.ADMIN.toString())
+                        .requestMatchers("/superAdmin/**").hasAnyRole(Ruolo.SUPERADMIN.toString())
 
                         // Le richieste a "/seller/**" richiedono l'autenticazione con il ruolo "VENDITORE"
-                        .requestMatchers("/clienteVenditore/**").hasRole(Ruolo.CLIENTEVENDITORE.toString())
+                        .requestMatchers("/admin/**").hasRole(Ruolo.ADMIN.toString())
 
 
                         // Le richieste a "/seller/**" richiedono l'autenticazione con il ruolo "VENDITORE"

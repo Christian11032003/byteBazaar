@@ -8,8 +8,8 @@ public interface RichiestaService
 {
     public boolean registrazioneRichiesta(Utente u);
 
-    public boolean richiesta(Utente u);
+    //public boolean richiesta(Utente u);
 
-    public boolean changeRequestAcceptInRegistration(Utente u, AcceptOrRejectRequest request);
+    public boolean modifyTheRequest(Utente u, AcceptOrRejectRequest request);
 
 }

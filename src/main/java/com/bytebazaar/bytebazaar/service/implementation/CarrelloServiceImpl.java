@@ -9,7 +9,9 @@ import com.bytebazaar.bytebazaar.repository.CarrelloRepository;
 import com.bytebazaar.bytebazaar.service.definition.CarrelloService;
 import com.bytebazaar.bytebazaar.service.definition.OggettocarrelloService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -21,32 +23,17 @@ public class CarrelloServiceImpl implements CarrelloService
     @Autowired
     CarrelloRepository carrelloRepo;
 
-    @Autowired
-    OggettocarrelloService serviceOggettoCarrello;
-
-
-    public boolean confermaCarrello(Utente u) {
-        Optional<Carrello> carrelloOptional = carrelloRepo.findCarrelloByUtente_UsernameAndUtente_PasswordAndDataAcquistoIsNull(u.getUsername(), u.getPassword());
-
-        if (carrelloOptional.isEmpty()) {
-            throw new NotFoundException("Carrello non trovato");
-        }
-
-        Carrello c = carrelloOptional.get();
-
-        if (c.getDataAcquisto() != null) {
-            throw new BadRequestException("Carrello non acquistato");
-        }
-
-        c.setDataAcquisto(LocalDateTime.now());
-
-        if (serviceOggettoCarrello.modificaQuantitaRimanenti(u,c)) {
-            carrelloRepo.save(c);
-        }
-
-        return true;
+    @Override
+    public Carrello getByUsername(String username) {
+        return carrelloRepo.findCarrelloByUtente_UsernameAndAndDataAcquistoIsNull(username).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"nessun carrello per questo utente"));
     }
 
+    @Override
+    public void confermaCarrello(Carrello c) {
+        if(c.getDataAcquisto()!=null) throw new BadRequestException("Carrello non acquistato");
+        c.setDataAcquisto(LocalDateTime.now());
+        carrelloRepo.save(c);
+    }
 
 
 }

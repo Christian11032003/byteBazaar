@@ -1,10 +1,12 @@
 package com.bytebazaar.bytebazaar.service.definition;
 
+import com.bytebazaar.bytebazaar.model.Carrello;
 import com.bytebazaar.bytebazaar.model.Utente;
 
 public interface CarrelloService
 {
-    public boolean confermaCarrello(Utente u);
+    public Carrello getByUsername(String username);
+    void confermaCarrello(Carrello c);
 
 
 }

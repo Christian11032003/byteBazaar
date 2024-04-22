@@ -16,7 +16,7 @@ public class FeedbackController
     @Autowired
     FeedbackService serviceFeedback;
 
-    @PostMapping({"/clienteVenditore/mandaFeedback","/cliente/mandaFeedback"})
+    @PostMapping({"/venditore/mandaFeedback","/cliente/mandaFeedback"})
     public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody AddFeedbackRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean addFeedback = serviceFeedback.aggiungiFeedback(u,request);

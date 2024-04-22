@@ -7,7 +7,7 @@ public enum Ruolo
 
     VENDITORE,
 
-    CLIENTEVENDITORE,
+    ADMIN,
 
-    ADMIN
+    SUPERADMIN
 }

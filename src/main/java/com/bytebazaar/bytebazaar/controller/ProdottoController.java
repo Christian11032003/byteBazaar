@@ -18,7 +18,7 @@ public class ProdottoController
 
 
     //funzionalità del venditore
-    @PostMapping({"/clienteVenditore/registraProdotto","/venditore/registraProdotto"})
+    @PostMapping("/venditore/registraProdotto")
     public ResponseEntity<Void> registrazioneProdotto(UsernamePasswordAuthenticationToken token, @RequestBody InsertOrModifyProductRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean registrato = serviceProdotto.registraProdotto(u,request);
@@ -26,7 +26,7 @@ public class ProdottoController
         else return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping({"/clienteVenditore/modificaProdotto","/venditore/modificaProdotto"})
+    @PostMapping("/venditore/modificaProdotto")
     public ResponseEntity<Void> modificaProdotto(UsernamePasswordAuthenticationToken token,@RequestBody InsertOrModifyProductRequest request){
         Utente u = (Utente)token.getPrincipal();
         boolean registrato = serviceProdotto.modificaProdotto(u,request);

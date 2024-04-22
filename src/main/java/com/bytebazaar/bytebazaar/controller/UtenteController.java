@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedAdminRequest;
+import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequest;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponse;
@@ -12,7 +12,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,12 +29,27 @@ public class UtenteController
 
     @Autowired
     TokenUtil util;
+
+    //funzionalità del superAdmin
+    @PostMapping("/superAdmin/bannedOrUnBannedAdmin")
+    public ResponseEntity<Void> bloccaAdmin(@RequestBody BannedOrUnBannedRequest request){
+        boolean bloccato = serviceUtente.bannedOrUnBannedAdmin(request);
+        if (bloccato) return ResponseEntity.ok().build();
+        else return  ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/superAdmin/registration")
+    public ResponseEntity<Void> registrazioneAdmin(@Valid @RequestBody RegistrationUserRequest request){
+        boolean registrato = serviceUtente.registrationAdmin(request);
+        if (registrato) return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
+    }
+
+
     //funzionalità dell'admin
-
-
-    @PostMapping("/admin/bloccaSbloccaUtente")
-    public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedAdminRequest request){
-        boolean bloccato = serviceUtente.bannedOrUnBannedAdminRequest(request);
+    @PostMapping("/admin/bannedOrUnBannedAdmin")
+    public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedRequest request){
+        boolean bloccato = serviceUtente.bannedOrUnBannedUser(request);
         if (bloccato) return ResponseEntity.ok().build();
         else return  ResponseEntity.badRequest().build();
     }
@@ -52,13 +66,6 @@ public class UtenteController
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
 
-
-    @GetMapping("/admin/trovaTuttiClientiVenditori")
-    public ResponseEntity<List<Utente>> findAllClientiVenditori(){
-        List<Utente> clientiVenditoriUsers = serviceUtente.findAllClientiVenditori();
-        return ResponseEntity.status(HttpStatus.OK).body(clientiVenditoriUsers);
-    }
-
     //funzionalità del venditore
 
     @GetMapping("/venditore/trovaTuttiImieiProdotti")
@@ -67,9 +74,9 @@ public class UtenteController
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListPersonal);
     }
 
-    //funzionalità del cliente
+    //funzionalità del cliente e del venditore
 
-    @PostMapping("/cliente/trovaGliAltriProdotti")
+    @PostMapping({"/venditore/trovaTuttiImieiProdotti","/cliente/trovaGliAltriProdotti"})
     public ResponseEntity<List<Prodotto>> findAllOtherProducts(@RequestBody LoginRequest request){
         List<Prodotto> prodottoListOthers = serviceUtente.findAllOtherProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);

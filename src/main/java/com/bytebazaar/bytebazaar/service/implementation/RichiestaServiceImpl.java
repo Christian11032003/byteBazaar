@@ -36,7 +36,7 @@ public class RichiestaServiceImpl implements RichiestaService
     }
 
 
-    public boolean richiesta(Utente u)
+    /*public boolean richiesta(Utente u)
     {
 
         Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(u.getUsername());
@@ -54,38 +54,50 @@ public class RichiestaServiceImpl implements RichiestaService
             throw new UnAuthorizedException("Richiesta già somministrata, attendere l'approvazione di un admin");
         }
 
-    }
+    }*/
 
 
-
-    public boolean changeRequestAcceptInRegistration(Utente u, AcceptOrRejectRequest request) {
+    //TODO mettere a cambiare le cose
+    public boolean modifyTheRequest(Utente u, AcceptOrRejectRequest request) {
 
         Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());
 
 
-        if (optionalRichiesta.isEmpty()) {
-            throw new NotFoundException("Messaggio richiesta non trovato");
-        }
+        if (optionalRichiesta.isEmpty()) {throw new NotFoundException("Messaggio richiesta non trovato");}
 
         Richiesta r = optionalRichiesta.get();
+        Utente ut = r.getUtente();
 
-        if (u.getRuolo() != Ruolo.ADMIN) {
-            throw new UnAuthorizedException("Non autorizzato");
+
+
+        if (request.getStato().equals(Stato.ACCETTATO))
+        {
+            if(ut.getRuolo() == Ruolo.VENDITORE) {
+                r.setStato(Stato.ACCETTATO);
+            }
+
+            else if(ut.getRuolo() == Ruolo.CLIENTE)
+            {
+                ut.setRuolo(Ruolo.VENDITORE);
+                r.setStato(Stato.ACCETTATO);
+            }
+
+
         }
 
-        if (request.getStato().equals(Stato.ACCETTATO)) {
-            r.setStato(Stato.ACCETTATO);
-
-            if (u.getRuolo() == Ruolo.CLIENTE) {
-                u.setRuolo(Ruolo.CLIENTEVENDITORE);
+        else if (request.getStato().equals(Stato.RIFIUTATO))
+        {
+            if(ut.getRuolo() == Ruolo.VENDITORE)
+            {
+                ut.setRuolo(Ruolo.CLIENTE);
+                r.setStato(Stato.RIFIUTATO);
             }
 
-        } else if (request.getStato().equals(Stato.RIFIUTATO)) {
-            r.setStato(Stato.RIFIUTATO);
-
-            if (u.getRuolo() == Ruolo.CLIENTEVENDITORE) {
-                u.setRuolo(Ruolo.CLIENTE);
+            else if(ut.getRuolo() == Ruolo.CLIENTE)
+            {
+                r.setStato(Stato.RIFIUTATO);
             }
+
         }
         else
         {
