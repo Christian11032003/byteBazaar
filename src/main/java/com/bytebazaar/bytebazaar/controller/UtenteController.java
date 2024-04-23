@@ -28,22 +28,20 @@ import java.util.List;
 public class UtenteController
 {
 
-    private final UtenteFacade facade;
+    private final UtenteFacade utenteFacade;
 
-    @Autowired
-    TokenUtil util;
 
     //funzionalità del superAdmin
     @PostMapping("/superAdmin/bannedOrUnBannedAdmin")
     public ResponseEntity<Void> bloccaAdmin(@RequestBody BannedOrUnBannedRequest request){
-        boolean bloccato = facade.bannedOrUnBannedAdmin(request);
+        boolean bloccato = utenteFacade.bannedOrUnBannedAdmin(request);
         if (bloccato) return ResponseEntity.ok().build();
         else return  ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/superAdmin/registration")
     public ResponseEntity<Void> registrazioneAdmin(@Valid @RequestBody RegistrationUserRequest request){
-        boolean registrato = facade.registrationAdmin(request);
+        boolean registrato = utenteFacade.registrationAdmin(request);
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
@@ -52,20 +50,20 @@ public class UtenteController
     //funzionalità dell'admin
     @PostMapping("/admin/bannedOrUnBannedAdmin")
     public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedRequest request){
-        boolean bloccato = facade.bannedOrUnBannedUser(request);
+        boolean bloccato = utenteFacade.bannedOrUnBannedUser(request);
         if (bloccato) return ResponseEntity.ok().build();
         else return  ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/admin/trovaTuttiClienti")
     public ResponseEntity<List<Utente>> findAllClienti() {
-        List<Utente> clientiUsers = facade.findAllClienti();
+        List<Utente> clientiUsers = utenteFacade.findAllClienti();
         return ResponseEntity.status(HttpStatus.OK).body(clientiUsers);
     }
 
     @GetMapping("/admin/trovaTuttiVenditori")
     public ResponseEntity<List<Utente>> findAllVenditori() {
-        List<Utente> venditoriUsers = facade.findAllVenditori();
+        List<Utente> venditoriUsers = utenteFacade.findAllVenditori();
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
 
@@ -73,7 +71,7 @@ public class UtenteController
 
     @GetMapping("/venditore/trovaTuttiImieiProdotti")
     public ResponseEntity<List<Prodotto>> findAllHisProducts(@RequestBody LoginRequest request){
-        List<Prodotto> prodottoListPersonal = facade.findAllHisProducts(request);
+        List<Prodotto> prodottoListPersonal = utenteFacade.findAllHisProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListPersonal);
     }
 
@@ -81,14 +79,14 @@ public class UtenteController
 
     @GetMapping({"/venditore/trovaTuttiImieiProdotti","/cliente/trovaGliAltriProdotti"})
     public ResponseEntity<List<Prodotto>> findAllOtherProducts(@RequestBody LoginRequest request){
-        List<Prodotto> prodottoListOthers = facade.findAllOtherProducts(request);
+        List<Prodotto> prodottoListOthers = utenteFacade.findAllOtherProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);
     }
 
     //funzionalità di tutti
     @PostMapping("/all/registration")
     public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUserRequest request){
-        boolean registrato = facade.registrationUtente(request);
+        boolean registrato = utenteFacade.registrationUtente(request);
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
@@ -96,7 +94,7 @@ public class UtenteController
 
     @PostMapping("/all/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
-        Utente u = facade.login(request);
+        Utente u = utenteFacade.login(request);
         if(u != null)
         {
             LoginResponse lr = new LoginResponse();
@@ -117,7 +115,7 @@ public class UtenteController
     public ResponseEntity<Void> logout(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
-        boolean logout = facade.logout(u);
+        boolean logout = utenteFacade.logout(u);
         if(logout) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
 

@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CarrelloController
 {
 
-    private final CarrelloFacade facade;
+    private final CarrelloFacade carrelloFacade;
 
     @GetMapping({"/venditore/confermaCarrello","/cliente/confermaCarrello"})
     public ResponseEntity<Void> confermaCarrello(UsernamePasswordAuthenticationToken token) {
         Utente u = (Utente)token.getPrincipal();
-        boolean bloccato = facade.confermaCarrello(u);
+        boolean bloccato = carrelloFacade.confermaCarrello(u);
         if (bloccato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

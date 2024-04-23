@@ -33,6 +33,9 @@ public class UtenteFacade
     private final RichiestaService serviceRichiesta;
 
 
+    private final RichiestaFacade richiestaFacade;
+
+
     private final TokenUtil tokenUtil;
 
 
@@ -114,7 +117,7 @@ public class UtenteFacade
             serviceUtente.salva(u);
 
             if ((request.getRuolo() == Ruolo.VENDITORE) || (request.getRuolo() == Ruolo.CLIENTE)) {
-                return serviceRichiesta.registrazioneRichiesta(u);
+                return richiestaFacade.registrazioneRichiesta(u);
             } else {
                 return true;
             }
