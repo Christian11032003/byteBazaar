@@ -26,8 +26,7 @@ public class RichiestaServiceImpl implements RichiestaService
     private UtenteRepository utenteRepo;
 
 
-    public boolean registrazioneRichiesta(Utente u)
-    {
+    public boolean registrazioneRichiesta(Utente u) {
         Richiesta r = new Richiesta();
         r.setUtente(u);
         r.setStato(Stato.RICHIESTA);
@@ -36,8 +35,7 @@ public class RichiestaServiceImpl implements RichiestaService
     }
 
 
-    /*public boolean richiesta(Utente u)
-    {
+    public boolean richiesta(Utente u) {
 
         Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(u.getUsername());
 
@@ -54,10 +52,10 @@ public class RichiestaServiceImpl implements RichiestaService
             throw new UnAuthorizedException("Richiesta già somministrata, attendere l'approvazione di un admin");
         }
 
-    }*/
+    }
 
 
-    //TODO mettere a cambiare le cose
+
     public boolean modifyTheRequest(Utente u, AcceptOrRejectRequest request) {
 
         Optional<Richiesta> optionalRichiesta = richiestaRepo.findByIdrichiesta(request.getIdrichiesta());

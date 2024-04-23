@@ -6,7 +6,7 @@ import com.bytebazaar.bytebazaar.model.Utente;
 public interface CarrelloService
 {
     public Carrello getByUsername(String username);
-    void confermaCarrello(Carrello c);
+    public void confermaCarrello(Carrello c);
 
 
 }

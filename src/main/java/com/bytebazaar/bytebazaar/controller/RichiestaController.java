@@ -27,12 +27,12 @@ public class RichiestaController
         else return ResponseEntity.badRequest().build();
     }
 
-    /*@GetMapping("/cliente/richiesta")
+    @GetMapping("/cliente/richiesta")
     public ResponseEntity<Void> richiesta(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
         boolean cambio = serviceRichiesta.richiesta(u);
         if (cambio) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
-    }*/
+    }
 }

@@ -28,164 +28,27 @@ public class UtenteServiceImpl implements UtenteService
     @Autowired
     private UtenteRepository utenteRepo;
 
-    @Autowired
-    private ProdottoRepository prodottoRepo;
 
-    @Autowired
-    private RichiestaService serviceRichiesta;
-
-    @Autowired
-    private TokenUtil tokenUtil;
-
-
-    //funzionalità superAdmin
-    public boolean bannedOrUnBannedAdmin(BannedOrUnBannedRequest request){
-
-        Optional<Utente> ut = utenteRepo.findById(request.getIdutente());
-
-        if (ut.isPresent())
-        {
-            Utente utente = ut.get();
-
-            if(utente.getRuolo() == Ruolo.ADMIN)
-            {
-                utente.setBloccato(!utente.isBloccato());
-            }
-
-            else {
-                throw new NotFoundException("Utente ADMIN non trovato");
-            }
-
-
-            utenteRepo.save(utente);
-            return true;
-        }
-
-        else
-        {
-            throw new NotFoundException("Utente non trovato");
-        }
-
-    }
-
-    //funzionalità dell'admin
+    //funzionalità per il facade
     @Override
-    public boolean bannedOrUnBannedUser(BannedOrUnBannedRequest request) {
-
-        Optional<Utente> ut = utenteRepo.findById(request.getIdutente());
-
-        if (ut.isPresent())
-        {
-            Utente utente = ut.get();
-
-            if(utente.getRuolo() == Ruolo.CLIENTE || utente.getRuolo() == Ruolo.VENDITORE)
-            {
-                utente.setBloccato(!utente.isBloccato());
-            }
-
-            else {
-                throw new NotFoundException("Utente ADMIN non trovato");
-            }
-
-
-            utenteRepo.save(utente);
-            return true;
-        }
-
-        else
-        {
-            throw new NotFoundException("Utente non trovato");
-        }
-    }
-
-
-    public List<Utente> findAllClienti() {return utenteRepo.findAllByRuolo(Ruolo.CLIENTE);}
-
-
-    public List<Utente> findAllVenditori() {return utenteRepo.findAllByRuolo(Ruolo.VENDITORE);}
-
-
-    //funzionalità del cliente e del venditore
-    public List<Prodotto> findAllOtherProducts(LoginRequest request) {return prodottoRepo.findAllByUtente_UsernameIsNot(request.getUsername());}
-
-
-    //funzionalità venditore
-    public List<Prodotto> findAllHisProducts(LoginRequest request) {return prodottoRepo.findAllByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());}
-
-    //funzionalità di tutti
-
-    public boolean registrationUtente(RegistrationUserRequest request) {
-
-        if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
-
-            Utente u = new Utente();
-            u.setNome(request.getNome());
-            u.setCognome(request.getCognome());
-            u.setEmail(request.getEmail());
-            u.setUsername(request.getUsername());
-            u.setPassword(request.getPassword());
-            u.setRuolo(request.getRuolo());
-            u = utenteRepo.save(u);
-
-            if ((request.getRuolo() == Ruolo.VENDITORE) || (request.getRuolo() == Ruolo.CLIENTE)) {
-                return serviceRichiesta.registrazioneRichiesta(u);
-            } else {
-                return true;
-            }
-
-        }
-
-        return false;
+    public Utente getByUsername(String username) {
+        return utenteRepo.findByUsername(username).orElseThrow(() -> new BadRequestException("utente non trovato"));
     }
 
     @Override
-    public boolean registrationAdmin(RegistrationUserRequest request) {
-        if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
-
-            Utente u = new Utente();
-            u.setNome(request.getNome());
-            u.setCognome(request.getCognome());
-            u.setEmail(request.getEmail());
-            u.setUsername(request.getUsername());
-            u.setPassword(request.getPassword());
-            u.setRuolo(request.getRuolo());
-            if(request.getRuolo() == Ruolo.ADMIN)
-            {
-                utenteRepo.save(u);
-                return true;
-            }
-
-            ;
-
-
-
-        }
-
-        throw new BadRequestException("Puoi solo registrare un utente con ruolo admin ");
-
+    public Utente getById(int id) {
+        return utenteRepo.findByIdutente(id).orElseThrow(() -> new BadRequestException("utente non trovato"));
     }
 
+    @Override
+    public List<Utente> findAllByRuolo(Ruolo ruolo) {
+        return utenteRepo.findAllByRuolo(ruolo);
+    }
 
-    public Utente login(LoginRequest request){
-
-        Optional<Utente> ut=utenteRepo.findByUsernameAndPassword(request.getUsername(),request.getPassword());
-        Utente u = ut.orElseThrow(()->new UnAuthorizedException("Utente inesistente nel database"));
-        String token= tokenUtil.generaToken(u);
-        u.setToken(token);
+    @Override
+    public void salva(Utente u) {
         utenteRepo.save(u);
-        return u;
     }
-
-    public boolean logout(Utente u)
-    {
-        u.setToken(null);
-        utenteRepo.save(u);
-        return true;
-    }
-
-
-
-
 
 
 

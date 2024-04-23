@@ -4,11 +4,14 @@ import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequest;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequest;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponse;
+import com.bytebazaar.bytebazaar.facade.CarrelloFacade;
+import com.bytebazaar.bytebazaar.facade.UtenteFacade;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.security.TokenUtil;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class UtenteController
 {
 
-    @Autowired
-    UtenteService serviceUtente;
+    private final UtenteFacade facade;
 
     @Autowired
     TokenUtil util;
@@ -33,14 +36,14 @@ public class UtenteController
     //funzionalità del superAdmin
     @PostMapping("/superAdmin/bannedOrUnBannedAdmin")
     public ResponseEntity<Void> bloccaAdmin(@RequestBody BannedOrUnBannedRequest request){
-        boolean bloccato = serviceUtente.bannedOrUnBannedAdmin(request);
+        boolean bloccato = facade.bannedOrUnBannedAdmin(request);
         if (bloccato) return ResponseEntity.ok().build();
         else return  ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/superAdmin/registration")
     public ResponseEntity<Void> registrazioneAdmin(@Valid @RequestBody RegistrationUserRequest request){
-        boolean registrato = serviceUtente.registrationAdmin(request);
+        boolean registrato = facade.registrationAdmin(request);
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
@@ -49,20 +52,20 @@ public class UtenteController
     //funzionalità dell'admin
     @PostMapping("/admin/bannedOrUnBannedAdmin")
     public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedRequest request){
-        boolean bloccato = serviceUtente.bannedOrUnBannedUser(request);
+        boolean bloccato = facade.bannedOrUnBannedUser(request);
         if (bloccato) return ResponseEntity.ok().build();
         else return  ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/admin/trovaTuttiClienti")
     public ResponseEntity<List<Utente>> findAllClienti() {
-        List<Utente> clientiUsers = serviceUtente.findAllClienti();
+        List<Utente> clientiUsers = facade.findAllClienti();
         return ResponseEntity.status(HttpStatus.OK).body(clientiUsers);
     }
 
     @GetMapping("/admin/trovaTuttiVenditori")
     public ResponseEntity<List<Utente>> findAllVenditori() {
-        List<Utente> venditoriUsers = serviceUtente.findAllVenditori();
+        List<Utente> venditoriUsers = facade.findAllVenditori();
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
 
@@ -70,22 +73,22 @@ public class UtenteController
 
     @GetMapping("/venditore/trovaTuttiImieiProdotti")
     public ResponseEntity<List<Prodotto>> findAllHisProducts(@RequestBody LoginRequest request){
-        List<Prodotto> prodottoListPersonal = serviceUtente.findAllHisProducts(request);
+        List<Prodotto> prodottoListPersonal = facade.findAllHisProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListPersonal);
     }
 
     //funzionalità del cliente e del venditore
 
-    @PostMapping({"/venditore/trovaTuttiImieiProdotti","/cliente/trovaGliAltriProdotti"})
+    @GetMapping({"/venditore/trovaTuttiImieiProdotti","/cliente/trovaGliAltriProdotti"})
     public ResponseEntity<List<Prodotto>> findAllOtherProducts(@RequestBody LoginRequest request){
-        List<Prodotto> prodottoListOthers = serviceUtente.findAllOtherProducts(request);
+        List<Prodotto> prodottoListOthers = facade.findAllOtherProducts(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);
     }
 
     //funzionalità di tutti
     @PostMapping("/all/registration")
     public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUserRequest request){
-        boolean registrato = serviceUtente.registrationUtente(request);
+        boolean registrato = facade.registrationUtente(request);
         if (registrato) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }
@@ -93,7 +96,7 @@ public class UtenteController
 
     @PostMapping("/all/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
-        Utente u = serviceUtente.login(request);
+        Utente u = facade.login(request);
         if(u != null)
         {
             LoginResponse lr = new LoginResponse();
@@ -114,7 +117,7 @@ public class UtenteController
     public ResponseEntity<Void> logout(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
-        boolean logout = serviceUtente.logout(u);
+        boolean logout = facade.logout(u);
         if(logout) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
 
