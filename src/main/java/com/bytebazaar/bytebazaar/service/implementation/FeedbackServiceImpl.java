@@ -20,56 +20,15 @@ public class FeedbackServiceImpl implements FeedbackService
     @Autowired
     private FeedbackRepository feedbackRepo;
 
-    @Autowired
-    private ProdottoRepository prodottoRepo;
 
+    @Override
+    public List<Feedback> getByIdProdotto(int idProdotto) {
+        return feedbackRepo.findAllByOggettocarrello_Prodotto_IdProdotto(idProdotto);
+    }
 
-    public boolean aggiungiFeedback(Utente u, AddFeedbackRequest request)
-    {
-
-
-        Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdprodotto());
-
-        if (prodottoOptional.isPresent())
-        {
-
-            Prodotto p = prodottoOptional.get();
-
-            List<Carrello> carrelloList = u.getCarrello();
-
-            List<Feedback> feedbackList = feedbackRepo.findAllByOggettocarrello_Prodotto_IdProdotto(request.getIdprodotto());
-
-
-            boolean trovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getIdutente() == (u.getIdutente()));
-
-            for (Carrello c : carrelloList) {
-                for (Oggettocarrello o : c.getOggettoCarrello()) {
-
-                    if (p.getIdProdotto() == o.getProdotto().getIdProdotto() && c.getDataAcquisto() != null && trovaFeedback) {
-
-                        Feedback f = new Feedback();
-                        f.setOggettocarrello(o);
-                        f.setDescrizione(request.getDescrizione());
-                        f.setValutazione(request.getValutazione());
-                        feedbackRepo.save(f);
-                        return true;
-
-                    } else {
-                        throw new BadRequestException("Errore");
-                    }
-
-                }
-            }
-
-        }
-
-        else
-        {
-            throw new NotFoundException("Prodotto non trovato");
-        }
-
-        throw new BadRequestException("Errore");
-
+    @Override
+    public void salva(Feedback f) {
+        feedbackRepo.save(f);
     }
 }
 
