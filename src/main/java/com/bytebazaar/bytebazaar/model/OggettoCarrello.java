@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-public class Oggettocarrello
+public class OggettoCarrello
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

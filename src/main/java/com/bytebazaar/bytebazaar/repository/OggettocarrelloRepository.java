@@ -1,15 +1,14 @@
 package com.bytebazaar.bytebazaar.repository;
 
-import com.bytebazaar.bytebazaar.model.Oggettocarrello;
+import com.bytebazaar.bytebazaar.model.OggettoCarrello;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface OggettocarrelloRepository extends JpaRepository<Oggettocarrello,Integer>
+public interface OggettocarrelloRepository extends JpaRepository<OggettoCarrello,Integer>
 {
 
-    Optional<Oggettocarrello> findByCarrello_IdcarrelloAndProdotto_IdProdotto(int idcarrello, int idprodotto);
+    Optional<OggettoCarrello> findByCarrello_IdcarrelloAndProdotto_IdProdotto(int idcarrello, int idprodotto);
 
-    Optional<Oggettocarrello> findById(int idoggettocarrello);
+    Optional<OggettoCarrello> findById(int idoggettocarrello);
 }

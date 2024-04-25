@@ -16,7 +16,7 @@ public class Feedback
 
     @ManyToOne
     @JoinColumn(nullable = false,updatable = false,name = "idoggettocarrello")
-    private Oggettocarrello oggettocarrello;
+    private OggettoCarrello oggettocarrello;
 
     @Column(nullable = false)
     private String descrizione;

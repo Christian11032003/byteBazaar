@@ -1,11 +1,10 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.response.ProdottoDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.model.Carrello;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.service.definition.CarrelloService;
-import com.bytebazaar.bytebazaar.service.definition.OggettocarrelloService;
+import com.bytebazaar.bytebazaar.service.definition.OggettoCarrelloService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 public class CarrelloFacade {
     private final CarrelloService carrelloService;
 
-    private final OggettocarrelloService serviceOggettoCarrello;
+    private final OggettoCarrelloFacade oggettoCarrelloFacade;
 
     @Transactional
     public boolean confermaCarrello(Utente u){
@@ -28,7 +27,7 @@ public class CarrelloFacade {
 
         carrello.setDataAcquisto(LocalDateTime.now());
 
-        if (serviceOggettoCarrello.modificaQuantitaRimanenti(u,carrello)) {
+        if (oggettoCarrelloFacade.modificaQuantitaRimanenti(u,carrello)) {
             carrelloService.confermaCarrello(carrello);
         }
 

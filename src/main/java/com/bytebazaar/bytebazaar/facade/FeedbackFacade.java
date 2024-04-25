@@ -7,7 +7,6 @@ import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.service.definition.FeedbackService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +41,7 @@ public class FeedbackFacade
             boolean trovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getIdutente() == (u.getIdutente()));
 
             for (Carrello c : carrelloList) {
-                for (Oggettocarrello o : c.getOggettoCarrello()) {
+                for (OggettoCarrello o : c.getOggettoCarrello()) {
 
                     if (p.getIdProdotto() == o.getProdotto().getIdProdotto() && c.getDataAcquisto() != null && trovaFeedback) {
 

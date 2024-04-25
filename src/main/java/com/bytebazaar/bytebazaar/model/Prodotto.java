@@ -35,7 +35,7 @@ public class Prodotto
 
     @JsonIgnore
     @OneToMany(mappedBy = "prodotto",fetch = FetchType.EAGER)
-    private List<Oggettocarrello> oggettocarrello;
+    private List<OggettoCarrello> oggettocarrello;
 
 
 
