@@ -1,9 +1,5 @@
 package com.bytebazaar.bytebazaar.service.definition;
 
-import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequest;
-import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequest;
-import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 

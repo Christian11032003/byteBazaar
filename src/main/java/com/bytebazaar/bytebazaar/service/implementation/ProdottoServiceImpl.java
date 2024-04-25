@@ -1,17 +1,11 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
-import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequest;
-
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
-import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProdottoServiceImpl implements ProdottoService

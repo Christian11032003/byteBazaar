@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.AddFeedbackRequest;
+import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequest;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
@@ -26,7 +26,7 @@ public class FeedbackFacade
     {
 
 
-        Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdprodotto());
+        Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdProdotto());
 
         if (prodottoOptional.isPresent())
         {
@@ -35,7 +35,7 @@ public class FeedbackFacade
 
             List<Carrello> carrelloList = u.getCarrello();
 
-            List<Feedback> feedbackList = serviceFeedback.getByIdProdotto(request.getIdprodotto());
+            List<Feedback> feedbackList = serviceFeedback.getByIdProdotto(request.getIdProdotto());
 
 
             boolean trovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getIdutente() == (u.getIdutente()));

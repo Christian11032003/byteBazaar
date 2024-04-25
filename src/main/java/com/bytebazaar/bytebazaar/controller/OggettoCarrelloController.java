@@ -1,11 +1,10 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.AddProductToCartRequest;
-import com.bytebazaar.bytebazaar.dto.request.DeleteObjectFromCartRequest;
-import com.bytebazaar.bytebazaar.dto.request.SubtractQuantityRequest;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.AddProductToCartRequest;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.DeleteObjectFromCartRequest;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.SubtractQuantityRequest;
 import com.bytebazaar.bytebazaar.facade.OggettoCarrelloFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
-import com.bytebazaar.bytebazaar.service.definition.OggettoCarrelloService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,7 @@ public class OggettoCarrelloController
     }
 
 
-    @PostMapping({"/venditore/aggiungiOggettoCarrello","/cliente/sottraiQuantita"})
+    @PostMapping({"/venditore/sottraiQuantita","/cliente/sottraiQuantita"})
     public ResponseEntity<Void> sottraiquanità(UsernamePasswordAuthenticationToken token,@RequestBody SubtractQuantityRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean sottraiQuantita = oggettoCarrelloFacade.sottraiQuantita(u,request);
@@ -40,7 +39,7 @@ public class OggettoCarrelloController
     }
 
 
-    @PostMapping({"/venditore/eliminaoggettocarrello","/cliente/eliminaoggettocarrello"})
+    @PostMapping({"/venditore/eliminaOggettoCarrello","/cliente/eliminaOggettoCarrello"})
     public ResponseEntity<Void> eliminaoggettocarrelloCliente(UsernamePasswordAuthenticationToken token,@RequestBody DeleteObjectFromCartRequest request) {
         Utente u = (Utente)token.getPrincipal();
         boolean eliminato = oggettoCarrelloFacade.eliminaoggettocarrello(u,request);

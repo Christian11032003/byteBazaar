@@ -1,10 +1,10 @@
-package com.bytebazaar.bytebazaar.dto.request;
+package com.bytebazaar.bytebazaar.dto.request.feedback;
 
 import lombok.Data;
 @Data
 public class AddFeedbackRequest
 {
-    private int idprodotto;
+    private int idProdotto;
 
     private String descrizione;
 

@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.AcceptOrRejectRequest;
+import com.bytebazaar.bytebazaar.dto.request.richiesta.AcceptOrRejectRequest;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Richiesta;
@@ -52,7 +52,7 @@ public class RichiestaFacade
 
     public boolean modifyTheRequest(Utente u, AcceptOrRejectRequest request) {
 
-        Richiesta r = serviceRichiesta.findByIdrichiesta(request.getIdrichiesta());
+        Richiesta r = serviceRichiesta.findByIdrichiesta(request.getIdRichiesta());
 
 
         Utente ut = r.getUtente();

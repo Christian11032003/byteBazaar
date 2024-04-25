@@ -1,18 +1,14 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequest;
-import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequest;
+import com.bytebazaar.bytebazaar.dto.request.utente.BannedOrUnBannedRequest;
+import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequest;
+import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequest;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponse;
-import com.bytebazaar.bytebazaar.facade.CarrelloFacade;
 import com.bytebazaar.bytebazaar.facade.UtenteFacade;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
-import com.bytebazaar.bytebazaar.security.TokenUtil;
-import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,7 +35,7 @@ public class UtenteController
         else return  ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/superAdmin/registration")
+    @PostMapping("/superAdmin/registrationAdmin")
     public ResponseEntity<Void> registrazioneAdmin(@Valid @RequestBody RegistrationUserRequest request){
         boolean registrato = utenteFacade.registrationAdmin(request);
         if (registrato) return ResponseEntity.ok().build();

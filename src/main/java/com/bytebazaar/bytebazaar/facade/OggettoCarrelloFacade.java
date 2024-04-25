@@ -1,9 +1,9 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.AddProductToCartRequest;
-import com.bytebazaar.bytebazaar.dto.request.DeleteObjectFromCartRequest;
-import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequest;
-import com.bytebazaar.bytebazaar.dto.request.SubtractQuantityRequest;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.AddProductToCartRequest;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.DeleteObjectFromCartRequest;
+import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequest;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.SubtractQuantityRequest;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
@@ -100,27 +100,39 @@ public class OggettoCarrelloFacade
     }
 
 
-    public boolean modificaQuantitaRimanenti(Utente u, Carrello c)
-    {
+    public boolean modificaQuantitaRimanenti(Utente u, Carrello c) {
         List<OggettoCarrello> oggettiCarrelli = c.getOggettoCarrello();
 
-        for(OggettoCarrello og : oggettiCarrelli)
+        if (u == c.getOggettoCarrello())
         {
 
-            Prodotto p = og.getProdotto();
-            if(p.getQuantita() >= og.getQuantita())
-            {
-                p.setQuantita(p.getQuantita()-og.getQuantita());
-                prodottoRepo.save(p);
-            }
 
-            else
-            {
-                throw new BadRequestException("impossibile completare l'operazione verificare le quantità");
-            }
+            for (OggettoCarrello og : oggettiCarrelli) {
 
+                Prodotto p = og.getProdotto();
+                if (p.getQuantita() >= og.getQuantita())
+                {
+                    p.setQuantita(p.getQuantita() - og.getQuantita());
+                    prodottoRepo.save(p);
+                }
+
+                else
+                {
+                    throw new BadRequestException("impossibile completare l'operazione verificare le quantità");
+                }
+
+
+            }
 
         }
+
+
+        else
+        {
+            throw new UnAuthorizedException("Non autorizzato");
+        }
+
+
 
         return true;
 
@@ -182,7 +194,7 @@ public class OggettoCarrelloFacade
     public boolean sottraiQuantita(Utente u, SubtractQuantityRequest request)
     {
 
-        OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdoggettocarrello());
+        OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
 
         if(oggettocarrello != null)
         {
@@ -213,14 +225,14 @@ public class OggettoCarrelloFacade
     public boolean eliminaoggettocarrello(Utente u, DeleteObjectFromCartRequest request)
     {
 
-        OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdoggettocarrello());
+        OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
 
         if (oggettocarrello != null)
         {
 
 
 
-            if(request.getIdoggettocarrello() == oggettocarrello.getIdoggettocarrello() && oggettocarrello.getCarrello().getDataAcquisto() == null)
+            if(request.getIdOggettocarrello() == oggettocarrello.getIdoggettocarrello() && oggettocarrello.getCarrello().getDataAcquisto() == null)
             {
                 serviceOggettoCarrello.cancella(oggettocarrello);
                 return true;

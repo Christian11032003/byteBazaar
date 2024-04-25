@@ -1,11 +1,10 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequest;
-import com.bytebazaar.bytebazaar.dto.request.LoginRequest;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequest;
+import com.bytebazaar.bytebazaar.dto.request.utente.BannedOrUnBannedRequest;
+import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequest;
+import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequest;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
@@ -17,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +40,7 @@ public class UtenteFacade
 
     public boolean bannedOrUnBannedAdmin(BannedOrUnBannedRequest request){
 
-        Utente u = serviceUtente.getById(request.getIdutente());
+        Utente u = serviceUtente.getById(request.getIdUtente());
 
 
         if(u.getRuolo() == Ruolo.ADMIN)
@@ -67,7 +65,7 @@ public class UtenteFacade
 
     public boolean bannedOrUnBannedUser(BannedOrUnBannedRequest request) {
 
-        Utente u = serviceUtente.getById(request.getIdutente());
+        Utente u = serviceUtente.getById(request.getIdUtente());
 
 
 
