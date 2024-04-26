@@ -12,11 +12,11 @@ public interface UtenteRepository extends JpaRepository<Utente, Integer>
 
         Optional<Utente> findByIdutente(int idutente);
 
-        Optional<Utente> findByUsernameAndPassword(String username,String password);
-
         List<Utente> findAllByRuolo(Ruolo ruolo);
 
         Optional<Utente> findByUsername(String username);
+
+
 
 
 }

@@ -1,10 +1,13 @@
 package com.bytebazaar.bytebazaar.controller;
 
 import com.bytebazaar.bytebazaar.dto.request.utente.BannedOrUnBannedRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.utente.FindThingsRequestDTO;
 import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequestDTO;
 import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequestDTO;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponseDTO;
 import com.bytebazaar.bytebazaar.facade.UtenteFacade;
+import com.bytebazaar.bytebazaar.model.Feedback;
+import com.bytebazaar.bytebazaar.model.Messaggio;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
 import jakarta.validation.Valid;
@@ -69,6 +72,31 @@ public class UtenteController
         List<Utente> venditoriUsers = utenteFacade.findAllVenditori();
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
+
+    @GetMapping("/admin/findAllUtenteProduct")
+    public ResponseEntity<List<Prodotto>> findAllUtenteProduct(@RequestBody FindThingsRequestDTO request) {
+        List<Prodotto> prodotti = utenteFacade.findAllProdottiUser(request);
+        return ResponseEntity.status(HttpStatus.OK).body(prodotti);
+    }
+
+    @GetMapping("/admin/findAllMessaggesUser")
+    public ResponseEntity<List<Messaggio>> findAllMessaggeUtente(@RequestBody FindThingsRequestDTO request) {
+        List<Messaggio> messaggi = utenteFacade.findAllMessaggeUser(request);
+        return ResponseEntity.status(HttpStatus.OK).body(messaggi);
+    }
+
+    @GetMapping("/admin/findAllFeedbackUser")
+    public ResponseEntity<List<Feedback>> findAllFeedbackUtente(@RequestBody FindThingsRequestDTO request) {
+        List<Feedback> feedbacks = utenteFacade.findAllFeedbackUser(request);
+        return ResponseEntity.status(HttpStatus.OK).body(feedbacks);
+    }
+
+
+
+
+
+
+
 
     //funzionalità del venditore
 

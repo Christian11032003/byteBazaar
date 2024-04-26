@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public interface FeedbackRepository extends JpaRepository<Feedback,Integer>
 {
-    Optional<Feedback> findByOggettocarrello_Prodotto_IdProdotto(int idprodotto);
 
     List<Feedback> findAllByOggettocarrello_Prodotto_IdProdotto(int idprodotto);
+
+    List<Feedback> findAllByOggettocarrello_Carrello_Utente_Idutente(int idUtente);
 }

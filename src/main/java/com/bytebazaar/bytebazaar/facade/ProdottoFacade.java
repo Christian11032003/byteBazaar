@@ -6,6 +6,7 @@ import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedExcepti
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Richiesta;
 import com.bytebazaar.bytebazaar.model.Utente;
+import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ public class ProdottoFacade
     public final ProdottoService serviceProdotto;
 
     private final RichiestaRepository richiestaRepo;
+
+    private final ProdottoRepository prodottoRepo;
 
 
     public boolean registraProdotto(Utente u, InsertOrModifyProductRequestDTO request)

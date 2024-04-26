@@ -17,6 +17,10 @@ public interface ProdottoRepository extends JpaRepository<Prodotto,Integer>
 
     public List<Prodotto> findAllByUtenteIsNot(Utente u);
 
+    public List<Prodotto> findAllByUtente_Idutente(int idUtente);
+
+
+
 
 
 

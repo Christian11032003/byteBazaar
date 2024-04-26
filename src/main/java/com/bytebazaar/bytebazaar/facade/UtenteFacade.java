@@ -1,13 +1,14 @@
 package com.bytebazaar.bytebazaar.facade;
 
 import com.bytebazaar.bytebazaar.dto.request.utente.BannedOrUnBannedRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.utente.FindThingsRequestDTO;
 import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequestDTO;
 import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
-import com.bytebazaar.bytebazaar.model.Prodotto;
-import com.bytebazaar.bytebazaar.model.Ruolo;
-import com.bytebazaar.bytebazaar.model.Utente;
+import com.bytebazaar.bytebazaar.model.*;
+import com.bytebazaar.bytebazaar.repository.FeedbackRepository;
+import com.bytebazaar.bytebazaar.repository.MessaggioRepository;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.security.TokenUtil;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
@@ -25,6 +26,10 @@ public class UtenteFacade
 
 
     private final ProdottoRepository prodottoRepo;
+
+    private final MessaggioRepository messaggioRepo;
+
+    private final FeedbackRepository feedbackRepo;
 
 
     private final RichiestaFacade richiestaFacade;
@@ -83,11 +88,28 @@ public class UtenteFacade
 
     public List<Utente> findAllAdmin(){return serviceUtente.findAllByRuolo(Ruolo.ADMIN);}
 
+    //funzionalità admin
 
     public List<Utente> findAllClienti() {return serviceUtente.findAllByRuolo(Ruolo.CLIENTE);}
 
 
     public List<Utente> findAllVenditori() {return serviceUtente.findAllByRuolo(Ruolo.VENDITORE);}
+
+    public List<Prodotto> findAllProdottiUser(FindThingsRequestDTO request)
+    {
+        return prodottoRepo.findAllByUtente_Idutente(request.getIdUtente());
+    }
+
+    public List<Messaggio> findAllMessaggeUser(FindThingsRequestDTO request)
+    {
+        return messaggioRepo.findAllByUtente_Idutente(request.getIdUtente());
+    }
+
+    public List<Feedback> findAllFeedbackUser(FindThingsRequestDTO request)
+    {
+        return feedbackRepo.findAllByOggettocarrello_Carrello_Utente_Idutente(request.getIdUtente());
+    }
+
 
 
     //funzionalità del cliente e del venditore
