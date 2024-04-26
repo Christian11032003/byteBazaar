@@ -91,6 +91,14 @@ public class UtenteController
         return ResponseEntity.status(HttpStatus.OK).body(feedbacks);
     }
 
+    @GetMapping("/admin/findAllProdottiUserInKart")
+    public ResponseEntity<List<Prodotto>> findAllProdottiUserInKart(@RequestBody FindThingsRequestDTO request) {
+        List<Prodotto> prodotti = utenteFacade.findAllProdottiUserInKart(request);
+        return ResponseEntity.status(HttpStatus.OK).body(prodotti);
+    }
+
+
+
 
 
 

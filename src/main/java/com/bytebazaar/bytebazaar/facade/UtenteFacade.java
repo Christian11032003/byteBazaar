@@ -100,6 +100,11 @@ public class UtenteFacade
         return prodottoRepo.findAllByUtente_Idutente(request.getIdUtente());
     }
 
+    public List<Prodotto> findAllProdottiUserInKart(FindThingsRequestDTO request)
+    {
+        return prodottoRepo.findAllProductInKart(request.getIdUtente());
+    }
+
     public List<Messaggio> findAllMessaggeUser(FindThingsRequestDTO request)
     {
         return messaggioRepo.findAllByUtente_Idutente(request.getIdUtente());
@@ -109,6 +114,7 @@ public class UtenteFacade
     {
         return feedbackRepo.findAllByOggettocarrello_Carrello_Utente_Idutente(request.getIdUtente());
     }
+
 
 
 
