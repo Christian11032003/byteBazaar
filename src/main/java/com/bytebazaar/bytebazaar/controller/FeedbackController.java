@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequest;
+import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequestDTO;
 import com.bytebazaar.bytebazaar.facade.FeedbackFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class FeedbackController
     private final FeedbackFacade feedbackFacade;
 
     @PostMapping({"/venditore/mandaFeedback","/cliente/mandaFeedback"})
-    public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody AddFeedbackRequest request) {
+    public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody AddFeedbackRequestDTO request) {
         Utente u = (Utente)token.getPrincipal();
         boolean addFeedback = feedbackFacade.aggiungiFeedback(u,request);
         if (addFeedback) return ResponseEntity.ok().build();

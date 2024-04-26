@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequest;
+import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequestDTO;
 import com.bytebazaar.bytebazaar.facade.ProdottoFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class ProdottoController
 
     //funzionalità del venditore
     @PostMapping("/venditore/registraProdotto")
-    public ResponseEntity<Void> registrazioneProdotto(UsernamePasswordAuthenticationToken token, @RequestBody InsertOrModifyProductRequest request) {
+    public ResponseEntity<Void> registrazioneProdotto(UsernamePasswordAuthenticationToken token, @RequestBody InsertOrModifyProductRequestDTO request) {
         Utente u = (Utente)token.getPrincipal();
         boolean registrato = prodottoFacade.registraProdotto(u,request);
         if (registrato) return ResponseEntity.ok().build();
@@ -30,7 +30,7 @@ public class ProdottoController
     }
 
     @PostMapping("/venditore/modificaProdotto")
-    public ResponseEntity<Void> modificaProdotto(UsernamePasswordAuthenticationToken token,@RequestBody InsertOrModifyProductRequest request){
+    public ResponseEntity<Void> modificaProdotto(UsernamePasswordAuthenticationToken token,@RequestBody InsertOrModifyProductRequestDTO request){
         Utente u = (Utente)token.getPrincipal();
         boolean registrato = prodottoFacade.modificaProdotto(u,request);
         if (registrato) return ResponseEntity.ok().build();

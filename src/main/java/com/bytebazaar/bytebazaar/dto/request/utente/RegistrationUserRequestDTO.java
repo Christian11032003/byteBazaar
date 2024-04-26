@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class RegistrationUserRequest
+public class RegistrationUserRequestDTO
 {
     @NotBlank(message = "il nome non può essere null")
     private String nome;

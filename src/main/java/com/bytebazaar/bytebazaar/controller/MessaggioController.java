@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.messaggio.SendMessageRequest;
+import com.bytebazaar.bytebazaar.dto.request.messaggio.SendMessageRequestDTO;
 import com.bytebazaar.bytebazaar.facade.MessaggioFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class MessaggioController
     private final MessaggioFacade messaggioFacade;
 
     @PostMapping({"/venditore/mandaMessaggio","/cliente/mandaMessaggio"})
-    public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody SendMessageRequest request) {
+    public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody SendMessageRequestDTO request) {
         Utente u = (Utente)token.getPrincipal();
         boolean sendMessaggio = messaggioFacade.mandaMessaggio(u,request);
         if (sendMessaggio) return ResponseEntity.ok().build();

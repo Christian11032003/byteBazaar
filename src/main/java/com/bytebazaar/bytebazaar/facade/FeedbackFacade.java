@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequest;
+import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
@@ -18,11 +18,10 @@ public class FeedbackFacade
 {
     private final FeedbackService serviceFeedback;
 
-
     private final ProdottoRepository prodottoRepo;
 
 
-    public boolean aggiungiFeedback(Utente u, AddFeedbackRequest request)
+    public boolean aggiungiFeedback(Utente u, AddFeedbackRequestDTO request)
     {
 
 

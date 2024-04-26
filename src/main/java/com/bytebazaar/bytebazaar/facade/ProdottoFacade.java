@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequest;
+import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Prodotto;
@@ -23,7 +23,7 @@ public class ProdottoFacade
     private final RichiestaRepository richiestaRepo;
 
 
-    public boolean registraProdotto(Utente u, InsertOrModifyProductRequest request)
+    public boolean registraProdotto(Utente u, InsertOrModifyProductRequestDTO request)
     {
 
         Optional<Richiesta> richiestaOptional = richiestaRepo.findByUtente_Username(u.getUsername());
@@ -76,7 +76,7 @@ public class ProdottoFacade
 
     }
 
-    public boolean modificaProdotto(Utente u, InsertOrModifyProductRequest request)
+    public boolean modificaProdotto(Utente u, InsertOrModifyProductRequestDTO request)
     {
 
 

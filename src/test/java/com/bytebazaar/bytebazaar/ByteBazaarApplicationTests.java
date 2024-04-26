@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar;
 
-import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequest;
+import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequestDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -26,7 +26,7 @@ class ByteBazaarApplicationTests {
     @Test
     @Order(2)
     void provaLoginConCredenzialiErrate() throws Exception {
-        LoginRequest l=new LoginRequest();
+        LoginRequestDTO l=new LoginRequestDTO();
         l.setUsername("a.grillo@elis.org");
         l.setPassword("P4ssw0rd!1");
         ObjectMapper om=new ObjectMapper();

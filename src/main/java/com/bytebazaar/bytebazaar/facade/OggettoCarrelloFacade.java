@@ -1,9 +1,9 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.AddProductToCartRequest;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.DeleteObjectFromCartRequest;
-import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequest;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.SubtractQuantityRequest;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.AddProductToCartRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.DeleteObjectFromCartRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.SubtractQuantityRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
@@ -31,7 +31,7 @@ public class OggettoCarrelloFacade
 
     private final ProdottoRepository prodottoRepo;
 
-    public boolean aggiungiAlCarrello(Utente u, AddProductToCartRequest request)
+    public boolean aggiungiAlCarrello(Utente u, AddProductToCartRequestDTO request)
     {
 
         // Find the carrello with a date, or create a new one
@@ -140,7 +140,7 @@ public class OggettoCarrelloFacade
 
     //rivedere sto metodo
 
-    public boolean modificaOggettoCarrello(Utente u, InsertOrModifyProductRequest request)
+    public boolean modificaOggettoCarrello(Utente u, InsertOrModifyProductRequestDTO request)
     {
 
 
@@ -191,7 +191,7 @@ public class OggettoCarrelloFacade
 
     }
 
-    public boolean sottraiQuantita(Utente u, SubtractQuantityRequest request)
+    public boolean sottraiQuantita(Utente u, SubtractQuantityRequestDTO request)
     {
 
         OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
@@ -222,7 +222,7 @@ public class OggettoCarrelloFacade
 
     }
 
-    public boolean eliminaoggettocarrello(Utente u, DeleteObjectFromCartRequest request)
+    public boolean eliminaoggettocarrello(Utente u, DeleteObjectFromCartRequestDTO request)
     {
 
         OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());

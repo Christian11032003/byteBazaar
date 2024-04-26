@@ -3,7 +3,7 @@ package com.bytebazaar.bytebazaar.dto.request.prodotto;
 import lombok.Data;
 
 @Data
-public class InsertOrModifyProductRequest
+public class InsertOrModifyProductRequestDTO
 {
     private String immagine;
 

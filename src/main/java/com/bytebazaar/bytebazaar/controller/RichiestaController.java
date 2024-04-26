@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.richiesta.AcceptOrRejectRequest;
+import com.bytebazaar.bytebazaar.dto.request.richiesta.AcceptOrRejectRequestDTO;
 import com.bytebazaar.bytebazaar.facade.RichiestaFacade;
 
 import com.bytebazaar.bytebazaar.model.Utente;
@@ -20,7 +20,7 @@ public class RichiestaController
     private final RichiestaFacade richiestaFacade;
 
     @PostMapping({"/admin/modifyTheRequest","/superAdmin/modifyTheRequest"})
-    public ResponseEntity<Void> modifyTheRequest(UsernamePasswordAuthenticationToken token,@RequestBody AcceptOrRejectRequest request)
+    public ResponseEntity<Void> modifyTheRequest(UsernamePasswordAuthenticationToken token,@RequestBody AcceptOrRejectRequestDTO request)
     {
         Utente u=(Utente) token.getPrincipal();
         boolean cambio = richiestaFacade.modifyTheRequest(u,request);

@@ -4,7 +4,7 @@ import com.bytebazaar.bytebazaar.model.Stato;
 import lombok.Data;
 
 @Data
-public class AcceptOrRejectRequest
+public class AcceptOrRejectRequestDTO
 {
     private int idRichiesta;
     private Stato stato;

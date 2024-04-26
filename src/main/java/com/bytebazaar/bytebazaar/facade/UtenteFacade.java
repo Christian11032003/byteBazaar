@@ -1,8 +1,8 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.utente.BannedOrUnBannedRequest;
-import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequest;
-import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequest;
+import com.bytebazaar.bytebazaar.dto.request.utente.BannedOrUnBannedRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.Prodotto;
@@ -10,7 +10,6 @@ import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.security.TokenUtil;
-import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,9 +27,6 @@ public class UtenteFacade
     private final ProdottoRepository prodottoRepo;
 
 
-    private final RichiestaService serviceRichiesta;
-
-
     private final RichiestaFacade richiestaFacade;
 
 
@@ -38,7 +34,7 @@ public class UtenteFacade
 
 
 
-    public boolean bannedOrUnBannedAdmin(BannedOrUnBannedRequest request){
+    public boolean bannedOrUnBannedAdmin(BannedOrUnBannedRequestDTO request){
 
         Utente u = serviceUtente.getById(request.getIdUtente());
 
@@ -63,7 +59,7 @@ public class UtenteFacade
 
     //funzionalità dell'admin
 
-    public boolean bannedOrUnBannedUser(BannedOrUnBannedRequest request) {
+    public boolean bannedOrUnBannedUser(BannedOrUnBannedRequestDTO request) {
 
         Utente u = serviceUtente.getById(request.getIdUtente());
 
@@ -85,6 +81,8 @@ public class UtenteFacade
 
     }
 
+    public List<Utente> findAllAdmin(){return serviceUtente.findAllByRuolo(Ruolo.ADMIN);}
+
 
     public List<Utente> findAllClienti() {return serviceUtente.findAllByRuolo(Ruolo.CLIENTE);}
 
@@ -93,15 +91,28 @@ public class UtenteFacade
 
 
     //funzionalità del cliente e del venditore
-    public List<Prodotto> findAllOtherProducts(LoginRequest request) {return prodottoRepo.findAllByUtente_UsernameIsNot(request.getUsername());}
+    public List<Prodotto> findAllOtherProducts(Utente u)
+    {
+
+
+        /*ProdottoDTO p=new ProdottoDTO.Builder()
+                .setDescrizione("csdvcsdf")
+                .setIdProdotto(4)
+                .build();*/
+
+        //DTO response del utente per il builder
+
+
+        return prodottoRepo.findAllByUtenteIsNot(u);
+    }
 
 
     //funzionalità venditore
-    public List<Prodotto> findAllHisProducts(LoginRequest request) {return prodottoRepo.findAllByUtente_UsernameAndUtente_Password(request.getUsername(), request.getPassword());}
+    public List<Prodotto> findAllHisProducts(Utente u) {return prodottoRepo.findAllByUtente(u);}
 
     //funzionalità di tutti
 
-    public boolean registrationUtente(RegistrationUserRequest request) {
+    public boolean registrationUtente(RegistrationUserRequestDTO request) {
 
         if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
 
@@ -126,7 +137,7 @@ public class UtenteFacade
     }
 
 
-    public boolean registrationAdmin(RegistrationUserRequest request) {
+    public boolean registrationAdmin(RegistrationUserRequestDTO request) {
         if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
 
             Utente u = new Utente();
@@ -149,7 +160,7 @@ public class UtenteFacade
     }
 
 
-    public Utente login(LoginRequest request){
+    public Utente login(LoginRequestDTO request){
 
         Utente u = serviceUtente.getByUsername(request.getUsername());
 

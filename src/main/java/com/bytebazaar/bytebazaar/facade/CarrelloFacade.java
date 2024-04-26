@@ -32,12 +32,7 @@ public class CarrelloFacade {
         }
 
 
-        /*ProdottoDTO p=new ProdottoDTO.Builder()
-                .setDescrizione("csdvcsdf")
-                .setIdProdotto(4)
-                .build();*/
 
-        //DTO response del utente per il builder
 
 
         return true;

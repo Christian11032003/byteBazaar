@@ -4,7 +4,7 @@ import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.Data;
 
 @Data
-public class CreateCartRequest
+public class CreateCartRequestDTO
 {
     private Utente utente;
 }
