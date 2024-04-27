@@ -153,7 +153,7 @@ public class UtenteFacade
             u.setRuolo(request.getRuolo());
             serviceUtente.salva(u);
 
-            if ((request.getRuolo() == Ruolo.VENDITORE) || (request.getRuolo() == Ruolo.CLIENTE)) {
+            if (request.getRuolo() == Ruolo.VENDITORE) {
                 return richiestaFacade.registrazioneRichiesta(u);
             } else {
                 return true;

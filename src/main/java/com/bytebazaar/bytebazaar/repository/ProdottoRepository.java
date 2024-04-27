@@ -20,7 +20,7 @@ public interface ProdottoRepository extends JpaRepository<Prodotto,Integer>
 
     public List<Prodotto> findAllByUtente_Idutente(int idUtente);
 
-    @Query(nativeQuery = true,value = "select * from OggettoCarrello join Carrello where Carrello.idUtente = :idUtente and Carrello.dataAcquisto != null group by idProdotto")
+    @Query(nativeQuery = true,value = "select * from Oggettocarrello join Carrello where Carrello.idUtente = :idUtente and Carrello.dataAcquisto != null group by idProdotto")
     public List<Prodotto> findAllProductInKart(int idUtente);
 
 

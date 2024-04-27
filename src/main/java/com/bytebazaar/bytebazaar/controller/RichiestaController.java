@@ -19,11 +19,11 @@ public class RichiestaController
 
     private final RichiestaFacade richiestaFacade;
 
-    @PostMapping({"/admin/modifyTheRequest","/superAdmin/modifyTheRequest"})
-    public ResponseEntity<Void> modifyTheRequest(UsernamePasswordAuthenticationToken token,@RequestBody AcceptOrRejectRequestDTO request)
+    @PostMapping("/admin/modifyTheRequest")
+    public ResponseEntity<Void> modifyTheRequest(@RequestBody AcceptOrRejectRequestDTO request)
     {
-        Utente u=(Utente) token.getPrincipal();
-        boolean cambio = richiestaFacade.modifyTheRequest(u,request);
+
+        boolean cambio = richiestaFacade.modifyTheRequest(request);
         if (cambio) return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().build();
     }

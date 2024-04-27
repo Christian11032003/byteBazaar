@@ -6,19 +6,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Getter
 public class ProdottoDTO {
-    private long idProdotto;
-    private long idVenditore;
-    private String nomeVenditore;
+
     private String immagineProdotto;
     private String nome;
     private String descrizione;
     private double prezzo;
     private int quantita;
 
-    private ProdottoDTO(long idProdotto, long idVenditore, String nomeVenditore, String immagineProdotto, String nome, String descrizione, double prezzo, int quantita) {
-        this.idProdotto = idProdotto;
-        this.idVenditore = idVenditore;
-        this.nomeVenditore = nomeVenditore;
+    private ProdottoDTO(String immagineProdotto, String nome, String descrizione, double prezzo, int quantita) {
         this.immagineProdotto = immagineProdotto;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -27,30 +22,13 @@ public class ProdottoDTO {
     }
 
     public static class Builder{
-        private long idProdotto;
-        private long idVenditore;
-        private String nomeVenditore;
+
         private String immagineProdotto;
         private String nome;
         private String descrizione;
         private double prezzo;
         private int quantita;
 
-        public Builder setIdProdotto(long idProdotto) {
-            if(idProdotto<1)return null;
-            this.idProdotto = idProdotto;
-            return this;
-        }
-
-        public Builder setIdVenditore(long idVenditore) {
-            this.idVenditore = idVenditore;
-            return this;
-        }
-
-        public Builder setNomeVenditore(String nomeVenditore) {
-            this.nomeVenditore = nomeVenditore;
-            return this;
-        }
 
         public Builder setImmagineProdotto(String immagineProdotto) {
             this.immagineProdotto = immagineProdotto;
@@ -77,16 +55,15 @@ public class ProdottoDTO {
             return this;
         }
 
-        private boolean isValid(){
+        /*private boolean isValid(){
             return idProdotto!=0&&
                     idVenditore!=0&&
                     nomeVenditore!=null&&
                     nome!=null;
-        }
+        }*/
 
         public ProdottoDTO build(){
-            if(isValid())return new ProdottoDTO(idProdotto,idVenditore,nomeVenditore,immagineProdotto,nome,descrizione,prezzo,quantita);
-            else throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            return new ProdottoDTO(immagineProdotto,nome,descrizione,prezzo,quantita);
         }
     }
 }

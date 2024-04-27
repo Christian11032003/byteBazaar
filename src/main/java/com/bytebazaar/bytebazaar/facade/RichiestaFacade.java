@@ -50,23 +50,23 @@ public class RichiestaFacade
 
 
 
-    public boolean modifyTheRequest(Utente u, AcceptOrRejectRequestDTO request) {
+    public boolean modifyTheRequest(AcceptOrRejectRequestDTO request) {
 
         Richiesta r = serviceRichiesta.findByIdrichiesta(request.getIdRichiesta());
 
 
-        Utente ut = r.getUtente();
+        Utente ur = r.getUtente();
 
 
         if (request.getStato().equals(Stato.ACCETTATO))
         {
-            if(ut.getRuolo() == Ruolo.VENDITORE) {
+            if(ur.getRuolo() == Ruolo.VENDITORE) {
                 r.setStato(Stato.ACCETTATO);
             }
 
-            else if(ut.getRuolo() == Ruolo.CLIENTE)
+            else if(ur.getRuolo() == Ruolo.CLIENTE)
             {
-                ut.setRuolo(Ruolo.VENDITORE);
+                ur.setRuolo(Ruolo.VENDITORE);
                 r.setStato(Stato.ACCETTATO);
             }
 
@@ -75,13 +75,13 @@ public class RichiestaFacade
 
         else if (request.getStato().equals(Stato.RIFIUTATO))
         {
-            if(ut.getRuolo() == Ruolo.VENDITORE)
+            if(ur.getRuolo() == Ruolo.VENDITORE)
             {
-                ut.setRuolo(Ruolo.CLIENTE);
+                ur.setRuolo(Ruolo.CLIENTE);
                 r.setStato(Stato.RIFIUTATO);
             }
 
-            else if(ut.getRuolo() == Ruolo.CLIENTE)
+            else if(ur.getRuolo() == Ruolo.CLIENTE)
             {
                 r.setStato(Stato.RIFIUTATO);
             }
@@ -93,7 +93,7 @@ public class RichiestaFacade
         }
 
         // Aggiorna l'utente e la richiesta nel repository
-        utenteRepo.save(u);
+        utenteRepo.save(ur);
         serviceRichiesta.salva(r);
 
         return true;

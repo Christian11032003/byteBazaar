@@ -191,7 +191,7 @@ public class OggettoCarrelloFacade
 
     }
 
-    public boolean sottraiQuantita(Utente u, SubtractQuantityRequestDTO request)
+    public boolean sottraiQuantita(SubtractQuantityRequestDTO request)
     {
 
         OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
@@ -222,7 +222,7 @@ public class OggettoCarrelloFacade
 
     }
 
-    public boolean eliminaoggettocarrello(Utente u, DeleteObjectFromCartRequestDTO request)
+    public boolean eliminaoggettocarrello(DeleteObjectFromCartRequestDTO request)
     {
 
         OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());

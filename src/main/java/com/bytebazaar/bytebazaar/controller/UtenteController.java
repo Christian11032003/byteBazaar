@@ -46,9 +46,19 @@ public class UtenteController
 
 
     @PostMapping("/superAdmin/registrationAdmin")
-    public ResponseEntity<Void> registrazioneAdmin(@Valid @RequestBody RegistrationUserRequestDTO request){
+    public ResponseEntity<LoginResponseDTO> registrazioneAdmin(@Valid @RequestBody RegistrationUserRequestDTO request){
         boolean registrato = utenteFacade.registrationAdmin(request);
-        if (registrato) return ResponseEntity.ok().build();
+        if (registrato) {
+
+            LoginResponseDTO lr = new LoginResponseDTO.Builder()
+                    .setUsername(request.getUsername())
+                    .setRuolo(request.getRuolo().toString())
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.OK).body(lr);
+        }
+
+
         else return ResponseEntity.badRequest().build();
     }
 
@@ -73,38 +83,31 @@ public class UtenteController
         return ResponseEntity.status(HttpStatus.OK).body(venditoriUsers);
     }
 
-    @GetMapping("/admin/findAllUtenteProduct")
+    @PostMapping("/admin/findAllUtenteProduct")
     public ResponseEntity<List<Prodotto>> findAllUtenteProduct(@RequestBody FindThingsRequestDTO request) {
         List<Prodotto> prodotti = utenteFacade.findAllProdottiUser(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodotti);
     }
 
-    @GetMapping("/admin/findAllMessaggesUser")
+    @PostMapping("/admin/findAllMessagesUser")
     public ResponseEntity<List<Messaggio>> findAllMessaggeUtente(@RequestBody FindThingsRequestDTO request) {
         List<Messaggio> messaggi = utenteFacade.findAllMessaggeUser(request);
         return ResponseEntity.status(HttpStatus.OK).body(messaggi);
     }
 
-    @GetMapping("/admin/findAllFeedbackUser")
+    @PostMapping("/admin/findAllFeedbackUser")
     public ResponseEntity<List<Feedback>> findAllFeedbackUtente(@RequestBody FindThingsRequestDTO request) {
         List<Feedback> feedbacks = utenteFacade.findAllFeedbackUser(request);
         return ResponseEntity.status(HttpStatus.OK).body(feedbacks);
     }
 
-    @GetMapping("/admin/findAllProdottiUserInKart")
+    @PostMapping("/admin/findAllProdottiUserInKart")
     public ResponseEntity<List<Prodotto>> findAllProdottiUserInKart(@RequestBody FindThingsRequestDTO request) {
         List<Prodotto> prodotti = utenteFacade.findAllProdottiUserInKart(request);
         return ResponseEntity.status(HttpStatus.OK).body(prodotti);
     }
 
-
-
-
-
-
-
-
-
+    
 
     //funzionalità del venditore
 
@@ -117,7 +120,6 @@ public class UtenteController
     }
 
     //funzionalità del cliente e del venditore
-
     @GetMapping({"/venditore/trovaTuttiImieiProdotti","/cliente/trovaGliAltriProdotti"})
     public ResponseEntity<List<Prodotto>> findAllOtherProducts(UsernamePasswordAuthenticationToken token)
     {
@@ -128,9 +130,12 @@ public class UtenteController
 
     //funzionalità di tutti
     @PostMapping("/all/registration")
-    public ResponseEntity<Void> registrazioneUtente(@Valid @RequestBody RegistrationUserRequestDTO request){
+    public ResponseEntity<String> registrazioneUtente(@Valid @RequestBody RegistrationUserRequestDTO request){
         boolean registrato = utenteFacade.registrationUtente(request);
-        if (registrato) return ResponseEntity.ok().build();
+        if (registrato)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body("Registrato con successo");
+        }
         else return ResponseEntity.badRequest().build();
     }
 
@@ -140,14 +145,10 @@ public class UtenteController
         Utente u = utenteFacade.login(request);
         if(u != null)
         {
-
-
-
             LoginResponseDTO lr = new LoginResponseDTO.Builder()
                     .setUsername(request.getUsername())
                     .setRuolo(u.getRuolo().toString())
                     .build();
-
 
             String token= u.getToken();
             return ResponseEntity.status(HttpStatus.OK).header("Authorization",token).body(lr);
@@ -160,11 +161,11 @@ public class UtenteController
     }
 
     @GetMapping("/all/logout")
-    public ResponseEntity<Void> logout(UsernamePasswordAuthenticationToken token)
+    public ResponseEntity<String> logout(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
         boolean logout = utenteFacade.logout(u);
-        if(logout) return ResponseEntity.ok().build();
+        if(logout) return ResponseEntity.status(HttpStatus.OK).body("Disconesso con successo");
         else return ResponseEntity.badRequest().build();
 
     }

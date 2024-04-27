@@ -2,10 +2,9 @@ package com.bytebazaar.bytebazaar.facade;
 
 import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.SwitchingProtocolException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
-import com.bytebazaar.bytebazaar.model.Prodotto;
-import com.bytebazaar.bytebazaar.model.Richiesta;
-import com.bytebazaar.bytebazaar.model.Utente;
+import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
@@ -39,10 +38,10 @@ public class ProdottoFacade
             List<Prodotto> prodottoList = u.getProdotto();
 
 
-            boolean notExistProduct = prodottoList.stream().noneMatch(prodotto -> prodotto.getNome().equalsIgnoreCase(request.getNome()));
+            boolean existProduct = prodottoList.stream().anyMatch(prodotto -> prodotto.getNome().equalsIgnoreCase(request.getNome()));
 
 
-            if (r.getStato().name().contains("ACCETTATO") && notExistProduct)
+            if (r.getStato() == Stato.ACCETTATO && !existProduct)
             {
                 Prodotto p = new Prodotto();
                 p.setUtente(u);
@@ -54,14 +53,13 @@ public class ProdottoFacade
                 serviceProdotto.salva(p);
                 return true;
 
+
             }
 
-            else if (r.getStato().name().contains("ACCETTATO") && !notExistProduct)
+            else if (r.getStato() == Stato.ACCETTATO)
             {
-                //TODO controllare bene qui
-                Prodotto p = serviceProdotto.getByNome(request.getNome());
-                serviceProdotto.salva(p);
-                return true;
+                //TODO da capire perchè non ritorna il messaggio
+                throw new SwitchingProtocolException("Attenzione! Non puoi modificare qui il prodotto, vai nel header modificaProdotto");
 
             }
 
@@ -82,12 +80,7 @@ public class ProdottoFacade
     public boolean modificaProdotto(Utente u, InsertOrModifyProductRequestDTO request)
     {
 
-
         Prodotto p = serviceProdotto.getByNome(request.getNome());
-
-
-
-
 
             // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
             if (p.getUtente().getIdutente() == u.getIdutente()) {

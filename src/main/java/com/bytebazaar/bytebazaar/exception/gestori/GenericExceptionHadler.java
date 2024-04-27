@@ -1,10 +1,7 @@
 package com.bytebazaar.bytebazaar.exception.gestori;
 
 import com.bytebazaar.bytebazaar.dto.response.errori.MessaggioErroreResponse;
-import com.bytebazaar.bytebazaar.exception.messaggiException.AlreadyReportedException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
-import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,9 +30,15 @@ public class GenericExceptionHadler
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<MessaggioErroreResponse> richiestaGiàDefinita(BadRequestException e) {
+    public ResponseEntity<MessaggioErroreResponse> bruttaRichiesta(BadRequestException e) {
         MessaggioErroreResponse m = new MessaggioErroreResponse(HttpStatus.BAD_REQUEST.name(),e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(m);
+    }
+
+    @ExceptionHandler(SwitchingProtocolException.class)
+    public ResponseEntity<MessaggioErroreResponse> cambiaHeader(SwitchingProtocolException e) {
+        MessaggioErroreResponse m = new MessaggioErroreResponse(HttpStatus.SWITCHING_PROTOCOLS.name(),e.getMessage());
+        return ResponseEntity.status(HttpStatus.SWITCHING_PROTOCOLS).body(m);
     }
 
 
