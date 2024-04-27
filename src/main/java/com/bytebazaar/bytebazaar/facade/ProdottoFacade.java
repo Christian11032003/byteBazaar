@@ -22,7 +22,6 @@ public class ProdottoFacade
 
     private final RichiestaRepository richiestaRepo;
 
-    private final ProdottoRepository prodottoRepo;
 
 
     public boolean registraProdotto(Utente u, InsertOrModifyProductRequestDTO request)

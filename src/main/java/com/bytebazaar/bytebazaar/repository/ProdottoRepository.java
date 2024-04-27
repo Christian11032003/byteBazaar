@@ -14,13 +14,13 @@ public interface ProdottoRepository extends JpaRepository<Prodotto,Integer>
 
     public Optional<Prodotto> findByIdProdotto(int idProdotto);
 
-    public List<Prodotto> findAllByUtente(Utente u);
+    public List<Prodotto> findAllByUtente_Idutente(int idUtente);
 
     public List<Prodotto> findAllByUtenteIsNot(Utente u);
 
-    public List<Prodotto> findAllByUtente_Idutente(int idUtente);
 
-    @Query(nativeQuery = true,value = "select * from Oggettocarrello join Carrello where Carrello.idUtente = :idUtente and Carrello.dataAcquisto != null group by idProdotto")
+
+    @Query(nativeQuery = true,value = "select * from oggetto_carrello join carrello where carrello.idutente = :idUtente and carrello.dataAcquisto != null group by id_prodotto")
     public List<Prodotto> findAllProductInKart(int idUtente);
 
 

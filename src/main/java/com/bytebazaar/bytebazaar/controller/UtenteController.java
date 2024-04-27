@@ -111,7 +111,7 @@ public class UtenteController
 
     //funzionalità del venditore
 
-    @GetMapping("/venditore/trovaTuttiImieiProdotti")
+    @GetMapping("/venditore/findMyOwnProduct")
     public ResponseEntity<List<Prodotto>> findAllHisProducts(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
@@ -120,7 +120,7 @@ public class UtenteController
     }
 
     //funzionalità del cliente e del venditore
-    @GetMapping({"/venditore/trovaTuttiImieiProdotti","/cliente/trovaGliAltriProdotti"})
+    @GetMapping({"/venditore/findTheOtherProduct","/cliente/findTheOtherProduct"})
     public ResponseEntity<List<Prodotto>> findAllOtherProducts(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();

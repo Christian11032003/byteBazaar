@@ -24,16 +24,13 @@ public class UtenteFacade
 
     private final UtenteService serviceUtente;
 
-
     private final ProdottoRepository prodottoRepo;
 
     private final MessaggioRepository messaggioRepo;
 
     private final FeedbackRepository feedbackRepo;
 
-
     private final RichiestaFacade richiestaFacade;
-
 
     private final TokenUtil tokenUtil;
 
@@ -89,9 +86,7 @@ public class UtenteFacade
     public List<Utente> findAllAdmin(){return serviceUtente.findAllByRuolo(Ruolo.ADMIN);}
 
     //funzionalità admin
-
     public List<Utente> findAllClienti() {return serviceUtente.findAllByRuolo(Ruolo.CLIENTE);}
-
 
     public List<Utente> findAllVenditori() {return serviceUtente.findAllByRuolo(Ruolo.VENDITORE);}
 
@@ -136,7 +131,7 @@ public class UtenteFacade
 
 
     //funzionalità venditore
-    public List<Prodotto> findAllHisProducts(Utente u) {return prodottoRepo.findAllByUtente(u);}
+    public List<Prodotto> findAllHisProducts(Utente u) {return prodottoRepo.findAllByUtente_Idutente(u.getIdutente());}
 
     //funzionalità di tutti
 
