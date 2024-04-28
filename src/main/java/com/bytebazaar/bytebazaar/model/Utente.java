@@ -18,7 +18,7 @@ public class Utente implements UserDetails
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idutente;
+    private int id;
 
     @Column(nullable = false)
     private String nome;

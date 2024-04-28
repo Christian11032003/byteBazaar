@@ -1,17 +1,15 @@
 package com.bytebazaar.bytebazaar.service.definition;
 
 
-import com.bytebazaar.bytebazaar.model.OggettoCarrello;
-
-import java.util.Optional;
+import com.bytebazaar.bytebazaar.model.Oggettocarrello;
 
 public interface OggettoCarrelloService
 {
-    public void salva(OggettoCarrello o);
+    public void salva(Oggettocarrello o);
 
-    public OggettoCarrello getByCarrelloIdcarrelloAndProdottoIdProdotto(int idCarrello, int idProdotto);
+    public Oggettocarrello getByCarrelloIdcarrelloAndProdottoIdProdotto(int idCarrello, int idProdotto);
 
-    public OggettoCarrello getById(int idOggettoCarrello);
+    public Oggettocarrello getById(int idOggettoCarrello);
 
-    public void cancella(OggettoCarrello o);
+    public void cancella(Oggettocarrello o);
 }

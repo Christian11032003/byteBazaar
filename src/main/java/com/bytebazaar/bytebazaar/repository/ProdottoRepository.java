@@ -12,9 +12,9 @@ public interface ProdottoRepository extends JpaRepository<Prodotto,Integer>
 {
     public Optional<Prodotto> findByNome(String nome);
 
-    public Optional<Prodotto> findByIdProdotto(int idProdotto);
+    public Optional<Prodotto> findById(int idProdotto);
 
-    public List<Prodotto> findAllByUtente_Idutente(int idUtente);
+    public List<Prodotto> findAllByUtente_Id(int idUtente);
 
     public List<Prodotto> findAllByUtenteIsNot(Utente u);
 

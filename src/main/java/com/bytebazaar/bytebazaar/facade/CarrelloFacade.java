@@ -21,11 +21,11 @@ public class CarrelloFacade {
     @Transactional
     public boolean confermaCarrello(Utente u){
         Carrello carrello = carrelloService.getByUsername(u.getUsername());
-        if (carrello.getDataAcquisto() != null) {
+        if (carrello.getDataacquisto() != null) {
             throw new BadRequestException("Carrello non acquistato");
         }
 
-        carrello.setDataAcquisto(LocalDateTime.now());
+        carrello.setDataacquisto(LocalDateTime.now());
 
         if (oggettoCarrelloFacade.modificaQuantitaRimanenti(u,carrello)) {
             carrelloService.confermaCarrello(carrello);

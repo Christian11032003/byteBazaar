@@ -44,7 +44,7 @@ public class ProdottoFacade
             {
                 Prodotto p = new Prodotto();
                 p.setUtente(u);
-                p.setImmagineProdotto(request.getImmagine());
+                p.setImmagineprodotto(request.getImmagine());
                 p.setNome(request.getNome());
                 p.setDescrizione(request.getDescrizione());
                 p.setPrezzo(request.getPrezzo());
@@ -82,10 +82,10 @@ public class ProdottoFacade
         Prodotto p = serviceProdotto.getByNome(request.getNome());
 
             // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
-            if (p.getUtente().getIdutente() == u.getIdutente()) {
+            if (p.getUtente().getId() == u.getId()) {
                 // Modifica solo i campi non nulli nella richiesta
                 if (request.getImmagine() != null) {
-                    p.setImmagineProdotto(request.getImmagine());
+                    p.setImmagineprodotto(request.getImmagine());
                 }
                 if (request.getNome() != null) {
                     p.setNome(request.getNome());

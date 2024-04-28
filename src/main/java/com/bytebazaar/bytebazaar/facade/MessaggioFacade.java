@@ -20,14 +20,14 @@ public class MessaggioFacade
     public boolean mandaMessaggio(Utente u, SendMessageRequestDTO request) {
 
 
-        if(u.getIdutente() != request.getIdUtente())
+        if(u.getId() != request.getIdUtente())
         {
             Messaggio m2 = new Messaggio();
             m2.setUtente(u);
-            m2.setIdmittente(u.getIdutente());
+            m2.setIdmittente(u.getId());
             m2.setIddestinatario(request.getIdUtente());
-            m2.setTestoMessaggio(request.getTestoMessaggio());
-            m2.setDataOraArrivo(LocalDateTime.now());
+            m2.setTesto(request.getTestoMessaggio());
+            m2.setDataoraarrivo(LocalDateTime.now());
 
             serviceMessaggio.salva(m2);
         }

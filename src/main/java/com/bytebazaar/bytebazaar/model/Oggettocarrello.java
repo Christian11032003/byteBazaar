@@ -10,11 +10,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-public class OggettoCarrello
+public class Oggettocarrello
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idoggettocarrello;
+    private int id;
 
     @ManyToOne
     @JoinColumn(nullable = false,updatable = false,name = "idprodotto")

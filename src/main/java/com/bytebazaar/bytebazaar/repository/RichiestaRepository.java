@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface RichiestaRepository extends JpaRepository<Richiesta,Integer>
 {
-    Optional<Richiesta> findByIdrichiesta(int idrichiesta);
+    Optional<Richiesta> findById(int idrichiesta);
 
     Optional<Richiesta> findByUtente_Username(String username);
 }

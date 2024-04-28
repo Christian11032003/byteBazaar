@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface MessaggioRepository extends JpaRepository<Messaggio,Integer>
 {
-    public List<Messaggio> findAllByUtente_Idutente(int idUtente);
+    public List<Messaggio> findAllByUtente_Id(int idUtente);
 }

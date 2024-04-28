@@ -21,13 +21,13 @@ public class CarrelloServiceImpl implements CarrelloService
 
     @Override
     public Carrello getByUsername(String username) {
-        return carrelloRepo.findCarrelloByUtente_UsernameAndAndDataAcquistoIsNull(username).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"nessun carrello per questo utente"));
+        return carrelloRepo.findCarrelloByUtente_UsernameAndDataacquistoIsNull(username).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"nessun carrello per questo utente"));
     }
 
     @Override
     public void confermaCarrello(Carrello c) {
-        if(c.getDataAcquisto()!=null) throw new BadRequestException("Carrello non acquistato");
-        c.setDataAcquisto(LocalDateTime.now());
+        if(c.getDataacquisto()!=null) throw new BadRequestException("Carrello non acquistato");
+        c.setDataacquisto(LocalDateTime.now());
         carrelloRepo.save(c);
     }
 

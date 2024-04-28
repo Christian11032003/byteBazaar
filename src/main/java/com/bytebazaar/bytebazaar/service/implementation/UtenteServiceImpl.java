@@ -27,7 +27,7 @@ public class UtenteServiceImpl implements UtenteService
 
     @Override
     public Utente getById(int id) {
-        return utenteRepo.findByIdutente(id).orElseThrow(() -> new BadRequestException("utente non trovato"));
+        return utenteRepo.findById(id).orElseThrow(() -> new BadRequestException("utente non trovato"));
     }
 
     @Override

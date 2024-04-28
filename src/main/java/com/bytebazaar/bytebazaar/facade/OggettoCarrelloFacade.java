@@ -8,7 +8,7 @@ import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Carrello;
-import com.bytebazaar.bytebazaar.model.OggettoCarrello;
+import com.bytebazaar.bytebazaar.model.Oggettocarrello;
 import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.CarrelloRepository;
@@ -36,23 +36,23 @@ public class OggettoCarrelloFacade
 
         // Find the carrello with a date, or create a new one
         Carrello carrello = u.getCarrello().stream()
-                .filter(c -> c.getDataAcquisto() == null)
+                .filter(c -> c.getDataacquisto() == null)
                 .findFirst()
                 .orElseGet(() -> {
                     Carrello newCarrello = new Carrello();
                     newCarrello.setUtente(u);
-                    newCarrello.setDataAcquisto(null);
+                    newCarrello.setDataacquisto(null);
                     return carrelloRepo.save(newCarrello);
                 });
 
-        Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdProdotto());
+        Optional<Prodotto> prodottoOptional = prodottoRepo.findById(request.getIdProdotto());
 
         if(prodottoOptional.isPresent())
         {
             Prodotto p = prodottoOptional.get();
-            OggettoCarrello og = serviceOggettoCarrello.getByCarrelloIdcarrelloAndProdottoIdProdotto(carrello.getIdcarrello(),p.getIdProdotto());
+            Oggettocarrello og = serviceOggettoCarrello.getByCarrelloIdcarrelloAndProdottoIdProdotto(carrello.getId(),p.getId());
 
-            if(u.getIdutente() == p.getUtente().getIdutente())
+            if(u.getId() == p.getUtente().getId())
             {
                 throw new BadRequestException("Non puoi comprare il tuo stesso prodotto");
             }
@@ -60,7 +60,7 @@ public class OggettoCarrelloFacade
             {
                 if(og == null)
                 {
-                    OggettoCarrello o = new OggettoCarrello();
+                    Oggettocarrello o = new Oggettocarrello();
                     o.setProdotto(p);
                     o.setQuantita(request.getQuantita());
 
@@ -101,13 +101,13 @@ public class OggettoCarrelloFacade
 
 
     public boolean modificaQuantitaRimanenti(Utente u, Carrello c) {
-        List<OggettoCarrello> oggettiCarrelli = c.getOggettoCarrello();
+        List<Oggettocarrello> oggettiCarrelli = c.getOggettocarrello();
 
-        if (u == c.getOggettoCarrello())
+        if (u == c.getOggettocarrello())
         {
 
 
-            for (OggettoCarrello og : oggettiCarrelli) {
+            for (Oggettocarrello og : oggettiCarrelli) {
 
                 Prodotto p = og.getProdotto();
                 if (p.getQuantita() >= og.getQuantita())
@@ -155,7 +155,7 @@ public class OggettoCarrelloFacade
             if (p.getUtente().equals(u)) {
                 // Modifica solo i campi non nulli nella richiesta
                 if (request.getImmagine() != null) {
-                    p.setImmagineProdotto(request.getImmagine());
+                    p.setImmagineprodotto(request.getImmagine());
                 }
                 if (request.getNome() != null) {
                     p.setNome(request.getNome());
@@ -194,12 +194,12 @@ public class OggettoCarrelloFacade
     public boolean sottraiQuantita(SubtractQuantityRequestDTO request)
     {
 
-        OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
+        Oggettocarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
 
         if(oggettocarrello != null)
         {
 
-            if(oggettocarrello.getCarrello().getDataAcquisto() == null)
+            if(oggettocarrello.getCarrello().getDataacquisto() == null)
             {
                 oggettocarrello.setQuantita(request.getQuantita());
                 serviceOggettoCarrello.salva(oggettocarrello);
@@ -225,14 +225,14 @@ public class OggettoCarrelloFacade
     public boolean eliminaoggettocarrello(DeleteObjectFromCartRequestDTO request)
     {
 
-        OggettoCarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
+        Oggettocarrello oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
 
         if (oggettocarrello != null)
         {
 
 
 
-            if(request.getIdOggettocarrello() == oggettocarrello.getIdoggettocarrello() && oggettocarrello.getCarrello().getDataAcquisto() == null)
+            if(request.getIdOggettocarrello() == oggettocarrello.getId() && oggettocarrello.getCarrello().getDataacquisto() == null)
             {
                 serviceOggettoCarrello.cancella(oggettocarrello);
                 return true;

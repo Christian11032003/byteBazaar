@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface CarrelloRepository extends JpaRepository<Carrello,Integer>
 {
-    public Optional<Carrello> findCarrelloByUtente_UsernameAndUtente_PasswordAndDataAcquistoIsNull(String username, String password);
 
-    public Optional<Carrello> findCarrelloByUtente_UsernameAndAndDataAcquistoIsNull(String username);
+
+    public Optional<Carrello> findCarrelloByUtente_UsernameAndDataacquistoIsNull(String username);
 
 }

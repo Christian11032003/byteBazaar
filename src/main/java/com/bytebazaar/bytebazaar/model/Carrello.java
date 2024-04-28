@@ -15,17 +15,17 @@ public class Carrello
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idcarrello;
+    private int id;
 
     @ManyToOne
     @JoinColumn(nullable = false,updatable = false,name = "idutente")
     private Utente utente;
 
-    private LocalDateTime dataAcquisto;
+    private LocalDateTime dataacquisto;
 
     @JsonIgnore
     @OneToMany(mappedBy = "carrello",fetch = FetchType.EAGER)
-    private List<OggettoCarrello> oggettoCarrello;
+    private List<Oggettocarrello> oggettocarrello;
 
 
 

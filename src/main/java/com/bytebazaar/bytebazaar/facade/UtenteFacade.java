@@ -92,7 +92,7 @@ public class UtenteFacade
 
     public List<Prodotto> findAllProdottiUser(FindThingsRequestDTO request)
     {
-        return prodottoRepo.findAllByUtente_Idutente(request.getIdUtente());
+        return prodottoRepo.findAllByUtente_Id(request.getIdUtente());
     }
 
     public List<Prodotto> findAllProdottiUserInKart(FindThingsRequestDTO request)
@@ -102,12 +102,12 @@ public class UtenteFacade
 
     public List<Messaggio> findAllMessaggeUser(FindThingsRequestDTO request)
     {
-        return messaggioRepo.findAllByUtente_Idutente(request.getIdUtente());
+        return messaggioRepo.findAllByUtente_Id(request.getIdUtente());
     }
 
     public List<Feedback> findAllFeedbackUser(FindThingsRequestDTO request)
     {
-        return feedbackRepo.findAllByOggettocarrello_Carrello_Utente_Idutente(request.getIdUtente());
+        return feedbackRepo.findAllByOggettocarrello_Carrello_Utente_Id(request.getIdUtente());
     }
 
 
@@ -131,7 +131,7 @@ public class UtenteFacade
 
 
     //funzionalità venditore
-    public List<Prodotto> findAllHisProducts(Utente u) {return prodottoRepo.findAllByUtente_Idutente(u.getIdutente());}
+    public List<Prodotto> findAllHisProducts(Utente u) {return prodottoRepo.findAllByUtente_Id(u.getId());}
 
     //funzionalità di tutti
 

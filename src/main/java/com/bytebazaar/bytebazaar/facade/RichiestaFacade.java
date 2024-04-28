@@ -11,6 +11,9 @@ import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class RichiestaFacade
@@ -20,7 +23,9 @@ public class RichiestaFacade
 
     private final UtenteRepository utenteRepo;
 
-    public boolean registrazioneRichiesta(Utente u) {
+    public boolean registrazioneRichiesta(Utente u)
+    {
+
         Richiesta r = new Richiesta();
         r.setUtente(u);
         r.setStato(Stato.RICHIESTA);
@@ -31,9 +36,12 @@ public class RichiestaFacade
 
     public boolean richiesta(Utente u) {
 
-        Richiesta r = serviceRichiesta.findByUtenteUsername(u.getUsername());
 
-        if (r == null) {
+        Optional<Richiesta> r = serviceRichiesta.findByUtenteUsername(u.getUsername());
+
+
+
+        if (r.isEmpty()) {
             Richiesta newRichiesta = new Richiesta();
             newRichiesta.setUtente(u);
             newRichiesta.setStato(Stato.RICHIESTA);

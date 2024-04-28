@@ -25,7 +25,7 @@ public class FeedbackFacade
     {
 
 
-        Optional<Prodotto> prodottoOptional = prodottoRepo.findByIdProdotto(request.getIdProdotto());
+        Optional<Prodotto> prodottoOptional = prodottoRepo.findById(request.getIdProdotto());
 
         if (prodottoOptional.isPresent())
         {
@@ -37,12 +37,12 @@ public class FeedbackFacade
             List<Feedback> feedbackList = serviceFeedback.getByIdProdotto(request.getIdProdotto());
 
 
-            boolean trovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getIdutente() == (u.getIdutente()));
+            boolean trovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getId() == (u.getId()));
 
             for (Carrello c : carrelloList) {
-                for (OggettoCarrello o : c.getOggettoCarrello()) {
+                for (Oggettocarrello o : c.getOggettocarrello()) {
 
-                    if (p.getIdProdotto() == o.getProdotto().getIdProdotto() && c.getDataAcquisto() != null && trovaFeedback) {
+                    if (p.getId() == o.getProdotto().getId() && c.getDataacquisto() != null && trovaFeedback) {
 
                         Feedback f = new Feedback();
                         f.setOggettocarrello(o);

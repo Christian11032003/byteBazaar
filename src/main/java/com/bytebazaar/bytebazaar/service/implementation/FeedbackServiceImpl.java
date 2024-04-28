@@ -19,7 +19,7 @@ public class FeedbackServiceImpl implements FeedbackService
 
     @Override
     public List<Feedback> getByIdProdotto(int idProdotto) {
-        return feedbackRepo.findAllByOggettocarrello_Prodotto_IdProdotto(idProdotto);
+        return feedbackRepo.findAllByOggettocarrello_Prodotto_Id(idProdotto);
     }
 
     @Override

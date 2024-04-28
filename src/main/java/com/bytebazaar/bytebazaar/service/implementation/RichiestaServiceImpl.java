@@ -7,6 +7,8 @@ import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class RichiestaServiceImpl implements RichiestaService
 {
@@ -16,8 +18,8 @@ public class RichiestaServiceImpl implements RichiestaService
 
 
     @Override
-    public Richiesta findByUtenteUsername(String username) {
-        return richiestaRepo.findByUtente_Username(username).orElseThrow(()-> new BadRequestException("Richiesta dell'utente non trovata"));
+    public Optional<Richiesta> findByUtenteUsername(String username) {
+        return richiestaRepo.findByUtente_Username(username);
     }
 
     @Override
@@ -28,6 +30,6 @@ public class RichiestaServiceImpl implements RichiestaService
     @Override
     public Richiesta findByIdrichiesta(int idRichiesta)
     {
-        return richiestaRepo.findByIdrichiesta(idRichiesta).orElseThrow(()-> new BadRequestException("Richiesta non trovata"));
+        return richiestaRepo.findById(idRichiesta).orElseThrow(()-> new BadRequestException("Richiesta non trovata"));
     }
 }

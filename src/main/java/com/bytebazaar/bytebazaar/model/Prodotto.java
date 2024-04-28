@@ -14,13 +14,13 @@ public class Prodotto
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idProdotto;
+    private int id;
 
     @ManyToOne
     @JoinColumn(nullable = false,updatable = false,name = "idutente")
     private Utente utente;
 
-    private String immagineProdotto;
+    private String immagineprodotto;
 
     @Column(nullable = false)
     private String nome;
@@ -35,7 +35,7 @@ public class Prodotto
 
     @JsonIgnore
     @OneToMany(mappedBy = "prodotto",fetch = FetchType.EAGER)
-    private List<OggettoCarrello> oggettocarrello;
+    private List<Oggettocarrello> oggettocarrello;
 
 
 

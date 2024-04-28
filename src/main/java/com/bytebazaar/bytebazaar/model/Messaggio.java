@@ -13,7 +13,7 @@ public class Messaggio
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idmessaggio;
+    private int id;
 
     @ManyToOne
     @JoinColumn(nullable = false,updatable = false,name = "idutente")
@@ -26,10 +26,10 @@ public class Messaggio
     private int iddestinatario;
 
     @Column(nullable = false)
-    private String testoMessaggio;
+    private String testo;
 
     @Column(nullable = false)
-    private LocalDateTime dataOraArrivo;
+    private LocalDateTime dataoraarrivo;
 
 
 
