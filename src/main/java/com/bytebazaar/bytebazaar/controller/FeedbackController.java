@@ -4,6 +4,7 @@ import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequestDTO;
 import com.bytebazaar.bytebazaar.facade.FeedbackFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +19,10 @@ public class FeedbackController
     private final FeedbackFacade feedbackFacade;
 
     @PostMapping({"/venditore/mandaFeedback","/cliente/mandaFeedback"})
-    public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody AddFeedbackRequestDTO request) {
+    public ResponseEntity<String> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody AddFeedbackRequestDTO request) {
         Utente u = (Utente)token.getPrincipal();
         boolean addFeedback = feedbackFacade.aggiungiFeedback(u,request);
-        if (addFeedback) return ResponseEntity.ok().build();
+        if (addFeedback) return ResponseEntity.status(HttpStatus.OK).body("Feedback aggiunto con successo");
         else return ResponseEntity.badRequest().build();
     }
 

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,21 +21,31 @@ public class CarrelloFacade {
 
     @Transactional
     public boolean confermaCarrello(Utente u){
-        Carrello carrello = carrelloService.getByUsername(u.getUsername());
-        if (carrello.getDataacquisto() != null) {
-            throw new BadRequestException("Carrello non acquistato");
+        Optional<Carrello> carrello = carrelloService.getByUsername(u.getUsername());
+
+
+        if(carrello.isPresent())
+        {
+
+            Carrello c = carrello.get();
+
+
+            if (c.getDataacquisto() != null) {
+                throw new BadRequestException("Carrello non acquistato");
+            }
+
+            c.setDataacquisto(LocalDateTime.now());
+
+            if (oggettoCarrelloFacade.modificaQuantitaRimanenti(u, c))
+            {
+
+                carrelloService.salva(c);
+            }
+
+            return true;
+
         }
 
-        carrello.setDataacquisto(LocalDateTime.now());
-
-        if (oggettoCarrelloFacade.modificaQuantitaRimanenti(u,carrello)) {
-            carrelloService.confermaCarrello(carrello);
-        }
-
-
-
-
-
-        return true;
+        throw new BadRequestException("Carrello non trovato");
     }
 }

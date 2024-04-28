@@ -7,6 +7,8 @@ import com.bytebazaar.bytebazaar.service.definition.OggettoCarrelloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class OggettoCarrelloServiceImpl implements OggettoCarrelloService
 {
@@ -20,13 +22,13 @@ public class OggettoCarrelloServiceImpl implements OggettoCarrelloService
     }
 
     @Override
-    public Oggettocarrello getByCarrelloIdcarrelloAndProdottoIdProdotto(int idCarrello, int idProdotto) {
-        return oggettocarrelloRepo.findByCarrello_IdAndProdotto_Id(idCarrello,idProdotto).orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+    public Optional<Oggettocarrello> getByCarrelloIdcarrelloAndProdottoIdProdotto(int idCarrello, int idProdotto) {
+        return oggettocarrelloRepo.findByCarrello_IdAndProdotto_Id(idCarrello,idProdotto);
     }
 
     @Override
-    public Oggettocarrello getById(int idOggettoCarrello) {
-        return oggettocarrelloRepo.findById(idOggettoCarrello).orElseThrow(() -> new NotFoundException("OggettoCarrello non trovato"));
+    public Optional<Oggettocarrello> getById(int idOggettoCarrello) {
+        return oggettocarrelloRepo.findById(idOggettoCarrello);
     }
 
     @Override

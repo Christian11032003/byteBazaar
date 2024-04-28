@@ -7,6 +7,7 @@ import com.bytebazaar.bytebazaar.facade.OggettoCarrelloFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +23,10 @@ public class OggettoCarrelloController
 
 
     @PostMapping({"/venditore/aggiungiOggettoCarrello","/cliente/aggiungiOggettoCarrello"})
-    public ResponseEntity<Void> aggiungiOggettoCarrello(UsernamePasswordAuthenticationToken token, @RequestBody AddProductToCartRequestDTO request) {
+    public ResponseEntity<String> aggiungiOggettoCarrello(UsernamePasswordAuthenticationToken token, @RequestBody AddProductToCartRequestDTO request) {
         Utente u = (Utente)token.getPrincipal();
         boolean registratoOggettoCarrello = oggettoCarrelloFacade.aggiungiAlCarrello(u,request);
-        if (registratoOggettoCarrello) return ResponseEntity.ok().build();
+        if (registratoOggettoCarrello) return ResponseEntity.status(HttpStatus.OK).body("Prodotto aggiunto con successo nel carello");
         else return ResponseEntity.badRequest().build();
     }
 
