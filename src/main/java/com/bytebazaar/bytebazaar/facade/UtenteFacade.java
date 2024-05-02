@@ -97,7 +97,7 @@ public class UtenteFacade
 
     public List<Prodotto> findAllProdottiUserInKart(FindThingsRequestDTO request)
     {
-        return prodottoRepo.findAllProductInKart(request.getIdUtente());
+        return prodottoRepo.getAllProductInKart(request.getIdUtente());
     }
 
     public List<Messaggio> findAllMessaggeUser(FindThingsRequestDTO request)
@@ -116,16 +116,6 @@ public class UtenteFacade
     //funzionalità del cliente e del venditore
     public List<Prodotto> findAllOtherProducts(Utente u)
     {
-
-
-        /*ProdottoDTO p=new ProdottoDTO.Builder()
-                .setDescrizione("csdvcsdf")
-                .setIdProdotto(4)
-                .build();*/
-
-        //DTO response del utente per il builder
-
-
         return prodottoRepo.findAllByUtenteIsNot(u);
     }
 

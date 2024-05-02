@@ -32,17 +32,17 @@ public class OggettoCarrelloController
 
 
     @PostMapping({"/venditore/sottraiQuantita","/cliente/sottraiQuantita"})
-    public ResponseEntity<Void> sottraiquantita(@RequestBody SubtractQuantityRequestDTO request) {
+    public ResponseEntity<String> sottraiquantita(@RequestBody SubtractQuantityRequestDTO request) {
         boolean sottraiQuantita = oggettoCarrelloFacade.sottraiQuantita(request);
-        if (sottraiQuantita) return ResponseEntity.ok().build();
+        if (sottraiQuantita) return ResponseEntity.status(HttpStatus.OK).body("Quantità modificata con successo");
         else return ResponseEntity.badRequest().build();
     }
 
 
     @PostMapping({"/venditore/eliminaOggettoCarrello","/cliente/eliminaOggettoCarrello"})
-    public ResponseEntity<Void> eliminaoggettocarrelloCliente(@RequestBody DeleteObjectFromCartRequestDTO request) {
+    public ResponseEntity<String> eliminaoggettocarrelloCliente(@RequestBody DeleteObjectFromCartRequestDTO request) {
         boolean eliminato = oggettoCarrelloFacade.eliminaoggettocarrello(request);
-        if (eliminato) return ResponseEntity.ok().build();
+        if (eliminato) return ResponseEntity.status(HttpStatus.OK).body("Prodotto eliminato dal carrello ");
         else return ResponseEntity.badRequest().build();
     }
 

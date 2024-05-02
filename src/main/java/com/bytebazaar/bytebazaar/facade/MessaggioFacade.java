@@ -24,7 +24,6 @@ public class MessaggioFacade
         {
             Messaggio m2 = new Messaggio();
             m2.setUtente(u);
-            m2.setIdmittente(u.getId());
             m2.setIddestinatario(request.getIdUtente());
             m2.setTesto(request.getTestoMessaggio());
             m2.setDataoraarrivo(LocalDateTime.now());

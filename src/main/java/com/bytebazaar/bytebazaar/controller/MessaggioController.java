@@ -4,6 +4,7 @@ import com.bytebazaar.bytebazaar.dto.request.messaggio.SendMessageRequestDTO;
 import com.bytebazaar.bytebazaar.facade.MessaggioFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +19,10 @@ public class MessaggioController
     private final MessaggioFacade messaggioFacade;
 
     @PostMapping({"/venditore/mandaMessaggio","/cliente/mandaMessaggio"})
-    public ResponseEntity<Void> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody SendMessageRequestDTO request) {
+    public ResponseEntity<String> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody SendMessageRequestDTO request) {
         Utente u = (Utente)token.getPrincipal();
         boolean sendMessaggio = messaggioFacade.mandaMessaggio(u,request);
-        if (sendMessaggio) return ResponseEntity.ok().build();
+        if (sendMessaggio) return ResponseEntity.status(HttpStatus.OK).body("Messaggio inviato con successo");
         else return ResponseEntity.badRequest().build();
     }
 }

@@ -20,9 +20,6 @@ public class Messaggio
     private Utente utente;
 
     @Column(nullable = false)
-    private int idmittente;
-
-    @Column(nullable = false)
     private int iddestinatario;
 
     @Column(nullable = false)
