@@ -272,6 +272,28 @@ public class Testing
 
     @Test
     @Order(14)
+    @WithUserDetails("ale")
+    public void vediMieiFeedback() throws Exception
+    {
+        mock.perform(MockMvcRequestBuilders.get("/cliente/findMyOwnFeedback"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andReturn();
+    }
+
+    @Test
+    @Order(15)
+    @WithUserDetails("ale")
+    public void vediMieiMessaggi() throws Exception
+    {
+        mock.perform(MockMvcRequestBuilders.get("/cliente/findMyOwnMessage"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andReturn();
+    }
+
+
+
+    @Test
+    @Order(16)
     public void login() throws Exception {
         LoginRequestDTO l=new LoginRequestDTO();
         l.setUsername("ale");
@@ -286,7 +308,7 @@ public class Testing
     }
 
     @Test
-    @Order(15)
+    @Order(17)
     @WithUserDetails("john")
     public void logout() throws Exception {
 

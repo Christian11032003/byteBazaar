@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.repository;
 
 import com.bytebazaar.bytebazaar.model.Feedback;
+import com.bytebazaar.bytebazaar.model.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Integer>
     public List<Feedback> findAllByOggettocarrello_Carrello_Utente_Id(int idUtente);
 
     public Feedback findByIdfeedback(int idFeedback);
+
+    public List<Feedback> findAllByOggettocarrello_Carrello_Utente(Utente u);
 
 
 

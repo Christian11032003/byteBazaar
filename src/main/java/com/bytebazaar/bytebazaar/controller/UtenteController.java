@@ -128,6 +128,24 @@ public class UtenteController
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);
     }
 
+
+    @GetMapping({"/venditore/findMyOwnMessage","/cliente/findMyOwnMessage"})
+    public ResponseEntity<List<Messaggio>> findMyOwnMessage(UsernamePasswordAuthenticationToken token)
+    {
+        Utente u=(Utente) token.getPrincipal();
+        List<Messaggio> myOwnMessages = utenteFacade.findMyOwnMessage(u);
+        return ResponseEntity.status(HttpStatus.OK).body(myOwnMessages);
+    }
+
+
+    @GetMapping({"/venditore/findMyOwnFeedback","/cliente/findMyOwnFeedback"})
+    public ResponseEntity<List<Feedback>> findMyOwnFeedback(UsernamePasswordAuthenticationToken token)
+    {
+        Utente u=(Utente) token.getPrincipal();
+        List<Feedback> myOwnMessages = utenteFacade.findMyOwnFeedback(u);
+        return ResponseEntity.status(HttpStatus.OK).body(myOwnMessages);
+    }
+
     //funzionalità di tutti
     @PostMapping("/all/registration")
     public ResponseEntity<String> registrazioneUtente(@Valid @RequestBody RegistrationUserRequestDTO request){

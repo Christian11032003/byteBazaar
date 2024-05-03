@@ -114,10 +114,10 @@ public class UtenteFacade
 
 
     //funzionalità del cliente e del venditore
-    public List<Prodotto> findAllOtherProducts(Utente u)
-    {
-        return prodottoRepo.findAllByUtenteIsNot(u);
-    }
+
+    public List<Messaggio> findMyOwnMessage(Utente u){return messaggioRepo.findAllByUtente(u);}
+    public List<Prodotto> findAllOtherProducts(Utente u) {return prodottoRepo.findAllByUtenteIsNot(u);}
+    public List<Feedback> findMyOwnFeedback(Utente u) {return feedbackRepo.findAllByOggettocarrello_Carrello_Utente(u);}
 
 
     //funzionalità venditore
