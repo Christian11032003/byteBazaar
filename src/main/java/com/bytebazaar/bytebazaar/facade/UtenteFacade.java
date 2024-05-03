@@ -92,7 +92,7 @@ public class UtenteFacade
 
     public List<Prodotto> findAllProdottiUser(FindThingsRequestDTO request)
     {
-        return prodottoRepo.findAllByUtente_Id(request.getIdUtente());
+        return prodottoRepo.trovaProdottiUser(request.getIdUtente());
     }
 
     public List<Prodotto> findAllProdottiUserInKart(FindThingsRequestDTO request)
@@ -121,7 +121,7 @@ public class UtenteFacade
 
 
     //funzionalità venditore
-    public List<Prodotto> findAllHisProducts(Utente u) {return prodottoRepo.findAllByUtente_Id(u.getId());}
+    public List<Prodotto> findAllHisProducts(Utente u) {return prodottoRepo.trovaProdottiUser(u.getId());}
 
     //funzionalità di tutti
 

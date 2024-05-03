@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.facade;
 
 import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.feedback.ModifyFeedbackRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
@@ -37,23 +38,25 @@ public class FeedbackFacade
             List<Feedback> feedbackList = serviceFeedback.getByIdProdotto(request.getIdProdotto());
 
 
-            boolean trovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getId() == (u.getId()));
+            boolean nonTrovaFeedback = feedbackList.stream().noneMatch(feedback -> feedback.getOggettocarrello().getCarrello().getUtente().getId() == (u.getId()));
 
             for (Carrello c : carrelloList) {
                 for (Oggettocarrello o : c.getOggettocarrello()) {
 
-                    if (p.getId() == o.getProdotto().getId() && c.getDataacquisto() != null && trovaFeedback) {
+                    if (p.getId() == o.getProdotto().getId() && c.getDataacquisto() != null && nonTrovaFeedback) {
 
-                        Feedback f = new Feedback();
-                        f.setOggettocarrello(o);
-                        f.setDescrizione(request.getDescrizione());
-                        f.setValutazione(request.getValutazione());
-                        serviceFeedback.salva(f);
+                        Feedback newFeedback = new Feedback();
+                        newFeedback.setOggettocarrello(o);
+                        newFeedback.setDescrizione(request.getDescrizione());
+                        newFeedback.setValutazione(request.getValutazione());
+                        serviceFeedback.salva(newFeedback);
                         return true;
 
-                    } else {
-                        throw new BadRequestException("Errore");
                     }
+
+
+                    throw new BadRequestException("Impossibile aggiungere il feedback");
+
 
                 }
             }
@@ -62,13 +65,39 @@ public class FeedbackFacade
 
         else
         {
-            System.out.println("aaaaaaaa");
             throw new NotFoundException("Prodotto non trovato");
         }
 
-        throw new BadRequestException("Errore");
+        throw new BadRequestException("Prodotto inesistente nel tuo vecchio carrello");
 
     }
+
+
+    public boolean modificaFeedback(ModifyFeedbackRequestDTO request)
+    {
+        Feedback f = serviceFeedback.getByIdFeedback(request.getIdFeedback());
+        Oggettocarrello o = f.getOggettocarrello();
+
+        if(f != null)
+        {
+            f.setOggettocarrello(o);
+            f.setDescrizione(request.getDescrizione());
+            f.setValutazione(request.getValutazione());
+            serviceFeedback.salva(f);
+            return true;
+        }
+
+        else
+        {
+            throw new NotFoundException("Feedback non trovato");
+
+        }
+
+
+    }
+
+
+
 
 
 

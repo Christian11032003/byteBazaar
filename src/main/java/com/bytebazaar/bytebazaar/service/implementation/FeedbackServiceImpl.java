@@ -23,6 +23,11 @@ public class FeedbackServiceImpl implements FeedbackService
     }
 
     @Override
+    public Feedback getByIdFeedback(int idFeedback) {
+        return feedbackRepo.findByIdfeedback(idFeedback);
+    }
+
+    @Override
     public void salva(Feedback f) {
         feedbackRepo.save(f);
     }

@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.facade;
 
 import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequestDTO;
+import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.SwitchingProtocolException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
@@ -11,6 +12,7 @@ import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,10 +47,41 @@ public class ProdottoFacade
                 Prodotto p = new Prodotto();
                 p.setUtente(u);
                 p.setImmagineprodotto(request.getImmagine());
-                p.setNome(request.getNome());
-                p.setDescrizione(request.getDescrizione());
-                p.setPrezzo(request.getPrezzo());
-                p.setQuantita(request.getQuantita());
+
+                if (request.getNome() != null) {
+                    p.setNome(request.getNome());
+                }
+                else
+                {
+
+                    throw new BadRequestException("Nome non può essere uguale null");
+                }
+
+                if (request.getDescrizione() != null) {
+                    p.setDescrizione(request.getDescrizione());
+                }
+                else
+                {
+
+                    throw new BadRequestException("Descrizione non può essere uguale da null");
+                }
+
+                if (request.getPrezzo() > 0) {
+                    p.setPrezzo(request.getPrezzo());
+                }
+                else
+                {
+
+                    throw new BadRequestException("Prezzo non può essere minore di 0");
+                }
+                if (request.getQuantita() > 0) {
+                    p.setQuantita(request.getQuantita());
+                }
+                else
+                {
+
+                    throw new BadRequestException("Quantità non può essere minore di 0");
+                }
                 serviceProdotto.salva(p);
                 return true;
 
@@ -87,17 +120,39 @@ public class ProdottoFacade
                 if (request.getImmagine() != null) {
                     p.setImmagineprodotto(request.getImmagine());
                 }
+                else
+                {
+                    p.setImmagineprodotto(p.getImmagineprodotto());
+                }
                 if (request.getNome() != null) {
                     p.setNome(request.getNome());
+                }
+                else
+                {
+                    p.setNome(p.getNome());
                 }
                 if (request.getDescrizione() != null) {
                     p.setDescrizione(request.getDescrizione());
                 }
+                else
+                {
+                    p.setDescrizione(p.getDescrizione());
+                }
                 if (request.getPrezzo() > 0) {
                     p.setPrezzo(request.getPrezzo());
                 }
-                if (request.getQuantita() >= 0) {
+                else
+                {
+                    throw new BadRequestException("Prezzo non può essere minore di 0");
+                }
+
+
+                if (request.getQuantita() > 0 ) {
                     p.setQuantita(request.getQuantita());
+                }
+                else
+                {
+                    throw new BadRequestException("Quantita non può essere minore di 0");
                 }
 
                 serviceProdotto.salva(p);

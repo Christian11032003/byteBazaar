@@ -61,8 +61,27 @@ public class OggettoCarrelloFacade
                 if(og.isEmpty())
                 {
                     Oggettocarrello newOggettoCarrello = new Oggettocarrello();
-                    newOggettoCarrello.setProdotto(p);
-                    newOggettoCarrello.setQuantita(request.getQuantita());
+                    if(request.getIdProdotto() == p.getId())
+                    {
+                        newOggettoCarrello.setProdotto(p);
+                    }
+
+                    else
+                    {
+                        throw new BadRequestException("prodotto inesistente");
+                    }
+
+                    if(request.getQuantita() > 0)
+                    {
+                        newOggettoCarrello.setQuantita(request.getQuantita());
+                    }
+
+                    else
+                    {
+                        throw new BadRequestException("la quantità deve essere maggiore di 0");
+                    }
+
+
 
 
                     // Set the relationship between Carrello and Oggettocarrello

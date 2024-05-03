@@ -37,7 +37,7 @@ public class ProdottoController
                     .setNome(request.getNome())
                     .setDescrizione(request.getDescrizione())
                     .setQuantita(request.getQuantita())
-                    .setPrezzo(request.getQuantita())
+                    .setPrezzo(request.getPrezzo())
                     .build();
 
 

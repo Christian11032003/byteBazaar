@@ -10,5 +10,7 @@ public interface FeedbackService
 
     public List<Feedback> getByIdProdotto(int idProdotto);
 
+    public Feedback getByIdFeedback(int idFeedback);
+
     public void salva(Feedback f);
 }
