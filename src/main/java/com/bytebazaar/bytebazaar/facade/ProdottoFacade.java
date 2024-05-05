@@ -109,62 +109,56 @@ public class ProdottoFacade
 
     }
 
-    public boolean modificaProdotto(Utente u, InsertOrModifyProductRequestDTO request)
-    {
+    public boolean modificaProdotto(Utente u, InsertOrModifyProductRequestDTO request) {
 
         Prodotto p = serviceProdotto.getByNome(request.getNome());
+
+        if (p != null) {
 
             // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
             if (p.getUtente().getId() == u.getId()) {
                 // Modifica solo i campi non nulli nella richiesta
                 if (request.getImmagine() != null) {
                     p.setImmagineprodotto(request.getImmagine());
-                }
-                else
-                {
+                } else {
                     p.setImmagineprodotto(p.getImmagineprodotto());
                 }
                 if (request.getNome() != null) {
                     p.setNome(request.getNome());
-                }
-                else
-                {
+                } else {
                     p.setNome(p.getNome());
                 }
                 if (request.getDescrizione() != null) {
                     p.setDescrizione(request.getDescrizione());
-                }
-                else
-                {
+                } else {
                     p.setDescrizione(p.getDescrizione());
                 }
                 if (request.getPrezzo() > 0) {
                     p.setPrezzo(request.getPrezzo());
-                }
-                else
-                {
+                } else {
                     throw new BadRequestException("Prezzo non può essere minore di 0");
                 }
 
 
-                if (request.getQuantita() > 0 ) {
+                if (request.getQuantita() > 0) {
                     p.setQuantita(request.getQuantita());
-                }
-                else
-                {
+                } else {
                     throw new BadRequestException("Quantita non può essere minore di 0");
                 }
 
                 serviceProdotto.salva(p);
 
                 return true;
-            }
-
-
-            else {
+            } else {
                 // L'utente non è autorizzato a modificare questo prodotto
                 throw new UnAuthorizedException("Non Autorizzato");
             }
+        } else {
+            throw new BadRequestException("prodotto non presente in vendita");
         }
 
+    }
+
 }
+
+
