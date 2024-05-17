@@ -1,9 +1,9 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.utente.BannedOrUnBannedRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.FindThingsRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.FindThingsRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.LoginRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;

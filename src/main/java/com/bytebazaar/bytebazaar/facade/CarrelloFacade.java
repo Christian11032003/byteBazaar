@@ -19,7 +19,7 @@ public class CarrelloFacade {
 
     private final OggettoCarrelloFacade oggettoCarrelloFacade;
 
-    @Transactional
+
     public boolean confermaCarrello(Utente u){
         Optional<Carrello> carrello = carrelloService.getByUsername(u.getUsername());
 

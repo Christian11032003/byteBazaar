@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.richiesta.AcceptOrRejectRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AcceptOrRejectRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Richiesta;

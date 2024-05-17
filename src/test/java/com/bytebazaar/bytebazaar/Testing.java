@@ -1,16 +1,16 @@
 package com.bytebazaar.bytebazaar;
 
-import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.feedback.ModifyFeedbackRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.messaggio.SendMessageRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.AddProductToCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.DeleteObjectFromCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.SubtractQuantityRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.richiesta.AcceptOrRejectRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.FindThingsRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AddFeedbackRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.ModifyFeedbackRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.SendMessageRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AddProductToCartRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.DeleteObjectFromCartRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.SubtractQuantityRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AcceptOrRejectRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.FindThingsRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.LoginRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequestDTO;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Stato;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -333,14 +333,15 @@ public class Testing
         i.setImmagine("macchina");
         i.setNome("Lamborghini");
         i.setDescrizione("Bellissima Macchina");
-        i.setQuantita(10);
         i.setPrezzo(750.40);
+        i.setQuantita(10);
         ObjectMapper om=new ObjectMapper();
         String json=om.writeValueAsString(i);
         mock.perform(MockMvcRequestBuilders.post("/venditore/registraProdotto")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 
@@ -358,10 +359,11 @@ public class Testing
         i.setPrezzo(750.30);
         ObjectMapper om=new ObjectMapper();
         String json=om.writeValueAsString(i);
-        mock.perform(MockMvcRequestBuilders.post("/venditore/registraProdotto")
+        mock.perform(MockMvcRequestBuilders.post("/venditore/modificaProdotto")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 
@@ -377,8 +379,9 @@ public class Testing
         String json=om.writeValueAsString(ad);
         mock.perform(MockMvcRequestBuilders.post("/cliente/aggiungiOggettoCarrello")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 
@@ -394,15 +397,16 @@ public class Testing
         String json=om.writeValueAsString(sub);
         mock.perform(MockMvcRequestBuilders.post("/cliente/sottraiQuantita")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 
     @Test
     @Order(22)
     @WithUserDetails("ale")
-    public void cancellaDalCancello() throws Exception
+    public void cancellaDalCarrello() throws Exception
     {
         DeleteObjectFromCartRequestDTO sub=new DeleteObjectFromCartRequestDTO();
         sub.setIdOggettocarrello(1);
@@ -410,24 +414,27 @@ public class Testing
         String json=om.writeValueAsString(sub);
         mock.perform(MockMvcRequestBuilders.post("/cliente/eliminaOggettoCarrello")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 
     @Test
     @Order(23)
-    @WithUserDetails("peppe")
+    @WithUserDetails("ale")
     public void mandaMessaggio() throws Exception
     {
         SendMessageRequestDTO mes=new SendMessageRequestDTO();
-        mes.setIdUtente(1);
+        mes.setIdUtente(4);
+        mes.setTestoMessaggio("Ciao bella laborghini, potrei avere uno sconto? ");
         ObjectMapper om=new ObjectMapper();
-        String json=om.writeValueAsString("Ciao bella laborghini, potrei avere uno sconto? ");
+        String json=om.writeValueAsString(mes);
         mock.perform(MockMvcRequestBuilders.post("/cliente/mandaMessaggio")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 
@@ -435,7 +442,7 @@ public class Testing
     //rifatto il controllo per testare la conferma del carrello e il feedback
     @Test
     @Order(24)
-    @WithUserDetails("peppe")
+    @WithUserDetails("ale")
     public void aggiungiAlCarrelloAgain() throws Exception
     {
         AddProductToCartRequestDTO ad=new AddProductToCartRequestDTO();
@@ -445,14 +452,15 @@ public class Testing
         String json=om.writeValueAsString(ad);
         mock.perform(MockMvcRequestBuilders.post("/cliente/aggiungiOggettoCarrello")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 
     @Test
     @Order(25)
-    @WithUserDetails("peppe")
+    @WithUserDetails("ale")
     public void confermaCarrello() throws Exception {
 
         mock.perform(MockMvcRequestBuilders.get("/cliente/confermaCarrello"))
@@ -462,7 +470,7 @@ public class Testing
 
     @Test
     @Order(26)
-    @WithUserDetails("peppe")
+    @WithUserDetails("ale")
     public void mandaFeedback() throws Exception
     {
         AddFeedbackRequestDTO ad=new AddFeedbackRequestDTO();
@@ -473,14 +481,15 @@ public class Testing
         String json=om.writeValueAsString(ad);
         mock.perform(MockMvcRequestBuilders.post("/cliente/mandaFeedback")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 
     @Test
     @Order(27)
-    @WithUserDetails("peppe")
+    @WithUserDetails("ale")
     public void modificaFeedback() throws Exception
     {
         ModifyFeedbackRequestDTO md=new ModifyFeedbackRequestDTO();
@@ -491,8 +500,9 @@ public class Testing
         String json=om.writeValueAsString(md);
         mock.perform(MockMvcRequestBuilders.post("/cliente/modificaFeedback")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
-                ).andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
     }
 

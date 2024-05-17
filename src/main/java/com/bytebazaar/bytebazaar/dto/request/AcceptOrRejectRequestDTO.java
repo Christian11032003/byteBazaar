@@ -1,4 +1,4 @@
-package com.bytebazaar.bytebazaar.dto.request.richiesta;
+package com.bytebazaar.bytebazaar.dto.request;
 
 import com.bytebazaar.bytebazaar.model.Stato;
 import lombok.Data;

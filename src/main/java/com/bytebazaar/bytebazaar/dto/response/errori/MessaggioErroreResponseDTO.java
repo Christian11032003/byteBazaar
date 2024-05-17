@@ -3,12 +3,12 @@ package com.bytebazaar.bytebazaar.dto.response.errori;
 import lombok.Data;
 
 @Data
-public class MessaggioErroreResponse
+public class MessaggioErroreResponseDTO
 {
     private String errore;
     private String messaggio;
 
-    public MessaggioErroreResponse(String errore, String messaggio)
+    public MessaggioErroreResponseDTO(String errore, String messaggio)
     {
         this.errore = errore;
         this.messaggio = messaggio;

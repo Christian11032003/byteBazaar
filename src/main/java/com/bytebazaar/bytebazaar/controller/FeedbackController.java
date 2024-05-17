@@ -1,7 +1,7 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.feedback.ModifyFeedbackRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AddFeedbackRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.ModifyFeedbackRequestDTO;
 import com.bytebazaar.bytebazaar.facade.FeedbackFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class FeedbackController
     private final FeedbackFacade feedbackFacade;
 
     @PostMapping({"/venditore/mandaFeedback","/cliente/mandaFeedback"})
-    public ResponseEntity<String> mandaMessaggio(UsernamePasswordAuthenticationToken token, @RequestBody AddFeedbackRequestDTO request) {
+    public ResponseEntity<String> mandaFeedback(UsernamePasswordAuthenticationToken token, @RequestBody AddFeedbackRequestDTO request) {
         Utente u = (Utente)token.getPrincipal();
         boolean addFeedback = feedbackFacade.aggiungiFeedback(u,request);
         if (addFeedback) return ResponseEntity.status(HttpStatus.OK).body("Feedback aggiunto con successo");
@@ -29,7 +29,7 @@ public class FeedbackController
 
 
     @PostMapping({"/venditore/modificaFeedback","/cliente/modificaFeedback"})
-    public ResponseEntity<String> mandaMessaggio(@RequestBody ModifyFeedbackRequestDTO request) {
+    public ResponseEntity<String> modificaFeedback(@RequestBody ModifyFeedbackRequestDTO request) {
 
         boolean addFeedback = feedbackFacade.modificaFeedback(request);
         if (addFeedback) return ResponseEntity.status(HttpStatus.OK).body("Feedback aggiunto con successo");

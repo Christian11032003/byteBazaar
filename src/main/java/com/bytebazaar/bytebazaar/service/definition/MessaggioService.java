@@ -4,6 +4,8 @@ import com.bytebazaar.bytebazaar.model.Messaggio;
 
 public interface MessaggioService
 {
+
+
     public void salva(Messaggio m);
 
 }

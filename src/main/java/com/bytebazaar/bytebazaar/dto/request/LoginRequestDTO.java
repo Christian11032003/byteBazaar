@@ -1,4 +1,4 @@
-package com.bytebazaar.bytebazaar.dto.request.utente;
+package com.bytebazaar.bytebazaar.dto.request;
 
 import lombok.Data;
 

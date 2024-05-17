@@ -1,9 +1,9 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.utente.BannedOrUnBannedRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.FindThingsRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.LoginRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.utente.RegistrationUserRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.FindThingsRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.LoginRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequestDTO;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponseDTO;
 import com.bytebazaar.bytebazaar.facade.UtenteFacade;
 import com.bytebazaar.bytebazaar.model.Feedback;

@@ -1,13 +1,11 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequestDTO;
 import com.bytebazaar.bytebazaar.dto.response.ProdottoDTO;
 import com.bytebazaar.bytebazaar.facade.ProdottoFacade;
-import com.bytebazaar.bytebazaar.model.Prodotto;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;

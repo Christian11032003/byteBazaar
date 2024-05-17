@@ -1,5 +1,6 @@
 package com.bytebazaar.bytebazaar.dto.response;
 
+import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -55,15 +56,19 @@ public class ProdottoDTO {
             return this;
         }
 
-        /*private boolean isValid(){
-            return idProdotto!=0&&
-                    idVenditore!=0&&
-                    nomeVenditore!=null&&
-                    nome!=null;
-        }*/
+        private boolean isValid(){
+            return prezzo>=0 && quantita>=0 && nome!=null;
+        }
 
         public ProdottoDTO build(){
-            return new ProdottoDTO(immagineProdotto,nome,descrizione,prezzo,quantita);
+            if(isValid())
+            {
+                return new ProdottoDTO(immagineProdotto,nome,descrizione,prezzo,quantita);
+            }
+
+            throw new BadRequestException("Prodotto non registrato");
+
+
         }
     }
 }

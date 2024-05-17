@@ -1,4 +1,4 @@
-package com.bytebazaar.bytebazaar.dto.request.oggettoCarello;
+package com.bytebazaar.bytebazaar.dto.request;
 
 import lombok.Data;
 

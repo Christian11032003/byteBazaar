@@ -1,9 +1,9 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.AddProductToCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.DeleteObjectFromCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.prodotto.InsertOrModifyProductRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.SubtractQuantityRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AddProductToCartRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.DeleteObjectFromCartRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.SubtractQuantityRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;

@@ -12,4 +12,6 @@ public interface MessaggioRepository extends JpaRepository<Messaggio,Integer>
     public List<Messaggio> findAllByUtente_Id(int idUtente);
 
     public List<Messaggio> findAllByUtente(Utente u);
+
+
 }

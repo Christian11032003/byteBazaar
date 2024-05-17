@@ -13,7 +13,6 @@ public class MessaggioServiceImpl implements MessaggioService
     @Autowired
     MessaggioRepository messaggioRepo;
 
-
     @Override
     public void salva(Messaggio m) {
         messaggioRepo.save(m);

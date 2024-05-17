@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.richiesta.AcceptOrRejectRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AcceptOrRejectRequestDTO;
 import com.bytebazaar.bytebazaar.facade.RichiestaFacade;
 
 import com.bytebazaar.bytebazaar.model.Utente;
@@ -33,7 +33,6 @@ public class RichiestaController
     public ResponseEntity<String> richiesta(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
-        System.out.println("oooooooooo");
         boolean cambio = richiestaFacade.richiesta(u);
         if (cambio) return ResponseEntity.status(HttpStatus.OK).body("Richiesta inoltrata con successo");
         else return ResponseEntity.badRequest().build();

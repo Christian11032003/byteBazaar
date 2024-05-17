@@ -1,6 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.messaggio.SendMessageRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.SendMessageRequestDTO;
 import com.bytebazaar.bytebazaar.facade.MessaggioFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;

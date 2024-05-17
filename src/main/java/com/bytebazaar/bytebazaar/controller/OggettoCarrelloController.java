@@ -1,8 +1,8 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.AddProductToCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.DeleteObjectFromCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.oggettoCarello.SubtractQuantityRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AddProductToCartRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.DeleteObjectFromCartRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.SubtractQuantityRequestDTO;
 import com.bytebazaar.bytebazaar.facade.OggettoCarrelloFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;

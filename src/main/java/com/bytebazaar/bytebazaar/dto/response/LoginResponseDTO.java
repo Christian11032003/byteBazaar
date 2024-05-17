@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.dto.response;
 
 
+import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import lombok.Getter;
 
 @Getter
@@ -32,9 +33,20 @@ public class LoginResponseDTO
             return this;
         }
 
+        public boolean isValid()
+        {
+            return username!=null && ruolo != null;
+        }
+
         public LoginResponseDTO build()
         {
-            return new LoginResponseDTO(username,ruolo);
+            if(isValid())
+            {
+                return new LoginResponseDTO(username,ruolo);
+            }
+
+            throw new BadRequestException("utente non trovato");
+
         }
 
     }

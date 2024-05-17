@@ -1,7 +1,7 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.feedback.AddFeedbackRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.feedback.ModifyFeedbackRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.AddFeedbackRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.ModifyFeedbackRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
