@@ -1,7 +1,7 @@
 package com.bytebazaar.bytebazaar.controller;
 
 import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequestDTO;
-import com.bytebazaar.bytebazaar.dto.response.ProdottoDTO;
+import com.bytebazaar.bytebazaar.dto.response.ProdottoReponseDTO;
 import com.bytebazaar.bytebazaar.facade.ProdottoFacade;
 import com.bytebazaar.bytebazaar.model.Utente;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,13 @@ public class ProdottoController
 
     //funzionalità del venditore
     @PostMapping("/venditore/registraProdotto")
-    public ResponseEntity<ProdottoDTO> registrazioneProdotto(UsernamePasswordAuthenticationToken token, @RequestBody InsertOrModifyProductRequestDTO request) {
+    public ResponseEntity<ProdottoReponseDTO> registrazioneProdotto(UsernamePasswordAuthenticationToken token, @RequestBody InsertOrModifyProductRequestDTO request) {
         Utente u = (Utente)token.getPrincipal();
         boolean registrato = prodottoFacade.registraProdotto(u,request);
         if (registrato)
         {
 
-            ProdottoDTO p = new ProdottoDTO.Builder()
+            ProdottoReponseDTO p = new ProdottoReponseDTO.BuilderProdottoDTO()
                     .setImmagineProdotto(request.getImmagine())
                     .setNome(request.getNome())
                     .setDescrizione(request.getDescrizione())
@@ -50,12 +50,12 @@ public class ProdottoController
     }
 
     @PostMapping("/venditore/modificaProdotto")
-    public ResponseEntity<ProdottoDTO> modificaProdotto(UsernamePasswordAuthenticationToken token,@RequestBody InsertOrModifyProductRequestDTO request){
+    public ResponseEntity<ProdottoReponseDTO> modificaProdotto(UsernamePasswordAuthenticationToken token, @RequestBody InsertOrModifyProductRequestDTO request){
         Utente u = (Utente)token.getPrincipal();
         boolean registrato = prodottoFacade.modificaProdotto(u,request);
         if (registrato)
         {
-            ProdottoDTO p = new ProdottoDTO.Builder()
+            ProdottoReponseDTO p = new ProdottoReponseDTO.BuilderProdottoDTO()
                     .setImmagineProdotto(request.getImmagine())
                     .setNome(request.getNome())
                     .setDescrizione(request.getDescrizione())

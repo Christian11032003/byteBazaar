@@ -75,9 +75,9 @@ public class TokenUtil {
     }
 
     // Metodo per ottenere il ruolo dell'utente dal token JWT
-    public Ruolo getRuolo(String token) {
+    /*public Ruolo getRuolo(String token) {
         return prendiClaimsDalToken(token).get("ruolo", Ruolo.class);
-    }
+    }*/
 
 
 

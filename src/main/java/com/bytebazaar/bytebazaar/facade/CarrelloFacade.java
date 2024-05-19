@@ -21,6 +21,7 @@ public class CarrelloFacade {
 
 
     public boolean confermaCarrello(Utente u){
+
         Optional<Carrello> carrello = carrelloService.getByUsername(u.getUsername());
 
 

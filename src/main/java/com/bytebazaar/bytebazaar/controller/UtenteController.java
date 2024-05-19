@@ -5,6 +5,7 @@ import com.bytebazaar.bytebazaar.dto.request.FindThingsRequestDTO;
 import com.bytebazaar.bytebazaar.dto.request.LoginRequestDTO;
 import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequestDTO;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponseDTO;
+import com.bytebazaar.bytebazaar.dto.response.RegistrationUserResponseDTO;
 import com.bytebazaar.bytebazaar.facade.UtenteFacade;
 import com.bytebazaar.bytebazaar.model.Feedback;
 import com.bytebazaar.bytebazaar.model.Messaggio;
@@ -148,11 +149,20 @@ public class UtenteController
 
     //funzionalità di tutti
     @PostMapping("/all/registration")
-    public ResponseEntity<String> registrazioneUtente(@Valid @RequestBody RegistrationUserRequestDTO request){
+    public ResponseEntity<RegistrationUserResponseDTO> registrazioneUtente(@Valid @RequestBody RegistrationUserRequestDTO request){
         boolean registrato = utenteFacade.registrationUtente(request);
         if (registrato)
         {
-            return ResponseEntity.status(HttpStatus.OK).body("Registrato con successo");
+            RegistrationUserResponseDTO registrationUserResponseDTO = new RegistrationUserResponseDTO.BuilderRegistrationUserDTO()
+                    .setNome(request.getNome())
+                    .setCognome(request.getCognome())
+                    .setEmail(request.getEmail())
+                    .setUsername(request.getUsername())
+                    .setPassword(request.getPassword())
+                    .setRuolo(request.getRuolo())
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.OK).body(registrationUserResponseDTO);
         }
         else return ResponseEntity.badRequest().build();
     }
