@@ -42,7 +42,7 @@ public class FeedbackResponseDTO
         }
 
 
-        private boolean isValid()
+        public boolean isValid()
         {
             return idProdotto > 0 && descrizione != null && valutazione > 0;
         }

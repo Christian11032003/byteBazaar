@@ -5,6 +5,7 @@ import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException
 import com.bytebazaar.bytebazaar.model.Carrello;
 import com.bytebazaar.bytebazaar.repository.CarrelloRepository;
 import com.bytebazaar.bytebazaar.service.definition.CarrelloService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -14,11 +15,12 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CarrelloServiceImpl implements CarrelloService
 {
 
-    @Autowired
-    CarrelloRepository carrelloRepo;
+
+    private final CarrelloRepository carrelloRepo;
 
     @Override
     public Optional<Carrello> getByUsername(String username) {

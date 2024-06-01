@@ -20,18 +20,21 @@ public class Prodotto
     @JoinColumn(nullable = false,updatable = false,name = "idutente")
     private Utente utente;
 
-    private String immagineprodotto;
 
     @Column(nullable = false)
     private String nome;
 
     private String descrizione;
+
     @Column(nullable = false)
     private double prezzo;
 
     @Column(nullable = false)
     private int quantita;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Condizione condizione;
 
     @JsonIgnore
     @OneToMany(mappedBy = "prodotto",fetch = FetchType.EAGER)

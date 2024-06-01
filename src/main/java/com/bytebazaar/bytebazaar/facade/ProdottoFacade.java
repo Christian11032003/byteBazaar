@@ -44,7 +44,7 @@ public class ProdottoFacade
             {
                 Prodotto p = new Prodotto();
                 p.setUtente(u);
-                p.setImmagineprodotto(request.getImmagine());
+
 
                 if (request.getNome() != null) {
                     p.setNome(request.getNome());
@@ -79,6 +79,16 @@ public class ProdottoFacade
                 {
 
                     throw new BadRequestException("Quantità non può essere minore di 0");
+                }
+
+                if(request.getCondizione() != null)
+                {
+                    p.setCondizione(request.getCondizione());
+                }
+                else
+                {
+                    throw new BadRequestException("la condizione non può essere null");
+
                 }
                 serviceProdotto.salva(p);
                 return true;
@@ -116,11 +126,7 @@ public class ProdottoFacade
             // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
             if (p.getUtente().getId() == u.getId()) {
                 // Modifica solo i campi non nulli nella richiesta
-                if (request.getImmagine() != null) {
-                    p.setImmagineprodotto(request.getImmagine());
-                } else {
-                    p.setImmagineprodotto(p.getImmagineprodotto());
-                }
+
                 if (request.getNome() != null) {
                     p.setNome(request.getNome());
                 } else {
@@ -135,6 +141,14 @@ public class ProdottoFacade
                     p.setPrezzo(request.getPrezzo());
                 } else {
                     throw new BadRequestException("Prezzo non può essere minore di 0");
+                }
+                if(request.getCondizione() != null)
+                {
+                    p.setCondizione(request.getCondizione());
+                }
+                else
+                {
+                    p.setCondizione(p.getCondizione());
                 }
 
 

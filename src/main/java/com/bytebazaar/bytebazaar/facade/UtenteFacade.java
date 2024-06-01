@@ -1,9 +1,6 @@
 package com.bytebazaar.bytebazaar.facade;
 
-import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.FindThingsRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.LoginRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.*;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
@@ -16,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -116,7 +114,10 @@ public class UtenteFacade
     //funzionalità del cliente e del venditore
 
     public List<Messaggio> findMyOwnMessage(Utente u){return messaggioRepo.findAllByUtente(u);}
-    public List<Prodotto> findAllOtherProducts(Utente u) {return prodottoRepo.findAllByUtenteIsNot(u);}
+    public List<Prodotto> findAllOtherProducts(Utente u, FilterProductRequestDTO request)
+    {
+        return prodottoRepo.findAllByUtenteIsNotAndCondizione(u,request.getCondizione());
+    }
     public List<Feedback> findMyOwnFeedback(Utente u) {return feedbackRepo.findAllByOggettocarrello_Carrello_Utente(u);}
 
 

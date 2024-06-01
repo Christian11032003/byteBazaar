@@ -16,18 +16,18 @@ public class LoginResponseDTO
         this.ruolo = ruolo;
     }
 
-    public static class Builder
+    public static class BuilderLoginResponseDTO
     {
         private String username;
         private String ruolo;
 
-        public Builder setUsername(String username)
+        public BuilderLoginResponseDTO setUsername(String username)
         {
             this.username = username;
             return this;
         }
 
-        public Builder setRuolo(String ruolo)
+        public BuilderLoginResponseDTO setRuolo(String ruolo)
         {
             this.ruolo = ruolo;
             return this;

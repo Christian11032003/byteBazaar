@@ -32,7 +32,7 @@ public class OggettoCarrelloReponseDTO
             return this;
         }
 
-        private boolean isValid(){
+        public boolean isValid(){
             return quantita >=0 && id > 0;
         }
 

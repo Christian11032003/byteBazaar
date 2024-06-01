@@ -1,38 +1,34 @@
 package com.bytebazaar.bytebazaar.dto.response;
 
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
+import com.bytebazaar.bytebazaar.model.Condizione;
 import lombok.Getter;
 
 @Getter
 public class ProdottoReponseDTO {
 
-    private String immagineProdotto;
+
     private String nome;
     private String descrizione;
     private double prezzo;
     private int quantita;
+    private Condizione condizione;
 
-    private ProdottoReponseDTO(String immagineProdotto, String nome, String descrizione, double prezzo, int quantita) {
-        this.immagineProdotto = immagineProdotto;
+    public ProdottoReponseDTO(String nome, String descrizione, double prezzo, int quantita, Condizione condizione) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.prezzo = prezzo;
         this.quantita = quantita;
+        this.condizione = condizione;
     }
 
     public static class BuilderProdottoDTO{
 
-        private String immagineProdotto;
         private String nome;
         private String descrizione;
         private double prezzo;
         private int quantita;
-
-
-        public BuilderProdottoDTO setImmagineProdotto(String immagineProdotto) {
-            this.immagineProdotto = immagineProdotto;
-            return this;
-        }
+        private Condizione condizione;
 
         public BuilderProdottoDTO setNome(String nome) {
             this.nome = nome;
@@ -54,7 +50,13 @@ public class ProdottoReponseDTO {
             return this;
         }
 
-        private boolean isValid(){
+        public BuilderProdottoDTO setCondizione(Condizione condizione)
+        {
+            this.condizione = condizione;
+            return this;
+        }
+
+        public boolean isValid(){
             return prezzo>=0 && quantita>=0 && nome!=null;
         }
 
@@ -62,7 +64,7 @@ public class ProdottoReponseDTO {
         {
             if(isValid())
             {
-                return new ProdottoReponseDTO(immagineProdotto,nome,descrizione,prezzo,quantita);
+                return new ProdottoReponseDTO(nome,descrizione,prezzo,quantita,condizione);
             }
 
             throw new BadRequestException("Prodotto non registrato");

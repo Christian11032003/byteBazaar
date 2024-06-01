@@ -169,9 +169,7 @@ public class OggettoCarrelloFacade
             // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
             if (p.getUtente().equals(u)) {
                 // Modifica solo i campi non nulli nella richiesta
-                if (request.getImmagine() != null) {
-                    p.setImmagineprodotto(request.getImmagine());
-                }
+
                 if (request.getNome() != null) {
                     p.setNome(request.getNome());
                 }

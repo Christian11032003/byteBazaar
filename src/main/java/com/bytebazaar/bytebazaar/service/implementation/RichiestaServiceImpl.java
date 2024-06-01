@@ -4,17 +4,19 @@ import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException
 import com.bytebazaar.bytebazaar.model.Richiesta;
 import com.bytebazaar.bytebazaar.repository.RichiestaRepository;
 import com.bytebazaar.bytebazaar.service.definition.RichiestaService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RichiestaServiceImpl implements RichiestaService
 {
 
-    @Autowired
-    private RichiestaRepository richiestaRepo;
+
+    private final RichiestaRepository richiestaRepo;
 
 
     @Override

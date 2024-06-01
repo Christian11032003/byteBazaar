@@ -61,7 +61,7 @@ public class RegistrationUserResponseDTO
             return this;
         }
 
-        private boolean isValid(){
+        public boolean isValid(){
             return nome != null && cognome != null && email != null && username != null && password != null && ruolo != null;
         }
 

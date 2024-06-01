@@ -1,16 +1,7 @@
 package com.bytebazaar.bytebazaar;
 
-import com.bytebazaar.bytebazaar.dto.request.AddFeedbackRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.ModifyFeedbackRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.SendMessageRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.AddProductToCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.DeleteObjectFromCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.SubtractQuantityRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.AcceptOrRejectRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.FindThingsRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.LoginRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.*;
+import com.bytebazaar.bytebazaar.model.Condizione;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Stato;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -270,7 +261,14 @@ public class Testing
     public void vediTuttiGliAltriProdotti() throws Exception
     {
 
-        mock.perform(MockMvcRequestBuilders.get("/cliente/findTheOtherProduct"))
+        FilterProductRequestDTO f =new FilterProductRequestDTO();
+        f.setCondizione(Condizione.COMENUOVO);
+        ObjectMapper om=new ObjectMapper();
+        String json=om.writeValueAsString(f);
+        mock.perform(MockMvcRequestBuilders.post("/cliente/findTheOtherProduct")
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andReturn();
 
@@ -330,11 +328,11 @@ public class Testing
     public void registraProdotto() throws Exception
     {
         InsertOrModifyProductRequestDTO i=new InsertOrModifyProductRequestDTO();
-        i.setImmagine("macchina");
         i.setNome("Lamborghini");
         i.setDescrizione("Bellissima Macchina");
         i.setPrezzo(750.40);
         i.setQuantita(10);
+        i.setCondizione(Condizione.NUOVO);
         ObjectMapper om=new ObjectMapper();
         String json=om.writeValueAsString(i);
         mock.perform(MockMvcRequestBuilders.post("/venditore/registraProdotto")
@@ -352,11 +350,11 @@ public class Testing
     public void modificaProdotto() throws Exception
     {
         InsertOrModifyProductRequestDTO i=new InsertOrModifyProductRequestDTO();
-        i.setImmagine("macchina verde");
         i.setNome("Lamborghini");
         i.setDescrizione("Bellissima Macchina Italiana");
         i.setQuantita(9);
         i.setPrezzo(750.30);
+        i.setCondizione(Condizione.COMENUOVO);
         ObjectMapper om=new ObjectMapper();
         String json=om.writeValueAsString(i);
         mock.perform(MockMvcRequestBuilders.post("/venditore/modificaProdotto")

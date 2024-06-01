@@ -1,9 +1,6 @@
 package com.bytebazaar.bytebazaar.controller;
 
-import com.bytebazaar.bytebazaar.dto.request.BannedOrUnBannedRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.FindThingsRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.LoginRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.RegistrationUserRequestDTO;
+import com.bytebazaar.bytebazaar.dto.request.*;
 import com.bytebazaar.bytebazaar.dto.response.LoginResponseDTO;
 import com.bytebazaar.bytebazaar.dto.response.RegistrationUserResponseDTO;
 import com.bytebazaar.bytebazaar.facade.UtenteFacade;
@@ -51,7 +48,7 @@ public class UtenteController
         boolean registrato = utenteFacade.registrationAdmin(request);
         if (registrato) {
 
-            LoginResponseDTO lr = new LoginResponseDTO.Builder()
+            LoginResponseDTO lr = new LoginResponseDTO.BuilderLoginResponseDTO()
                     .setUsername(request.getUsername())
                     .setRuolo(request.getRuolo().toString())
                     .build();
@@ -121,11 +118,11 @@ public class UtenteController
     }
 
     //funzionalità del cliente e del venditore
-    @GetMapping({"/venditore/findTheOtherProduct","/cliente/findTheOtherProduct"})
-    public ResponseEntity<List<Prodotto>> findAllOtherProducts(UsernamePasswordAuthenticationToken token)
+    @PostMapping({"/venditore/findTheOtherProductToCondition","/cliente/findTheOtherProductToCondition"})
+    public ResponseEntity<List<Prodotto>> findAllOtherProductsToCondition(UsernamePasswordAuthenticationToken token, @RequestBody FilterProductRequestDTO request)
     {
         Utente u=(Utente) token.getPrincipal();
-        List<Prodotto> prodottoListOthers = utenteFacade.findAllOtherProducts(u);
+        List<Prodotto> prodottoListOthers = utenteFacade.findAllOtherProducts(u, request);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);
     }
 
@@ -173,7 +170,7 @@ public class UtenteController
         Utente u = utenteFacade.login(request);
         if(u != null)
         {
-            LoginResponseDTO lr = new LoginResponseDTO.Builder()
+            LoginResponseDTO lr = new LoginResponseDTO.BuilderLoginResponseDTO()
                     .setUsername(request.getUsername())
                     .setRuolo(u.getRuolo().toString())
                     .build();

@@ -36,7 +36,6 @@ public class MessaggioResponseDTO
         {
             return idDestinatario > 0  && testo != null;
 
-
         }
 
         public MessaggioResponseDTO build()

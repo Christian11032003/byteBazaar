@@ -5,6 +5,7 @@ import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,11 +13,12 @@ import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class UtenteServiceImpl implements UtenteService
 {
 
-    @Autowired
-    private UtenteRepository utenteRepo;
+
+    private final UtenteRepository utenteRepo;
 
 
     //funzionalità per il facade

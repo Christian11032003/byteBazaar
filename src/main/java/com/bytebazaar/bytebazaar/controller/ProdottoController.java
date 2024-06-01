@@ -31,11 +31,12 @@ public class ProdottoController
         {
 
             ProdottoReponseDTO p = new ProdottoReponseDTO.BuilderProdottoDTO()
-                    .setImmagineProdotto(request.getImmagine())
+
                     .setNome(request.getNome())
                     .setDescrizione(request.getDescrizione())
                     .setQuantita(request.getQuantita())
                     .setPrezzo(request.getPrezzo())
+                    .setCondizione(request.getCondizione())
                     .build();
 
 
@@ -56,11 +57,11 @@ public class ProdottoController
         if (registrato)
         {
             ProdottoReponseDTO p = new ProdottoReponseDTO.BuilderProdottoDTO()
-                    .setImmagineProdotto(request.getImmagine())
                     .setNome(request.getNome())
                     .setDescrizione(request.getDescrizione())
                     .setQuantita(request.getQuantita())
                     .setPrezzo(request.getPrezzo())
+                    .setCondizione(request.getCondizione())
                     .build();
 
             return ResponseEntity.status(HttpStatus.OK).body(p);

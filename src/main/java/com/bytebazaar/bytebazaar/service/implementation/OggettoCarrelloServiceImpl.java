@@ -4,16 +4,18 @@ import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.*;
 import com.bytebazaar.bytebazaar.service.definition.OggettoCarrelloService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class OggettoCarrelloServiceImpl implements OggettoCarrelloService
 {
-    @Autowired
-    private OggettocarrelloRepository oggettocarrelloRepo;
+
+    private final OggettocarrelloRepository oggettocarrelloRepo;
 
 
     @Override

@@ -4,15 +4,17 @@ import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
 import com.bytebazaar.bytebazaar.repository.ProdottoRepository;
 import com.bytebazaar.bytebazaar.service.definition.ProdottoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProdottoServiceImpl implements ProdottoService
 {
 
-    @Autowired
-    private ProdottoRepository prodottoRepo;
+
+    private final ProdottoRepository prodottoRepo;
 
 
     @Override
