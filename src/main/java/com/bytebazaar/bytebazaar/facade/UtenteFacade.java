@@ -1,6 +1,9 @@
 package com.bytebazaar.bytebazaar.facade;
 
 import com.bytebazaar.bytebazaar.dto.request.*;
+import com.bytebazaar.bytebazaar.dto.response.FeedbackResponseDTO;
+import com.bytebazaar.bytebazaar.dto.response.MessaggioResponseDTO;
+import com.bytebazaar.bytebazaar.dto.response.ProdottoReponseDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.*;
@@ -12,6 +15,7 @@ import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,6 +95,7 @@ public class UtenteFacade
     public List<Prodotto> findAllProdottiUser(FindThingsRequestDTO request)
     {
         return prodottoRepo.trovaProdottiUser(request.getIdUtente());
+
     }
 
     public List<Prodotto> findAllProdottiUserInKart(FindThingsRequestDTO request)
@@ -113,16 +118,93 @@ public class UtenteFacade
 
     //funzionalità del cliente e del venditore
 
-    public List<Messaggio> findMyOwnMessage(Utente u){return messaggioRepo.findAllByUtente(u);}
-    public List<Prodotto> findAllOtherProducts(Utente u, FilterProductRequestDTO request)
+    public List<MessaggioResponseDTO> findMyOwnMessage(Utente u)
     {
-        return prodottoRepo.findAllByUtenteIsNotAndCondizione(u,request.getCondizione());
+        List<Messaggio> messaggio = messaggioRepo.findAllByUtente(u);
+        List<MessaggioResponseDTO> messaggioFiltrato = new ArrayList<>();
+
+        for(Messaggio m: messaggio)
+        {
+            MessaggioResponseDTO mDTO = new MessaggioResponseDTO.BuilderMessaggioResponseDTO()
+                    .setIdDestinatario(m.getIddestinatario())
+                    .setTesto(m.getTesto())
+                    .build();
+
+            messaggioFiltrato.add(mDTO);
+
+        }
+
+        return messaggioFiltrato;
     }
-    public List<Feedback> findMyOwnFeedback(Utente u) {return feedbackRepo.findAllByOggettocarrello_Carrello_Utente(u);}
+    public List<ProdottoReponseDTO> findAllOtherProducts(Utente u, FilterProductRequestDTO request)
+    {
+        List <ProdottoReponseDTO> prodottoFiltrato = new ArrayList<>();
+        List <Prodotto> prodotto = prodottoRepo.findAllByUtenteIsNotAndCondizione(u,request.getCondizione());
+        for(Prodotto p : prodotto)
+        {
+
+            ProdottoReponseDTO pDTO = new ProdottoReponseDTO.BuilderProdottoDTO()
+                    .setIdVenditore(p.getUtente().getId())
+                    .setNome(p.getNome())
+                    .setDescrizione(p.getDescrizione())
+                    .setQuantita(p.getQuantita())
+                    .setPrezzo(p.getPrezzo())
+                    .setCondizione(p.getCondizione())
+                    .build2();
+
+            prodottoFiltrato.add(pDTO);
+
+
+        }
+
+        return prodottoFiltrato;
+
+    }
+    public List<FeedbackResponseDTO> findMyOwnFeedback(Utente u)
+    {
+        List <FeedbackResponseDTO> feedbackFiltrato = new ArrayList<>();
+        List<Feedback> feedbacks = feedbackRepo.findAllByOggettocarrello_Carrello_Utente(u);
+
+        for(Feedback f : feedbacks)
+        {
+            FeedbackResponseDTO fDto = new FeedbackResponseDTO.BuilderFeedbackResponseDTO()
+                    .setIdProdotto(f.getOggettocarrello().getProdotto().getId())
+                    .setDescrizione(f.getDescrizione())
+                    .setValutazione(f.getValutazione())
+                    .build();
+
+            feedbackFiltrato.add(fDto);
+        }
+
+
+        return feedbackFiltrato;
+
+
+    }
 
 
     //funzionalità venditore
-    public List<Prodotto> findAllHisProducts(Utente u) {return prodottoRepo.trovaProdottiUser(u.getId());}
+    public List<ProdottoReponseDTO> findAllHisProducts(Utente u) {
+
+        List <ProdottoReponseDTO> prodottoFiltrato = new ArrayList<>();
+        List <Prodotto> prodotto = prodottoRepo.trovaProdottiUser(u.getId());
+        for(Prodotto p : prodotto)
+        {
+            ProdottoReponseDTO pDTO = new ProdottoReponseDTO.BuilderProdottoDTO()
+                    .setNome(p.getNome())
+                    .setDescrizione(p.getDescrizione())
+                    .setQuantita(p.getQuantita())
+                    .setPrezzo(p.getPrezzo())
+                    .setCondizione(p.getCondizione())
+                    .build();
+
+            prodottoFiltrato.add(pDTO);
+
+
+        }
+
+        return prodottoFiltrato;
+    }
 
     //funzionalità di tutti
 

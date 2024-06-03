@@ -1,8 +1,7 @@
 package com.bytebazaar.bytebazaar.controller;
 
 import com.bytebazaar.bytebazaar.dto.request.*;
-import com.bytebazaar.bytebazaar.dto.response.LoginResponseDTO;
-import com.bytebazaar.bytebazaar.dto.response.RegistrationUserResponseDTO;
+import com.bytebazaar.bytebazaar.dto.response.*;
 import com.bytebazaar.bytebazaar.facade.UtenteFacade;
 import com.bytebazaar.bytebazaar.model.Feedback;
 import com.bytebazaar.bytebazaar.model.Messaggio;
@@ -110,37 +109,38 @@ public class UtenteController
     //funzionalità del venditore
 
     @GetMapping("/venditore/findMyOwnProduct")
-    public ResponseEntity<List<Prodotto>> findAllHisProducts(UsernamePasswordAuthenticationToken token)
+    public ResponseEntity<List<ProdottoReponseDTO>> findAllHisProducts(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
-        List<Prodotto> prodottoListPersonal = utenteFacade.findAllHisProducts(u);
+        List<ProdottoReponseDTO> prodottoListPersonal = utenteFacade.findAllHisProducts(u);
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListPersonal);
     }
 
     //funzionalità del cliente e del venditore
     @PostMapping({"/venditore/findTheOtherProductToCondition","/cliente/findTheOtherProductToCondition"})
-    public ResponseEntity<List<Prodotto>> findAllOtherProductsToCondition(UsernamePasswordAuthenticationToken token, @RequestBody FilterProductRequestDTO request)
+    public ResponseEntity<List<ProdottoReponseDTO>> findAllOtherProductsToCondition(UsernamePasswordAuthenticationToken token, @RequestBody FilterProductRequestDTO request)
     {
         Utente u=(Utente) token.getPrincipal();
-        List<Prodotto> prodottoListOthers = utenteFacade.findAllOtherProducts(u, request);
+        List<ProdottoReponseDTO> prodottoListOthers = utenteFacade.findAllOtherProducts(u, request);
+
         return ResponseEntity.status(HttpStatus.OK).body(prodottoListOthers);
     }
 
 
     @GetMapping({"/venditore/findMyOwnMessage","/cliente/findMyOwnMessage"})
-    public ResponseEntity<List<Messaggio>> findMyOwnMessage(UsernamePasswordAuthenticationToken token)
+    public ResponseEntity<List<MessaggioResponseDTO>> findMyOwnMessage(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
-        List<Messaggio> myOwnMessages = utenteFacade.findMyOwnMessage(u);
+        List<MessaggioResponseDTO> myOwnMessages = utenteFacade.findMyOwnMessage(u);
         return ResponseEntity.status(HttpStatus.OK).body(myOwnMessages);
     }
 
 
     @GetMapping({"/venditore/findMyOwnFeedback","/cliente/findMyOwnFeedback"})
-    public ResponseEntity<List<Feedback>> findMyOwnFeedback(UsernamePasswordAuthenticationToken token)
+    public ResponseEntity<List<FeedbackResponseDTO>> findMyOwnFeedback(UsernamePasswordAuthenticationToken token)
     {
         Utente u=(Utente) token.getPrincipal();
-        List<Feedback> myOwnMessages = utenteFacade.findMyOwnFeedback(u);
+        List<FeedbackResponseDTO> myOwnMessages = utenteFacade.findMyOwnFeedback(u);
         return ResponseEntity.status(HttpStatus.OK).body(myOwnMessages);
     }
 

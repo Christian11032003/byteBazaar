@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class ProdottoReponseDTO {
 
-
+    private int idVenditore;
     private String nome;
     private String descrizione;
     private double prezzo;
@@ -22,13 +22,29 @@ public class ProdottoReponseDTO {
         this.condizione = condizione;
     }
 
+    public ProdottoReponseDTO(int idVenditore,String nome, String descrizione, double prezzo, int quantita, Condizione condizione) {
+        this.idVenditore = idVenditore;
+        this.nome = nome;
+        this.descrizione = descrizione;
+        this.prezzo = prezzo;
+        this.quantita = quantita;
+        this.condizione = condizione;
+    }
+
     public static class BuilderProdottoDTO{
 
+        private int idVenditore;
         private String nome;
         private String descrizione;
         private double prezzo;
         private int quantita;
         private Condizione condizione;
+
+        public BuilderProdottoDTO setIdVenditore(int idVenditore)
+        {
+            this.idVenditore = idVenditore;
+            return this;
+        }
 
         public BuilderProdottoDTO setNome(String nome) {
             this.nome = nome;
@@ -70,5 +86,18 @@ public class ProdottoReponseDTO {
             throw new BadRequestException("Prodotto non registrato");
 
         }
+
+        public ProdottoReponseDTO build2()
+        {
+            if(isValid() && idVenditore>0)
+            {
+                return new ProdottoReponseDTO(idVenditore,nome,descrizione,prezzo,quantita,condizione);
+            }
+
+            throw new BadRequestException("Prodotto non registrato");
+
+        }
+
+
     }
 }

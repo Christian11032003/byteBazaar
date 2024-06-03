@@ -1,5 +1,6 @@
 package com.bytebazaar.bytebazaar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class Messaggio
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
 
     @ManyToOne
     @JoinColumn(nullable = false,updatable = false,name = "idutente")

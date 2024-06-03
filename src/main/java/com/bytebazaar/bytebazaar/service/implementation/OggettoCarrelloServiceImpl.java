@@ -23,11 +23,22 @@ public class OggettoCarrelloServiceImpl implements OggettoCarrelloService
         oggettocarrelloRepo.save(o);
     }
 
+    /**
+     * questo metodo serve a ..
+     * @param idCarrello id del carrello
+     * @param idProdotto id del prodotto
+     * @return il carrello
+     */
     @Override
     public Optional<Oggettocarrello> getByCarrelloIdcarrelloAndProdottoIdProdotto(int idCarrello, int idProdotto) {
         return oggettocarrelloRepo.findByCarrello_IdAndProdotto_Id(idCarrello,idProdotto);
     }
 
+    /**
+     *
+     * @param idOggettoCarrello
+     * @return
+     */
     @Override
     public Optional<Oggettocarrello> getById(int idOggettoCarrello) {
         return oggettocarrelloRepo.findById(idOggettoCarrello);
