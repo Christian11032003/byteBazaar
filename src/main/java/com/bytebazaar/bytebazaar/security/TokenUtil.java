@@ -1,16 +1,13 @@
 package com.bytebazaar.bytebazaar.security;
 
-import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
-import com.bytebazaar.bytebazaar.model.Ruolo;
+
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
-import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;

@@ -1,11 +1,12 @@
 package com.bytebazaar.bytebazaar.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
+
+//entità Messaggio con i relativi campi e le relazioni
 
 @Data
 @NoArgsConstructor

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+//entità Oggettocarello con i relativi campi e le relazioni
 @Data
 @NoArgsConstructor
 @Entity

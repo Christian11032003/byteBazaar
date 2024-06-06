@@ -51,6 +51,15 @@ public class BeanConfigurazioneJwt {
     }
 
     // Definizione di un bean che restituirà un AuthenticationManager.
+
+    /**
+     * Definisce un bean che restituirà un'istanza di AuthenticationManager.
+     * Questo bean è utilizzato per la gestione dell'autenticazione.
+     *
+     * @param configure l'oggetto AuthenticationConfiguration utilizzato per la configurazione dell'AuthenticationManager
+     * @return un'istanza di AuthenticationManager configurata
+     * @throws Exception se si verifica un'eccezione durante la configurazione dell'AuthenticationManager
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configure) throws Exception {
         // Questo bean è utilizzato per la gestione dell'autenticazione.

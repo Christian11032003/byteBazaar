@@ -3,7 +3,7 @@ package com.bytebazaar.bytebazaar.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+//entità Richiesta con i relativi campi e le relazioni
 @Data
 @NoArgsConstructor
 @Entity

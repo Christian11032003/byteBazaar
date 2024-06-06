@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+//entità Carello con i relativi campi e le relazioni
 @Data
 @NoArgsConstructor
 @Entity

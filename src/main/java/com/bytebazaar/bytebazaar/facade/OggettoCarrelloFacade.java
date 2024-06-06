@@ -2,7 +2,6 @@ package com.bytebazaar.bytebazaar.facade;
 
 import com.bytebazaar.bytebazaar.dto.request.AddProductToCartRequestDTO;
 import com.bytebazaar.bytebazaar.dto.request.DeleteObjectFromCartRequestDTO;
-import com.bytebazaar.bytebazaar.dto.request.InsertOrModifyProductRequestDTO;
 import com.bytebazaar.bytebazaar.dto.request.SubtractQuantityRequestDTO;
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
 import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
@@ -25,16 +24,25 @@ import java.util.Optional;
 public class OggettoCarrelloFacade
 {
 
+    // Servizio per gestire le operazioni sugli oggetti nel carrello.
     private final OggettoCarrelloService serviceOggettoCarrello;
 
+    // Repository per gestire le operazioni sul carrello.
     private final CarrelloRepository carrelloRepo;
 
+    // Repository per gestire le operazioni sui prodotti.
     private final ProdottoRepository prodottoRepo;
 
-    public boolean aggiungiAlCarrello(Utente u, AddProductToCartRequestDTO request)
-    {
-
-        // Find the carrello with a date, or create a new one
+    /**
+     * Aggiunge un prodotto al carrello di un utente.
+     * @param u L'utente a cui aggiungere il prodotto nel carrello.
+     * @param request L'oggetto di richiesta contenente le informazioni del prodotto da aggiungere al carrello.
+     * @return true se il prodotto è stato aggiunto con successo al carrello, altrimenti false.
+     * @throws BadRequestException Se non è possibile aggiungere il prodotto al carrello.
+     * @throws NotFoundException Se il prodotto non è trovato.
+     */
+    public boolean aggiungiAlCarrello(Utente u, AddProductToCartRequestDTO request) {
+        // Trova il carrello con una data, o crea un nuovo carrello
         Carrello carrello = u.getCarrello().stream()
                 .filter(c -> c.getDataacquisto() == null)
                 .findFirst()
@@ -45,226 +53,133 @@ public class OggettoCarrelloFacade
                     return carrelloRepo.save(newCarrello);
                 });
 
+        // Ottiene il prodotto tramite l'ID fornito nella richiesta
         Optional<Prodotto> prodottoOptional = prodottoRepo.findById(request.getIdProdotto());
 
-        if(prodottoOptional.isPresent())
-        {
+        // Verifica se il prodotto è presente nel repository
+        if (prodottoOptional.isPresent()) {
             Prodotto p = prodottoOptional.get();
-            Optional<Oggettocarrello> og = serviceOggettoCarrello.getByCarrelloIdcarrelloAndProdottoIdProdotto(carrello.getId(),p.getId());
 
-            if(u.getId() == p.getUtente().getId())
-            {
+            // Ottiene l'oggetto carrello per il prodotto e il carrello specificati
+            Optional<Oggettocarrello> og = serviceOggettoCarrello.getByCarrelloIdcarrelloAndProdottoIdProdotto(carrello.getId(), p.getId());
+
+            // Verifica se l'utente sta cercando di aggiungere il proprio prodotto al carrello
+            if (u.getId() == p.getUtente().getId()) {
                 throw new BadRequestException("Non puoi comprare il tuo stesso prodotto");
-            }
-            else
-            {
-                if(og.isEmpty())
-                {
+            } else {
+                if (og.isEmpty()) {
                     Oggettocarrello newOggettoCarrello = new Oggettocarrello();
-                    if(request.getIdProdotto() == p.getId())
-                    {
+                    if (request.getIdProdotto() == p.getId()) {
                         newOggettoCarrello.setProdotto(p);
+                    } else {
+                        throw new BadRequestException("Prodotto inesistente");
                     }
 
-                    else
-                    {
-                        throw new BadRequestException("prodotto inesistente");
-                    }
-
-                    if(request.getQuantita() > 0)
-                    {
+                    if (request.getQuantita() > 0) {
                         newOggettoCarrello.setQuantita(request.getQuantita());
+                    } else {
+                        throw new BadRequestException("La quantità deve essere maggiore di 0");
                     }
 
-                    else
-                    {
-                        throw new BadRequestException("la quantità deve essere maggiore di 0");
-                    }
-
-
-
-
-                    // Set the relationship between Carrello and Oggettocarrello
+                    // Imposta la relazione tra Carrello e Oggettocarrello
                     newOggettoCarrello.setCarrello(carrello);
 
-                    // Save the Oggettocarrello and update the Carrello to the database using the repositories
+                    // Salva l'Oggettocarrello e aggiorna il Carrello nel database utilizzando i repository
                     serviceOggettoCarrello.salva(newOggettoCarrello);
                     carrelloRepo.save(carrello);
 
-                    return true; // Successfully added to the carrello
-                }
-
-                else
-                {
-
+                    return true; // Aggiunto con successo al carrello
+                } else {
+                    // Se il prodotto è già presente nel carrello, aggiorna solo la quantità
                     Oggettocarrello o = og.get();
                     o.setQuantita(o.getQuantita() + request.getQuantita());
                     serviceOggettoCarrello.salva(o);
-                    return true; //Successfully altered to the carrello
-
+                    return true; // Quantità aggiornata con successo nel carrello
                 }
-
-
             }
-
-
-
-        }
-
-        else
-        {
+        } else {
+            // Se il prodotto non è trovato, solleva un'eccezione NotFoundException
             throw new NotFoundException("Prodotto non trovato");
         }
-
     }
 
 
-    public boolean modificaQuantitaRimanenti(Utente u, Carrello c)
-    {
+    /**
+     * Modifica le quantità rimanenti dei prodotti nel carrello dopo un acquisto.
+     *
+     * @param u L'utente che effettua la modifica.
+     * @param c Il carrello contenente gli oggetti da modificare.
+     * @return True se l'operazione è stata completata con successo, altrimenti False.
+     */
+    public boolean modificaQuantitaRimanenti(Utente u, Carrello c) {
         List<Oggettocarrello> oggettiCarrelli = c.getOggettocarrello();
 
-        //TO DO da rivedere
-        //if (c.getUtente().getCarrello() == u.getCarrello())
-
-
+        // Cicla attraverso gli oggetti nel carrello
         for (Oggettocarrello og : oggettiCarrelli) {
-
             Prodotto p = og.getProdotto();
-            if (p.getQuantita() >= og.getQuantita())
-            {
-                p.setQuantita(p.getQuantita() - og.getQuantita());
-                prodottoRepo.save(p);
-                return true;
-
+            // Verifica se la quantità disponibile del prodotto è sufficiente
+            if (p.getQuantita() >= og.getQuantita()) {
+                p.setQuantita(p.getQuantita() - og.getQuantita()); // Riduce la quantità disponibile
+                prodottoRepo.save(p); // Salva le modifiche
+                return true; // Restituisce true se l'operazione è avvenuta con successo
+            } else {
+                // Lancia un'eccezione BadRequest se la quantità non è sufficiente
+                throw new BadRequestException("Impossibile completare l'operazione, verificare le quantità");
             }
-
-
-            else
-            {
-                throw new BadRequestException("impossibile completare l'operazione verificare le quantità");
-            }
-
-
         }
 
-
-        return true;
-
-
+        return true; // Restituisce true se il carrello è vuoto o se tutte le operazioni sono state completate con successo
     }
 
-    //rivedere sto metodo
-
-    public boolean modificaOggettoCarrello(Utente u, InsertOrModifyProductRequestDTO request)
-    {
-
-
-        Optional<Prodotto> prodottoOptional = prodottoRepo.findByNome(request.getNome());
-
-        if (prodottoOptional.isPresent())
-        {
-
-            Prodotto p = prodottoOptional.get();
-
-            // Verifica che l'utente associato al prodotto sia lo stesso dell'utente autenticato
-            if (p.getUtente().equals(u)) {
-                // Modifica solo i campi non nulli nella richiesta
-
-                if (request.getNome() != null) {
-                    p.setNome(request.getNome());
-                }
-                if (request.getDescrizione() != null) {
-                    p.setDescrizione(request.getDescrizione());
-                }
-                if (request.getPrezzo() > 0) {
-                    p.setPrezzo(request.getPrezzo());
-                }
-                if (request.getQuantita() >= 0) {
-                    p.setQuantita(request.getQuantita());
-                }
-
-                prodottoRepo.save(p);
-
-                return true;
-            }
-
-            else
-            {
-                // L'utente non è autorizzato a modificare questo prodotto
-                throw new UnAuthorizedException("Non Autorizzato");
-            }
-        }
-        else
-        {
-            // Prodotto non trovato
-
-            throw new NotFoundException("Prodotto non trovato");
-        }
-
-
-    }
-
-    public boolean sottraiQuantita(SubtractQuantityRequestDTO request)
-    {
-
+    /**
+     * Sottrae una quantità specifica da un oggetto nel carrello.
+     *
+     * @param request La richiesta di sottrazione di quantità.
+     * @return True se l'operazione è stata completata con successo, altrimenti False.
+     */
+    public boolean sottraiQuantita(SubtractQuantityRequestDTO request) {
         Optional<Oggettocarrello> oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
 
-        if(oggettocarrello.isPresent())
-        {
-
+        if (oggettocarrello.isPresent()) {
             Oggettocarrello og = oggettocarrello.get();
-
-            if(og.getCarrello().getDataacquisto() == null)
-            {
-                og.setQuantita(request.getQuantita());
-                serviceOggettoCarrello.salva(og);
-                return true;
-            }
-
-            else
-            {
+            // Verifica se il carrello ha già effettuato un acquisto
+            if (og.getCarrello().getDataacquisto() == null) {
+                og.setQuantita(request.getQuantita()); // Imposta la nuova quantità
+                serviceOggettoCarrello.salva(og); // Salva le modifiche
+                return true; // Restituisce true se l'operazione è stata completata con successo
+            } else {
+                // Lancia un'eccezione UnAuthorized se il carrello ha già effettuato un acquisto
                 throw new UnAuthorizedException("Non autorizzato");
             }
-
-        }
-
-        else
-        {
+        } else {
+            // Lancia un'eccezione NotFoundException se l'oggetto carrello non è stato trovato
             throw new NotFoundException("Oggetto carrello non trovato");
         }
-
-
-
     }
 
-    public boolean eliminaoggettocarrello(DeleteObjectFromCartRequestDTO request)
-    {
-
+    /**
+     * Elimina un oggetto dal carrello.
+     *
+     * @param request La richiesta di eliminazione dell'oggetto dal carrello.
+     * @return True se l'operazione è stata completata con successo, altrimenti False.
+     */
+    public boolean eliminaoggettocarrello(DeleteObjectFromCartRequestDTO request) {
         Optional<Oggettocarrello> oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
 
-        if (oggettocarrello.isPresent())
-        {
-
+        if (oggettocarrello.isPresent()) {
             Oggettocarrello og = oggettocarrello.get();
-
-            if(request.getIdOggettocarrello() == og.getId() && og.getCarrello().getDataacquisto() == null)
-            {
-                serviceOggettoCarrello.cancella(og);
-                return true;
-            }
-
-            else
-            {
+            // Verifica se l'oggetto carrello esiste e se il carrello ha già effettuato un acquisto
+            if (request.getIdOggettocarrello() == og.getId() && og.getCarrello().getDataacquisto() == null) {
+                serviceOggettoCarrello.cancella(og); // Cancella l'oggetto carrello
+                return true; // Restituisce true se l'operazione è stata completata con successo
+            } else {
+                // Lancia un'eccezione UnAuthorized se l'utente non è autorizzato o se l'oggetto carrello non è valido
                 throw new UnAuthorizedException("Non autorizzato");
             }
-
-        }
-
-        else
-        {
+        } else {
+            // Lancia un'eccezione NotFoundException se l'oggetto carrello non è stato trovato
             throw new NotFoundException("Oggetto carrello non trovato");
         }
-
     }
 
 

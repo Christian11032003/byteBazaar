@@ -14,135 +14,204 @@ import com.bytebazaar.bytebazaar.security.TokenUtil;
 import com.bytebazaar.bytebazaar.service.definition.UtenteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UtenteFacade
 {
 
+    // Servizio per la gestione degli utenti nel sistema.
     private final UtenteService serviceUtente;
 
+    // Repository per l'accesso ai dati dei prodotti nel database.
     private final ProdottoRepository prodottoRepo;
 
+    // Repository per l'accesso ai dati dei messaggi nel database.
     private final MessaggioRepository messaggioRepo;
 
+    // Repository per l'accesso ai dati dei feedback nel database.
     private final FeedbackRepository feedbackRepo;
 
+    // Fornisce metodi per la gestione delle richieste nel sistema.
     private final RichiestaFacade richiestaFacade;
 
+    // Utilità per la generazione e la gestione dei token di autenticazione.
     private final TokenUtil tokenUtil;
 
 
 
-    public boolean bannedOrUnBannedAdmin(BannedOrUnBannedRequestDTO request){
+    /**
+     * Registra un nuovo utente con ruolo ADMIN nel sistema.
+     *
+     * @param request Le informazioni del nuovo utente da registrare come ADMIN.
+     * @return True se l'utente è stato registrato con successo, altrimenti lancia un'eccezione BadRequest.
+     * @throws BadRequestException Se non è possibile registrare un utente con ruolo diverso da ADMIN.
+     */
+    public boolean registrationAdmin(RegistrationUserRequestDTO request) {
+        if (request.getPassword().equals(request.getPasswordRipetuta())) {
+            Utente u = new Utente();
+            u.setNome(request.getNome());
+            u.setCognome(request.getCognome());
+            u.setEmail(request.getEmail());
+            u.setUsername(request.getUsername());
+            u.setPassword(request.getPassword());
+            u.setRuolo(request.getRuolo());
+            if (request.getRuolo() == Ruolo.ADMIN) {
+                serviceUtente.salva(u);
+                return true;
+            }
+        }
+        throw new BadRequestException("Puoi solo registrare un utente con ruolo admin ");
+    }
 
+
+    /**
+     * Blocca o sblocca un utente con ruolo Admin.
+     *
+     * @param request La richiesta di blocco o sblocco dell'utente.
+     * @return True se l'operazione è stata completata con successo, altrimenti False.
+     * @throws NotFoundException Se l'utente Admin non è trovato.
+     */
+    public boolean bannedOrUnBannedAdmin(BannedOrUnBannedRequestDTO request) {
+        // Ottiene l'utente dal servizio Utente
         Utente u = serviceUtente.getById(request.getIdUtente());
 
-
-        if(u.getRuolo() == Ruolo.ADMIN)
-        {
-            u.setBloccato(!u.isBloccato());
-        }
-
-        else
-        {
+        if (u.getRuolo() == Ruolo.ADMIN) {
+            u.setBloccato(!u.isBloccato()); // Cambia lo stato di blocco dell'utente
+        } else {
+            // Se l'utente non è Admin, lancia un'eccezione NotFoundException
             throw new NotFoundException("Utente ADMIN non trovato");
         }
 
-
-        serviceUtente.salva(u);
-        return true;
-
-
-
+        serviceUtente.salva(u); // Salva l'utente
+        return true; // Restituisce true se l'operazione è stata completata con successo
     }
 
-    //funzionalità dell'admin
-
+    /**
+     * Blocca o sblocca un utente con ruolo Cliente o Venditore.
+     *
+     * @param request La richiesta di blocco o sblocco dell'utente.
+     * @return True se l'operazione è stata completata con successo, altrimenti False.
+     * @throws NotFoundException Se l'utente Admin non è trovato.
+     */
     public boolean bannedOrUnBannedUser(BannedOrUnBannedRequestDTO request) {
-
+        // Ottiene l'utente dal servizio Utente
         Utente u = serviceUtente.getById(request.getIdUtente());
 
-
-
-        if(u.getRuolo() == Ruolo.CLIENTE || u.getRuolo() == Ruolo.VENDITORE)
-        {
-            u.setBloccato(!u.isBloccato());
-        }
-
-        else
-        {
+        if (u.getRuolo() == Ruolo.CLIENTE || u.getRuolo() == Ruolo.VENDITORE) {
+            u.setBloccato(!u.isBloccato()); // Cambia lo stato di blocco dell'utente
+        } else {
+            // Se l'utente non è Admin, lancia un'eccezione NotFoundException
             throw new NotFoundException("Utente ADMIN non trovato");
         }
 
-
-        serviceUtente.salva(u);
-        return true;
-
+        serviceUtente.salva(u); // Salva l'utente
+        return true; // Restituisce true se l'operazione è stata completata con successo
     }
 
-    public List<Utente> findAllAdmin(){return serviceUtente.findAllByRuolo(Ruolo.ADMIN);}
+    /**
+     * Restituisce una lista di utenti con ruolo Admin.
+     *
+     * @return Una lista di utenti con ruolo Admin.
+     */
+    public List<Utente> findAllAdmin() {
+        return serviceUtente.findAllByRuolo(Ruolo.ADMIN);
+    }
 
-    //funzionalità admin
-    public List<Utente> findAllClienti() {return serviceUtente.findAllByRuolo(Ruolo.CLIENTE);}
+    /**
+     * Restituisce una lista di utenti con ruolo Cliente.
+     *
+     * @return Una lista di utenti con ruolo Cliente.
+     */
+    public List<Utente> findAllClienti() {
+        return serviceUtente.findAllByRuolo(Ruolo.CLIENTE);
+    }
 
-    public List<Utente> findAllVenditori() {return serviceUtente.findAllByRuolo(Ruolo.VENDITORE);}
+    /**
+     * Restituisce una lista di utenti con ruolo Venditore.
+     *
+     * @return Una lista di utenti con ruolo Venditore.
+     */
+    public List<Utente> findAllVenditori() {
+        return serviceUtente.findAllByRuolo(Ruolo.VENDITORE);
+    }
 
-    public List<Prodotto> findAllProdottiUser(FindThingsRequestDTO request)
-    {
+    /**
+     * Restituisce una lista di prodotti dell'utente specificato.
+     *
+     * @param request La richiesta contenente l'ID dell'utente.
+     * @return Una lista di prodotti dell'utente.
+     */
+    public List<Prodotto> findAllProdottiUser(FindThingsRequestDTO request) {
         return prodottoRepo.trovaProdottiUser(request.getIdUtente());
-
     }
 
-    public List<Prodotto> findAllProdottiUserInKart(FindThingsRequestDTO request)
-    {
+    /**
+     * Restituisce una lista di prodotti presenti nel carrello dell'utente specificato.
+     *
+     * @param request La richiesta contenente l'ID dell'utente.
+     * @return Una lista di prodotti nel carrello dell'utente.
+     */
+    public List<Prodotto> findAllProdottiUserInKart(FindThingsRequestDTO request) {
         return prodottoRepo.getAllProductInKart(request.getIdUtente());
     }
 
-    public List<Messaggio> findAllMessaggeUser(FindThingsRequestDTO request)
-    {
+    /**
+     * Restituisce una lista di messaggi dell'utente specificato.
+     *
+     * @param request La richiesta contenente l'ID dell'utente.
+     * @return Una lista di messaggi dell'utente.
+     */
+    public List<Messaggio> findAllMessaggeUser(FindThingsRequestDTO request) {
         return messaggioRepo.findAllByUtente_Id(request.getIdUtente());
     }
 
-    public List<Feedback> findAllFeedbackUser(FindThingsRequestDTO request)
-    {
+    /**
+     * Restituisce una lista di feedback dell'utente specificato.
+     *
+     * @param request La richiesta contenente l'ID dell'utente.
+     * @return Una lista di feedback dell'utente.
+     */
+    public List<Feedback> findAllFeedbackUser(FindThingsRequestDTO request) {
         return feedbackRepo.findAllByOggettocarrello_Carrello_Utente_Id(request.getIdUtente());
     }
 
-
-
-
-    //funzionalità del cliente e del venditore
-
-    public List<MessaggioResponseDTO> findMyOwnMessage(Utente u)
-    {
+    /**
+     * Restituisce una lista di messaggi dell'utente specificato nel formato DTO.
+     *
+     * @param u L'utente di cui trovare i messaggi.
+     * @return Una lista di messaggi dell'utente nel formato DTO.
+     */
+    public List<MessaggioResponseDTO> findMyOwnMessage(Utente u) {
         List<Messaggio> messaggio = messaggioRepo.findAllByUtente(u);
         List<MessaggioResponseDTO> messaggioFiltrato = new ArrayList<>();
 
-        for(Messaggio m: messaggio)
-        {
+        for (Messaggio m : messaggio) {
             MessaggioResponseDTO mDTO = new MessaggioResponseDTO.BuilderMessaggioResponseDTO()
                     .setIdDestinatario(m.getIddestinatario())
                     .setTesto(m.getTesto())
                     .build();
 
             messaggioFiltrato.add(mDTO);
-
         }
 
         return messaggioFiltrato;
     }
-    public List<ProdottoReponseDTO> findAllOtherProducts(Utente u, FilterProductRequestDTO request)
-    {
-        List <ProdottoReponseDTO> prodottoFiltrato = new ArrayList<>();
-        List <Prodotto> prodotto = prodottoRepo.findAllByUtenteIsNotAndCondizione(u,request.getCondizione());
-        for(Prodotto p : prodotto)
-        {
 
+
+    /**
+     * Restituisce una lista di prodotti di altri utenti, filtrati in base alla condizione specificata.
+     *
+     * @param u       L'utente di cui trovare i prodotti di altri utenti.
+     * @param request La richiesta contenente la condizione di filtraggio.
+     * @return Una lista di prodotti di altri utenti filtrati per condizione.
+     */
+    public List<ProdottoReponseDTO> findAllOtherProducts(Utente u, FilterProductRequestDTO request) {
+        List<ProdottoReponseDTO> prodottoFiltrato = new ArrayList<>();
+        List<Prodotto> prodotto = prodottoRepo.findAllByUtenteIsNotAndCondizione(u, request.getCondizione());
+        for (Prodotto p : prodotto) {
             ProdottoReponseDTO pDTO = new ProdottoReponseDTO.BuilderProdottoDTO()
                     .setIdVenditore(p.getUtente().getId())
                     .setNome(p.getNome())
@@ -153,20 +222,22 @@ public class UtenteFacade
                     .build2();
 
             prodottoFiltrato.add(pDTO);
-
-
         }
 
         return prodottoFiltrato;
-
     }
-    public List<FeedbackResponseDTO> findMyOwnFeedback(Utente u)
-    {
-        List <FeedbackResponseDTO> feedbackFiltrato = new ArrayList<>();
+
+    /**
+     * Restituisce una lista di feedback dell'utente specificato nel formato DTO.
+     *
+     * @param u L'utente di cui trovare i feedback.
+     * @return Una lista di feedback dell'utente nel formato DTO.
+     */
+    public List<FeedbackResponseDTO> findMyOwnFeedback(Utente u) {
+        List<FeedbackResponseDTO> feedbackFiltrato = new ArrayList<>();
         List<Feedback> feedbacks = feedbackRepo.findAllByOggettocarrello_Carrello_Utente(u);
 
-        for(Feedback f : feedbacks)
-        {
+        for (Feedback f : feedbacks) {
             FeedbackResponseDTO fDto = new FeedbackResponseDTO.BuilderFeedbackResponseDTO()
                     .setIdProdotto(f.getOggettocarrello().getProdotto().getId())
                     .setDescrizione(f.getDescrizione())
@@ -176,20 +247,19 @@ public class UtenteFacade
             feedbackFiltrato.add(fDto);
         }
 
-
         return feedbackFiltrato;
-
-
     }
 
-
-    //funzionalità venditore
+    /**
+     * Restituisce una lista dei prodotti dell'utente specificato nel formato DTO.
+     *
+     * @param u L'utente di cui trovare i prodotti.
+     * @return Una lista dei prodotti dell'utente nel formato DTO.
+     */
     public List<ProdottoReponseDTO> findAllHisProducts(Utente u) {
-
-        List <ProdottoReponseDTO> prodottoFiltrato = new ArrayList<>();
-        List <Prodotto> prodotto = prodottoRepo.trovaProdottiUser(u.getId());
-        for(Prodotto p : prodotto)
-        {
+        List<ProdottoReponseDTO> prodottoFiltrato = new ArrayList<>();
+        List<Prodotto> prodotto = prodottoRepo.trovaProdottiUser(u.getId());
+        for (Prodotto p : prodotto) {
             ProdottoReponseDTO pDTO = new ProdottoReponseDTO.BuilderProdottoDTO()
                     .setNome(p.getNome())
                     .setDescrizione(p.getDescrizione())
@@ -199,8 +269,6 @@ public class UtenteFacade
                     .build();
 
             prodottoFiltrato.add(pDTO);
-
-
         }
 
         return prodottoFiltrato;
@@ -208,10 +276,14 @@ public class UtenteFacade
 
     //funzionalità di tutti
 
+    /**
+     * Registra un nuovo utente nel sistema.
+     *
+     * @param request Le informazioni del nuovo utente da registrare.
+     * @return True se l'utente è stato registrato con successo, altrimenti false.
+     */
     public boolean registrationUtente(RegistrationUserRequestDTO request) {
-
-        if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
-
+        if (request.getPassword().equals(request.getPasswordRipetuta())) {
             Utente u = new Utente();
             u.setNome(request.getNome());
             u.setCognome(request.getCognome());
@@ -226,52 +298,37 @@ public class UtenteFacade
             } else {
                 return true;
             }
-
         }
-
         return false;
     }
 
 
-    public boolean registrationAdmin(RegistrationUserRequestDTO request) {
-        if ((request.getPassword().equals(request.getPasswordRipetuta()))) {
-
-            Utente u = new Utente();
-            u.setNome(request.getNome());
-            u.setCognome(request.getCognome());
-            u.setEmail(request.getEmail());
-            u.setUsername(request.getUsername());
-            u.setPassword(request.getPassword());
-            u.setRuolo(request.getRuolo());
-            if(request.getRuolo() == Ruolo.ADMIN)
-            {
-                serviceUtente.salva(u);
-                return true;
-            }
-
-        }
-
-        throw new BadRequestException("Puoi solo registrare un utente con ruolo admin ");
-
-    }
-
-
-    public Utente login(LoginRequestDTO request){
-
+    /**
+     * Effettua il login di un utente nel sistema.
+     *
+     * @param request Le credenziali di login dell'utente.
+     * @return L'utente autenticato.
+     */
+    public Utente login(LoginRequestDTO request) {
         Utente u = serviceUtente.getByUsername(request.getUsername());
-
-        String token= tokenUtil.generaToken(u);
+        String token = tokenUtil.generaToken(u);
         u.setToken(token);
         serviceUtente.salva(u);
         return u;
     }
 
-    public boolean logout(Utente u)
-    {
+    /**
+     * Effettua il logout di un utente dal sistema.
+     *
+     * @param u L'utente che deve effettuare il logout.
+     * @return True se il logout è stato effettuato con successo, altrimenti false.
+     */
+    public boolean logout(Utente u) {
         u.setToken(null);
         serviceUtente.salva(u);
         return true;
     }
+
 
 
 

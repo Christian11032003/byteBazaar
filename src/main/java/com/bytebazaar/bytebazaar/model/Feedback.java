@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
+//entità Feedback con i relativi campi e le relazioni
 @Data
 @NoArgsConstructor
 @Entity

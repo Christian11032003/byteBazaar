@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
+//entità Prodotto con i relativi campi e le relazioni
 @Data
 @NoArgsConstructor
 @Entity
