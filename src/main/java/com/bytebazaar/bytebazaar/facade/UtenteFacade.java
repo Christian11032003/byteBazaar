@@ -184,11 +184,10 @@ public class UtenteFacade
      * @param u L'utente di cui trovare i messaggi.
      * @return Una lista di messaggi dell'utente nel formato DTO.
      */
-    public List<MessaggioResponseDTO> findMyOwnMessage(Utente u) {
+    public List<MessaggioResponseDTO> findMyOwnMessage(Utente u){
         List<Messaggio> messaggio = messaggioRepo.findAllByUtente(u);
         List<MessaggioResponseDTO> messaggioFiltrato = new ArrayList<>();
-
-        for (Messaggio m : messaggio) {
+        for (Messaggio m : messaggio){
             MessaggioResponseDTO mDTO = new MessaggioResponseDTO.BuilderMessaggioResponseDTO()
                     .setIdDestinatario(m.getIddestinatario())
                     .setTesto(m.getTesto())
@@ -211,18 +210,21 @@ public class UtenteFacade
     public List<ProdottoReponseDTO> findAllOtherProducts(Utente u, FilterProductRequestDTO request) {
         List<ProdottoReponseDTO> prodottoFiltrato = new ArrayList<>();
         List<Prodotto> prodotto = prodottoRepo.findAllByUtenteIsNotAndCondizione(u, request.getCondizione());
-        for (Prodotto p : prodotto) {
-            ProdottoReponseDTO pDTO = new ProdottoReponseDTO.BuilderProdottoDTO()
-                    .setIdVenditore(p.getUtente().getId())
-                    .setNome(p.getNome())
-                    .setDescrizione(p.getDescrizione())
-                    .setQuantita(p.getQuantita())
-                    .setPrezzo(p.getPrezzo())
-                    .setCondizione(p.getCondizione())
-                    .build2();
 
-            prodottoFiltrato.add(pDTO);
-        }
+            for (Prodotto p : prodotto){
+                ProdottoReponseDTO pDTO = new ProdottoReponseDTO.BuilderProdottoDTO()
+                        .setIdVenditore(p.getUtente().getId())
+                        .setNome(p.getNome())
+                        .setDescrizione(p.getDescrizione())
+                        .setQuantita(p.getQuantita())
+                        .setPrezzo(p.getPrezzo())
+                        .setCondizione(p.getCondizione())
+                        .build2();
+
+                prodottoFiltrato.add(pDTO);
+            }
+
+
 
         return prodottoFiltrato;
     }
@@ -237,7 +239,7 @@ public class UtenteFacade
         List<FeedbackResponseDTO> feedbackFiltrato = new ArrayList<>();
         List<Feedback> feedbacks = feedbackRepo.findAllByOggettocarrello_Carrello_Utente(u);
 
-        for (Feedback f : feedbacks) {
+        for (Feedback f : feedbacks){
             FeedbackResponseDTO fDto = new FeedbackResponseDTO.BuilderFeedbackResponseDTO()
                     .setIdProdotto(f.getOggettocarrello().getProdotto().getId())
                     .setDescrizione(f.getDescrizione())
@@ -256,10 +258,10 @@ public class UtenteFacade
      * @param u L'utente di cui trovare i prodotti.
      * @return Una lista dei prodotti dell'utente nel formato DTO.
      */
-    public List<ProdottoReponseDTO> findAllHisProducts(Utente u) {
+    public List<ProdottoReponseDTO> findAllHisProducts(Utente u){
         List<ProdottoReponseDTO> prodottoFiltrato = new ArrayList<>();
         List<Prodotto> prodotto = prodottoRepo.trovaProdottiUser(u.getId());
-        for (Prodotto p : prodotto) {
+        for (Prodotto p : prodotto){
             ProdottoReponseDTO pDTO = new ProdottoReponseDTO.BuilderProdottoDTO()
                     .setNome(p.getNome())
                     .setDescrizione(p.getDescrizione())
@@ -309,12 +311,13 @@ public class UtenteFacade
      * @param request Le credenziali di login dell'utente.
      * @return L'utente autenticato.
      */
-    public Utente login(LoginRequestDTO request) {
-        Utente u = serviceUtente.getByUsername(request.getUsername());
+    public Utente login(LoginRequestDTO request){
+        Utente u = serviceUtente.getByUsernameAndPassword(request.getUsername(), request.getPassword());
         String token = tokenUtil.generaToken(u);
         u.setToken(token);
         serviceUtente.salva(u);
         return u;
+
     }
 
     /**
@@ -323,7 +326,7 @@ public class UtenteFacade
      * @param u L'utente che deve effettuare il logout.
      * @return True se il logout è stato effettuato con successo, altrimenti false.
      */
-    public boolean logout(Utente u) {
+    public boolean logout(Utente u){
         u.setToken(null);
         serviceUtente.salva(u);
         return true;

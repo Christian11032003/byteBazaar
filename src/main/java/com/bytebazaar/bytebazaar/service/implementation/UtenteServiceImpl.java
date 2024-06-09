@@ -1,6 +1,7 @@
 package com.bytebazaar.bytebazaar.service.implementation;
 
 import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.NotFoundException;
 import com.bytebazaar.bytebazaar.model.Ruolo;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.repository.UtenteRepository;
@@ -28,9 +29,10 @@ public class UtenteServiceImpl implements UtenteService
      * @throws BadRequestException se l'utente con il nome utente specificato non viene trovato
      */
     @Override
-    public Utente getByUsername(String username) {
-        return utenteRepo.findByUsername(username).orElseThrow(() -> new BadRequestException("utente non trovato"));
+    public Utente getByUsernameAndPassword(String username, String password) {
+        return utenteRepo.findByUsernameAndPassword(username,password).orElseThrow(() -> new NotFoundException("utente non trovato"));
     }
+
 
     /**
      * Recupera un'istanza di Utente basata sul suo ID.

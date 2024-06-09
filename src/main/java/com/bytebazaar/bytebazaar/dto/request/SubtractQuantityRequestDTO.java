@@ -1,7 +1,7 @@
 package com.bytebazaar.bytebazaar.dto.request;
 
 import lombok.Data;
-// DTO per la richiesta
+// DTO per la richiesta di sottrare la quantità dal carrello
 @Data
 public class SubtractQuantityRequestDTO
 {

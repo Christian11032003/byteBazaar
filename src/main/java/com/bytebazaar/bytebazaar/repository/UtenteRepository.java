@@ -36,6 +36,8 @@ public interface UtenteRepository extends JpaRepository<Utente, Integer> {
          * @param username il nome utente dell'utente da cercare
          * @return un Optional contenente l'Utente se trovato, altrimenti un Optional vuoto
          */
+        Optional<Utente> findByUsernameAndPassword(String username, String password);
+
         Optional<Utente> findByUsername(String username);
 
 }

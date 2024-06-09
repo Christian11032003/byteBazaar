@@ -1,7 +1,7 @@
 package com.bytebazaar.bytebazaar.dto.request;
 
 import lombok.Data;
-// DTO per la richiesta
+// DTO per la richiesta di mandare un messaggio ad un utente
 @Data
 public class SendMessageRequestDTO
 {

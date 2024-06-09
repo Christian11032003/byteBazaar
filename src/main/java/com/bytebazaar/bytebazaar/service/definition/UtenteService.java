@@ -14,7 +14,9 @@ public interface UtenteService {
      * @param username il nome utente dell'utente da cercare
      * @return l'utente trovato, null se non trovato
      */
-    public Utente getByUsername(String username);
+    public Utente getByUsernameAndPassword(String username, String password);
+
+
 
     /**
      * Metodo per ottenere un utente tramite il suo ID.

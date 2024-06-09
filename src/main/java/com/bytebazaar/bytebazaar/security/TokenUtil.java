@@ -72,10 +72,6 @@ public class TokenUtil {
         return service.findByUsername(username).orElseThrow(()->new ResponseStatusException(HttpStatusCode.valueOf(403),"nessun utente con queste credenziali"));
     }
 
-    // Metodo per ottenere il ruolo dell'utente dal token JWT
-    /*public Ruolo getRuolo(String token) {
-        return prendiClaimsDalToken(token).get("ruolo", Ruolo.class);
-    }*/
 
 
 

@@ -113,27 +113,29 @@ public class ProdottoFacade
 
                 if (request.getNome() != null) {
                     p.setNome(request.getNome());
-                } else {
-                    p.setNome(p.getNome());
                 }
+
+                p.setNome(p.getNome());
+
                 if (request.getDescrizione() != null) {
                     p.setDescrizione(request.getDescrizione());
-                } else {
-                    p.setDescrizione(p.getDescrizione());
                 }
+
+                p.setDescrizione(p.getDescrizione());
+
                 if (request.getPrezzo() > 0) {
                     p.setPrezzo(request.getPrezzo());
-                } else {
+                }
+                else {
                     throw new BadRequestException("Prezzo non può essere minore di 0");
                 }
                 if(request.getCondizione() != null)
                 {
                     p.setCondizione(request.getCondizione());
                 }
-                else
-                {
-                    p.setCondizione(p.getCondizione());
-                }
+
+                p.setCondizione(p.getCondizione());
+
 
                 if (request.getQuantita() > 0) {
                     p.setQuantita(request.getQuantita());

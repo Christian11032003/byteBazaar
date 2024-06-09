@@ -23,18 +23,13 @@ public class GenericExceptionHadler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(m);
     }
 
-    /**
-     * Gestisce un'eccezione AlreadyReportedException, restituendo una risposta con status ALREADY_REPORTED.
-     *
-     * @param e AlreadyReportedException lanciata
-     * @return ResponseEntity contenente un MessaggioErroreResponseDTO con le informazioni sull'errore
-     */
-    @ExceptionHandler(AlreadyReportedException.class)
-    public ResponseEntity<MessaggioErroreResponseDTO> richiestaGiàDefinita(AlreadyReportedException e) {
+    @ExceptionHandler(UnAuthorizedException.class)
+    public ResponseEntity<MessaggioErroreResponseDTO> nonAutorizzato(UnAuthorizedException e)
+    {
         // Costruisce un MessaggioErroreResponseDTO con lo status e il messaggio dell'eccezione
-        MessaggioErroreResponseDTO m = new MessaggioErroreResponseDTO(HttpStatus.ALREADY_REPORTED.name(), e.getMessage());
-        // Restituisce una ResponseEntity con status ALREADY_REPORTED e il MessaggioErroreResponseDTO
-        return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(m);
+        MessaggioErroreResponseDTO m = new MessaggioErroreResponseDTO(HttpStatus.UNAUTHORIZED.name(), e.getMessage());
+        // Restituisce una ResponseEntity con status NOT_FOUND e il MessaggioErroreResponseDTO
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(m);
     }
 
     /**

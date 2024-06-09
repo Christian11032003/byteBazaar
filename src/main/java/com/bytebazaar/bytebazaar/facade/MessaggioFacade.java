@@ -1,6 +1,8 @@
 package com.bytebazaar.bytebazaar.facade;
 
 import com.bytebazaar.bytebazaar.dto.request.SendMessageRequestDTO;
+import com.bytebazaar.bytebazaar.exception.messaggiException.BadRequestException;
+import com.bytebazaar.bytebazaar.exception.messaggiException.UnAuthorizedException;
 import com.bytebazaar.bytebazaar.model.Messaggio;
 import com.bytebazaar.bytebazaar.model.Utente;
 import com.bytebazaar.bytebazaar.service.definition.MessaggioService;
@@ -35,12 +37,32 @@ public class MessaggioFacade
             // Crea un nuovo messaggio e lo invia
             Messaggio m2 = new Messaggio();
             m2.setUtente(u);
+
+            System.out.println(ud.getId());
+
+            if(ud.getId() <= 0)
+            {
+                throw new BadRequestException("Utente id non può essere 0 ");
+            }
+
             m2.setIddestinatario(ud.getId());
+
+            if(request.getTestoMessaggio() == null)
+            {
+                throw new BadRequestException("Non puoi inviare il messaggio ai tuoi");
+            }
+
             m2.setTesto(request.getTestoMessaggio());
+
             m2.setDataoraarrivo(LocalDateTime.now());
             serviceMessaggio.salva(m2);
+            return true; // Ritorna true per indicare che il messaggio è stato inviato con successo
         }
-        return true; // Ritorna true per indicare che il messaggio è stato inviato con successo
+
+        else {
+            throw new UnAuthorizedException("Non puoi mandare un messaggio a te stesso");
+        }
+
     }
 
 }

@@ -7,7 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-// DTO per la richiesta
+// DTO per la richiesta di registrazione dell'utente
 @Data
 public class RegistrationUserRequestDTO
 {

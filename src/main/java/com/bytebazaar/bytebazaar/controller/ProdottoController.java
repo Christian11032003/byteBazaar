@@ -37,6 +37,7 @@ public class ProdottoController
         if (registrato) {
             // Se la registrazione ha avuto successo, crea un oggetto DTO per la risposta con i dettagli del prodotto registrato
             ProdottoReponseDTO p = new ProdottoReponseDTO.BuilderProdottoDTO()
+                    .setIdVenditore(u.getId())
                     .setNome(request.getNome())
                     .setDescrizione(request.getDescrizione())
                     .setQuantita(request.getQuantita())
@@ -69,6 +70,7 @@ public class ProdottoController
         if (registrato) {
             // Se la modifica ha avuto successo, crea un oggetto DTO per la risposta con i dettagli del prodotto modificato
             ProdottoReponseDTO p = new ProdottoReponseDTO.BuilderProdottoDTO()
+                    .setIdVenditore(u.getId())
                     .setNome(request.getNome())
                     .setDescrizione(request.getDescrizione())
                     .setQuantita(request.getQuantita())

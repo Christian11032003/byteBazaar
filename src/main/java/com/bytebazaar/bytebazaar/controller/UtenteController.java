@@ -76,7 +76,7 @@ public class UtenteController {
      * @param request i dati della richiesta incapsulati in BannedOrUnBannedRequestDTO
      * @return un ResponseEntity con lo stato della richiesta
      */
-    @PostMapping("/admin/bannedOrUnBannedAdmin")
+    @PostMapping("/admin/bannedOrUnBanned")
     public ResponseEntity<Void> bloccaUtente(@RequestBody BannedOrUnBannedRequestDTO request) {
         boolean bloccato = utenteFacade.bannedOrUnBannedUser(request);
         if (bloccato) return ResponseEntity.ok().build();
@@ -233,16 +233,15 @@ public class UtenteController {
     @PostMapping("/all/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
         Utente u = utenteFacade.login(request);
-        if (u != null) {
-            LoginResponseDTO lr = new LoginResponseDTO.BuilderLoginResponseDTO()
-                    .setUsername(request.getUsername())
-                    .setRuolo(u.getRuolo().toString())
-                    .build();
-            String token = u.getToken();
-            return ResponseEntity.status(HttpStatus.OK).header("Authorization", token).body(lr);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+
+        LoginResponseDTO lr = new LoginResponseDTO.BuilderLoginResponseDTO()
+                .setUsername(request.getUsername())
+                .setRuolo(u.getRuolo().toString())
+                .build();
+
+        String token = u.getToken();
+        return ResponseEntity.status(HttpStatus.OK).header("Authorization", token).body(lr);
+
     }
 
     /**

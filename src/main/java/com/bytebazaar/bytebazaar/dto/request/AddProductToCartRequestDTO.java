@@ -2,7 +2,7 @@ package com.bytebazaar.bytebazaar.dto.request;
 
 import lombok.Data;
 
-// DTO per la richiesta
+// DTO per la richiesta di aggiungere un prodotto nel carrello
 @Data
 public class AddProductToCartRequestDTO {
 

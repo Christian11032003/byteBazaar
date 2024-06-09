@@ -3,7 +3,7 @@ package com.bytebazaar.bytebazaar.dto.request;
 import com.bytebazaar.bytebazaar.model.Condizione;
 import lombok.Data;
 
-// DTO per la richiesta
+// DTO per la richiesta di inserire o modificare il prodotto in vendita
 @Data
 public class InsertOrModifyProductRequestDTO
 {

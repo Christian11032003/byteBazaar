@@ -67,7 +67,8 @@ public class OggettoCarrelloFacade
             if (u.getId() == p.getUtente().getId()) {
                 throw new BadRequestException("Non puoi comprare il tuo stesso prodotto");
             } else {
-                if (og.isEmpty()) {
+                if (og.isEmpty())
+                {
                     Oggettocarrello newOggettoCarrello = new Oggettocarrello();
                     if (request.getIdProdotto() == p.getId()) {
                         newOggettoCarrello.setProdotto(p);
@@ -89,7 +90,10 @@ public class OggettoCarrelloFacade
                     carrelloRepo.save(carrello);
 
                     return true; // Aggiunto con successo al carrello
-                } else {
+                }
+                else
+                {
+                    System.out.println("Sono dove vuoi tu");
                     // Se il prodotto è già presente nel carrello, aggiorna solo la quantità
                     Oggettocarrello o = og.get();
                     o.setQuantita(o.getQuantita() + request.getQuantita());

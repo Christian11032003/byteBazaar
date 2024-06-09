@@ -2,7 +2,7 @@ package com.bytebazaar.bytebazaar.dto.request;
 
 import lombok.Data;
 
-// DTO per la richiesta
+// DTO per la richiesta di modificare il feedback
 @Data
 public class ModifyFeedbackRequestDTO
 {
