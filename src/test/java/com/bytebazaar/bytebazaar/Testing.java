@@ -506,7 +506,7 @@ public class Testing
     public void sottraiDalCancello() throws Exception
     {
         SubtractQuantityRequestDTO sub=new SubtractQuantityRequestDTO();
-        sub.setIdOggettocarrello(1);
+        sub.setIdOggettoCarrello(1);
         sub.setQuantita(2);
         ObjectMapper om=new ObjectMapper();
         String json=om.writeValueAsString(sub);
@@ -524,7 +524,7 @@ public class Testing
     public void cancellaDalCarrello() throws Exception
     {
         DeleteObjectFromCartRequestDTO sub=new DeleteObjectFromCartRequestDTO();
-        sub.setIdOggettocarrello(1);
+        sub.setIdOggettoCarrello(1);
         ObjectMapper om=new ObjectMapper();
         String json=om.writeValueAsString(sub);
         mock.perform(MockMvcRequestBuilders.post("/cliente/eliminaOggettoCarrello")

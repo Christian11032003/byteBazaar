@@ -142,7 +142,7 @@ public class OggettoCarrelloFacade
      * @return True se l'operazione è stata completata con successo, altrimenti False.
      */
     public boolean sottraiQuantita(SubtractQuantityRequestDTO request) {
-        Optional<Oggettocarrello> oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
+        Optional<Oggettocarrello> oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettoCarrello());
 
         if (oggettocarrello.isPresent()) {
             Oggettocarrello og = oggettocarrello.get();
@@ -168,12 +168,12 @@ public class OggettoCarrelloFacade
      * @return True se l'operazione è stata completata con successo, altrimenti False.
      */
     public boolean eliminaoggettocarrello(DeleteObjectFromCartRequestDTO request) {
-        Optional<Oggettocarrello> oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettocarrello());
+        Optional<Oggettocarrello> oggettocarrello = serviceOggettoCarrello.getById(request.getIdOggettoCarrello());
 
         if (oggettocarrello.isPresent()) {
             Oggettocarrello og = oggettocarrello.get();
             // Verifica se l'oggetto carrello esiste e se il carrello ha già effettuato un acquisto
-            if (request.getIdOggettocarrello() == og.getId() && og.getCarrello().getDataacquisto() == null) {
+            if (request.getIdOggettoCarrello() == og.getId() && og.getCarrello().getDataacquisto() == null) {
                 serviceOggettoCarrello.cancella(og); // Cancella l'oggetto carrello
                 return true; // Restituisce true se l'operazione è stata completata con successo
             } else {

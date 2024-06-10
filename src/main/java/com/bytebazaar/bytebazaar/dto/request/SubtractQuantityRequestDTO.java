@@ -6,7 +6,7 @@ import lombok.Data;
 public class SubtractQuantityRequestDTO
 {
     // Identificativo univoco dell'oggetto nel carrello
-    private int idOggettocarrello;
+    private int idOggettoCarrello;
 
     // Quantità dell'oggetto nel carrello
     private int quantita;

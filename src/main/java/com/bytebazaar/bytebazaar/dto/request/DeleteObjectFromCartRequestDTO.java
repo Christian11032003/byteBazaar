@@ -7,6 +7,6 @@ import lombok.Data;
 public class DeleteObjectFromCartRequestDTO
 {
     // Identificativo univoco dell'oggetto nel carrello
-    private int idOggettocarrello;
+    private int idOggettoCarrello;
 
 }
